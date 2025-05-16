@@ -139,16 +139,16 @@ static void state_enter(struct state_machine_data *data, state_e from, state_eve
     }
     switch (to) {
     case STATE_IDLE:
-        state_wait_enter(&(data->idle), from, event);
+        state_idle_enter(&(data->idle), from, event);
         break;
     case STATE_INIT:
-        state_search_enter(&(data->init), from, event);
+        state_init_enter(&(data->init), from, event);
         break;
     case STATE_RUNNING:
-        state_attack_enter(&(data->running), from, event);
+        state_running_enter(&(data->running), from, event);
         break;
     case STATE_STOP:
-        state_retreat_enter(&(data->stop), from, event);
+        state_stop_enter(&(data->stop), from, event);
         break;
     }
 }

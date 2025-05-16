@@ -160,12 +160,15 @@ static inline void process_event(struct state_machine_data *data, state_event_e 
 
 static inline state_event_e process_input(struct state_machine_data *data)
 {
-    data->common.enemy = enemy_get();
-    data->common.line = line_get();
-    data->common.cmd = ir_remote_get_cmd();
-    const struct input input = { .enemy = data->common.enemy, .line = data->common.line };
-    input_history_save(&data->input_history, &input);
+    // data->common.enemy = enemy_get();
+    // data->common.line = line_get();
+    // data->common.cmd = ir_remote_get_cmd();
+    // const struct input input = { .enemy = data->common.enemy, .line = data->common.line };
+    // input_history_save(&data->input_history, &input);
+//function to get the input from the backend
 
+
+/*
     if (data->common.cmd != IR_CMD_NONE) {
         return STATE_EVENT_COMMAND;
     } else if (has_internal_event(data)) {
@@ -178,28 +181,38 @@ static inline state_event_e process_input(struct state_machine_data *data)
     } else if (enemy_detected(&data->common.enemy)) {
         return STATE_EVENT_ENEMY;
     }
-    return STATE_EVENT_NONE;
+    return STATE_EVENT_NONE;*/
 }
 
 static inline void state_machine_init(struct state_machine_data *data)
 {
     //data->state = STATE_WAIT;
     data->common.state_machine_data = data;
-    data->common.enemy.position = ENEMY_POS_NONE;
-    data->common.enemy.range = ENEMY_RANGE_NONE;
-    data->common.line = LINE_NONE;
-    data->common.cmd = IR_CMD_NONE;
+    // data->common.enemy.position = ENEMY_POS_NONE;
+    // data->common.enemy.range = ENEMY_RANGE_NONE;
+    // data->common.line = LINE_NONE;
+    // data->common.cmd = IR_CMD_NONE;
     data->common.timer = &data->timer;
     timer_clear(&data->timer);
+    // data->internal_event = STATE_EVENT_NONE;
+    // data->wait.common = &data->common;
+    // data->search.common = &data->common;
+    // data->attack.common = &data->common;
+    // data->retreat.common = &data->common;
+    // data->manual.common = &data->common;
     data->internal_event = STATE_EVENT_NONE;
-    data->wait.common = &data->common;
-    data->search.common = &data->common;
-    data->attack.common = &data->common;
-    data->retreat.common = &data->common;
-    data->manual.common = &data->common;
-    state_search_init(&data->search);
-    state_attack_init(&data->attack);
-    state_retreat_init(&data->retreat);
+    data->idle.common = &data->common;
+    data->init.common = &data->common;
+    data->running.common = &data->common;
+    data->stop.common = &data->common;
+    // state_search_init(&data->search);
+    // state_attack_init(&data->attack);
+    // state_retreat_init(&data->retreat);
+    // state_manual_init(&data->manual);
+    state_idle_init(&data->idle);
+    state_init_init(&data->init);
+    state_running_init(&data->running);
+    state_stop_init(&data->stop);
 }
 
 #define INPUT_HISTORY_BUFFER_SIZE (6u)
