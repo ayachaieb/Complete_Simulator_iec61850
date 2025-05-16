@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SVConfig>
+  <appID>0x1000</appID>
+  <macAddress>01:0C:CD:01:00:00</macAddress>
+  <GOid>GOID123</GOid>
+  <interface>ETH0</interface>
+  <cbref>CBREFFF</cbref>
+  <svid>SVID456</svid>
+  <scenariofile>SCENARIO.XML</scenariofile>
+</SVConfig>

@@ -1,0 +1,60 @@
+<div class="container mt-4">
+    <h1 class="text-center mb-4">{{ title }}</h1>
+  
+    <div class="row">
+      <!-- Left Column: SV Configuration Form -->
+      <div class="col">
+        <h3 class="mb-3 fw-bold">Manual Configuration</h3>
+        <form class="row g-3">
+          <div class="col-md-6">
+            <label for="appID" class="form-label">App ID (e.g., 0x1000)</label>
+            <input [(ngModel)]="config.appID" name="appID" type="text" class="form-control" id="appID" placeholder="0x1000">
+          </div>
+          <div class="col-md-6">
+            <label for="macAddress" class="form-label">MAC Address (e.g., 01:0C:CD:01:00:00)</label>
+            <input [(ngModel)]="config.macAddress" name="macAddress" type="text" class="form-control" id="macAddress" placeholder="01:0C:CD:01:00:00">
+          </div>
+          <div class="col-md-6">
+            <label for="GOid" class="form-label">GOID</label>
+            <input [(ngModel)]="config.GOid" name="GOid" type="text" class="form-control" id="GOid" placeholder="GOID123">
+          </div>
+          <div class="col-md-6">
+            <label for="interface" class="form-label">Interface (e.g., eth0)</label>
+            <input [(ngModel)]="config.interface" name="interface" type="text" class="form-control" id="interface" placeholder="eth0">
+          </div>
+          <div class="col-md-6">
+            <label for="cbref" class="form-label">CBRef</label>
+            <input [(ngModel)]="config.cbref" name="cbref" type="text" class="form-control" id="cbref" placeholder="CBRef123">
+          </div>
+          <div class="col-md-6">
+            <label for="svid" class="form-label">SVID</label>
+            <input [(ngModel)]="config.svid" name="svid" type="text" class="form-control" id="svid" placeholder="SVID123">
+          </div>
+          <div class="col-12">
+            <label for="scenariofile" class="form-label">Scenario File (e.g., scenario.xml)</label>
+            <input [(ngModel)]="config.scenariofile" name="scenariofile" type="text" class="form-control" id="scenariofile" placeholder="scenario.xml">
+          </div>
+          <h3 class="mb-3 fw-bold">Or import a configuration file</h3>
+          <div class="col-12">
+            <label for="configFile" class="form-label">Import Config (XML file)</label>
+            <input type="file" accept=".xml" (change)="onFileSelected($event)" class="form-control" id="configFile">
+          </div>
+          <div class="col-12">
+            <button type="button" (click)="startConfig()" class="btn btn-primary">Start Config</button>
+            <button type="button" (click)="startSimulation()" class="btn btn-success ms-2" [disabled]="!isConfigValid">Start Simulation</button>
+            <button type="button" (click)="stopSimulation()" class="btn btn-danger ms-2" [disabled]="!isConfigValid">Stop Simulation</button>
+          </div>
+        </form>
+      </div>
+      <!-- Right Column: Status Alerts -->
+      <div class="col">
+        <h3 class="mb-3 fw-bold">Notification Alerts</h3>
+        <div *ngIf="configStatus" class="alert" [ngClass]="{'crypto__alert-success': configStatus === 'Configuration is valid', 'crypto__alert-danger': configStatus !== 'Configuration is valid'}">
+          {{ configStatus }}
+        </div>
+        <div *ngIf="simulationStatus" class="alert" [ngClass]="{'crypto__alert-success': simulationStatus === 'Simulation started', 'crypto__alert-danger': simulationStatus !== 'Simulation started'}">
+          {{ simulationStatus }}
+        </div>
+      </div>
+    </div>
+  </div>

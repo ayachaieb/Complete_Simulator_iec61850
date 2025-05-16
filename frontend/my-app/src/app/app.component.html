@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+ <h3 class="navbar-text">IEC 61850 Testing Tool</h3>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'sv-config'" (click)="setSection('sv-config')" href="#">SV Configuration</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'goose'" (click)="setSection('goose')" href="#">GOOSE Messaging</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'sinus-signals'" (click)="setSection('sinus-signals')" href="#">Sinus Signals</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid p-3">
+  <app-sv-config *ngIf="activeSection === 'sv-config'"></app-sv-config>
+  <app-goose *ngIf="activeSection === 'goose'"></app-goose>
+  <app-sinus-signals *ngIf="activeSection === 'sinus-signals'"></app-sinus-signals>
+</div>

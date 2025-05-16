@@ -1,0 +1,5 @@
+xmlns(b=abc://d/e:f) xpointer(/b:rootB)\
+<?xml version="1.0"?>
+<rootB xmlns="abc://d/e:f">
+</rootB>
+\

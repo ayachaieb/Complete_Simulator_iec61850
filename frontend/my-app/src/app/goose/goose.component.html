@@ -1,0 +1,54 @@
+<div class="container mt-4">
+  <h1 class="text-center mb-4">{{ title }}</h1>
+
+  <div class="row">
+    <!-- Left Column: GOOSE Configuration Form -->
+    <div class="col">
+      <h3 class="mb-3 fw-bold">GOOSE Configuration</h3>
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label for="gocbRef" class="form-label">GoCBRef (e.g., LD0/LLN0$GO$gocb)</label>
+          <input [(ngModel)]="config.gocbRef" name="gocbRef" type="text" class="form-control" id="gocbRef" placeholder="LD0/LLN0$GO$gocb">
+        </div>
+        <div class="col-md-6">
+          <label for="datSet" class="form-label">DatSet (e.g., LD0/LLN0$dataset)</label>
+          <input [(ngModel)]="config.datSet" name="datSet" type="text" class="form-control" id="datSet" placeholder="LD0/LLN0$dataset">
+        </div>
+        <div class="col-md-6">
+          <label for="goID" class="form-label">GoID (e.g., GOOSE1)</label>
+          <input [(ngModel)]="config.goID" name="goID" type="text" class="form-control" id="goID" placeholder="GOOSE1">
+        </div>
+        <div class="col-md-6">
+          <label for="macAddress" class="form-label">MAC Address (e.g., 01:0C:CD:01:00:00)</label>
+          <input [(ngModel)]="config.macAddress" name="macAddress" type="text" class="form-control" id="macAddress" placeholder="01:0C:CD:01:00:00">
+        </div>
+        <div class="col-md-6">
+          <label for="appID" class="form-label">App ID (e.g., 0x1000)</label>
+          <input [(ngModel)]="config.appID" name="appID" type="text" class="form-control" id="appID" placeholder="0x1000">
+        </div>
+        <div class="col-md-6">
+          <label for="interface" class="form-label">Interface (e.g., eth0)</label>
+          <input [(ngModel)]="config.interface" name="interface" type="text" class="form-control" id="interface" placeholder="eth0">
+        </div>
+        <div class="col-12">
+          <label for="configFile" class="form-label">Import Config (SCL/XML file)</label>
+          <input type="file" accept=".xml" (change)="onFileSelected($event)" class="form-control" id="configFile">
+        </div>
+        <div class="col-12">
+          <button type="button" (click)="startConfig()" class="btn btn-primary">startConfig</button>
+          <button type="button" (click)="SendGooseMessage()" class="btn btn-success ms-2" [disabled]="!isConfigValid">SendGooseMessage</button>
+        </div>
+      </form>
+    </div>
+    <!-- Right Column: Status Alerts -->
+    <div class="col">
+      <h3 class="mb-3 fw-bold">Notification Alerts</h3>
+      <div *ngIf="configStatus" class="alert" [ngClass]="{'alert-success': configStatus === 'Configuration is valid', 'alert-danger': configStatus !== 'Configuration is valid'}">
+        {{ configStatus }}
+      </div>
+      <div *ngIf="simulationStatus" class="alert" [ngClass]="{'alert-success': simulationStatus === 'Simulation started', 'alert-danger': simulationStatus !== 'Simulation started'}">
+        {{ simulationStatus }}
+      </div>
+    </div>
+  </div>
+</div>

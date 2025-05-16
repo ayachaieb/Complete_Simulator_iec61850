@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <h1 class="text-center mb-4">{{ title }}</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="mb-3 fw-bold">Signal Parameters</h3>
+      <form class="row g-3">
+        <div class="col-md-4">
+          <label for="amplitude" class="form-label">Amplitude</label>
+          <input [(ngModel)]="amplitude" name="amplitude" type="number" class="form-control" id="amplitude" placeholder="1">
+        </div>
+        <div class="col-md-4">
+          <label for="frequency" class="form-label">Frequency (Hz)</label>
+          <input [(ngModel)]="frequency" name="frequency" type="number" class="form-control" id="frequency" placeholder="1">
+        </div>
+        <div class="col-md-4">
+          <label for="phase" class="form-label"> phase shift </label>
+          <input [(ngModel)]="phase" name="phase" type="number" class="form-control" id="phase" placeholder="1">
+        </div>
+        <div class="col-md-4">
+          <label for="noiseLevel" class="form-label">Noise Level</label>
+          <input [(ngModel)]="noiseLevel" name="noiseLevel" type="number" class="form-control" id="noiseLevel" placeholder="0.1">
+        </div>
+        <div class="col-12">
+          <button type="button" (click)="generateSignal()" class="btn btn-primary">Generate Signal</button>
+          <button type="button" (click)="createScenarioFile()" class="btn btn-secondary ms-2">Create Scenario File</button>
+        </div>
+      </form>
+      <div *ngIf="status" class="alert alert-success mt-3">
+        {{ status }}
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="mb-3 fw-bold">Signal Visualization</h3>
+      <canvas id="signalChart" style="max-height: 400px;"></canvas>
+    </div>
+  </div>
+</div>

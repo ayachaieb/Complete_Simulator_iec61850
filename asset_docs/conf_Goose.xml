@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GooseConfig>
+  <gocbRef>ControlBlock1</gocbRef>
+  <datSet>DataSet1</datSet>
+  <goID>0x1000</goID>
+  <macAddress>01:0C:CD:01:00:00</macAddress>
+  <appID>AppID_123</appID>
+  <interface>eth0</interface>
+</GooseConfig>

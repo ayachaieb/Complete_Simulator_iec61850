@@ -1,0 +1,2 @@
+xpointer(normalize-space("  abc  def  "))\
+<d></d>\
