@@ -1,12 +1,10 @@
 #include "app/state_machine.h"
-#include "state_common.h"
-#include "app/state_wait.h"
-#include "app/state_search.h"
-#include "app/state_attack.h"
-#include "app/state_retreat.h"
-#include "app/state_manual.h"
+#include "app/state_common.h"
+#include "app/state_idle.h"
+#include "app/state_init.h"
+#include "app/state_running.h"
+#include "app/state_stop.h"
 #include "app/timer.h"
-#include "app/input_history.h"
 #include "common/trace.h"
 #include "common/defines.h"
 #include "common/assert_handler.h"
@@ -14,58 +12,12 @@
 #include "common/ring_buffer.h"
 #include "common/sleep.h"
 
-/* A state machine implemented as a set of enums and functions. The states are linked through
- * transitions, which are triggered by events.
- *
- * Flow:
- *    1. Process input
- *        - Check input (e.g. sensors, timer, internal event...)
- *        - Return event
- *    2. Process event
- *        - State/Change state
- *        - Run state function
- *    3. Repeat
- *
- * The flow is continuous (never blocks), which avoids the need for event synchronization
- * mechanisms, since the input can be processed repeatedly at the beginning of each iteration
- * instead. No input is still treated as an event (STATE_EVENT_NONE), but treated as a NOOP
- * when processed. Of course, this means that the code inside the state machine can't block.
- */
-
 struct state_transition
 {
     state_e from;
     state_event_e event;
     state_e to;
 };
-
-// // See docs/state_machine.png (docs/state_machine.uml)
-// static const struct state_transition state_transitions[] = {
-//     { STATE_WAIT, STATE_EVENT_NONE, STATE_WAIT },
-//     { STATE_WAIT, STATE_EVENT_LINE, STATE_WAIT },
-//     { STATE_WAIT, STATE_EVENT_ENEMY, STATE_WAIT },
-//     { STATE_WAIT, STATE_EVENT_COMMAND, STATE_SEARCH },
-//     { STATE_SEARCH, STATE_EVENT_NONE, STATE_SEARCH },
-//     { STATE_SEARCH, STATE_EVENT_TIMEOUT, STATE_SEARCH },
-//     { STATE_SEARCH, STATE_EVENT_ENEMY, STATE_ATTACK },
-//     { STATE_SEARCH, STATE_EVENT_LINE, STATE_RETREAT },
-//     { STATE_SEARCH, STATE_EVENT_COMMAND, STATE_MANUAL },
-//     { STATE_ATTACK, STATE_EVENT_ENEMY, STATE_ATTACK },
-//     { STATE_ATTACK, STATE_EVENT_LINE, STATE_RETREAT },
-//     { STATE_ATTACK, STATE_EVENT_NONE, STATE_SEARCH }, // Enemy lost
-//     { STATE_ATTACK, STATE_EVENT_COMMAND, STATE_MANUAL },
-//     { STATE_ATTACK, STATE_EVENT_TIMEOUT, STATE_ATTACK },
-//     { STATE_RETREAT, STATE_EVENT_LINE, STATE_RETREAT },
-//     { STATE_RETREAT, STATE_EVENT_FINISHED, STATE_SEARCH },
-//     { STATE_RETREAT, STATE_EVENT_TIMEOUT, STATE_RETREAT },
-//     { STATE_RETREAT, STATE_EVENT_ENEMY, STATE_RETREAT },
-//     { STATE_RETREAT, STATE_EVENT_NONE, STATE_RETREAT },
-//     { STATE_RETREAT, STATE_EVENT_COMMAND, STATE_MANUAL },
-//     { STATE_MANUAL, STATE_EVENT_COMMAND, STATE_MANUAL },
-//     { STATE_MANUAL, STATE_EVENT_NONE, STATE_MANUAL },
-//     { STATE_MANUAL, STATE_EVENT_LINE, STATE_MANUAL },
-//     { STATE_MANUAL, STATE_EVENT_ENEMY, STATE_MANUAL },
-// };
 
 static const struct state_transition state_transitions[] = {
     { STATE_IDLE, STATE_EVENT_NONE, STATE_IDLE }, 
@@ -80,21 +32,6 @@ static const struct state_transition state_transitions[] = {
     { STATE_RUNNING, STATE_EVENT_NONE, STATE_RUNNING }
 };
 
-// struct state_machine_data
-// {
-//     state_e state;
-//     struct state_common_data common;
-//     struct state_wait_data wait;
-//     struct state_search_data search;
-//     struct state_attack_data attack;
-//     struct state_retreat_data retreat;
-//     struct state_manual_data manual;
-//     state_event_e internal_event;
-//     timer_t timer;
-//     struct ring_buffer input_history;
-// };
-
-
 struct state_machine_data
 {
     state_e state;
@@ -107,7 +44,6 @@ struct state_machine_data
     timer_t timer;
     struct ring_buffer input_history;
 };
-
 
 static inline bool has_internal_event(const struct state_machine_data *data)
 {
@@ -150,6 +86,8 @@ static void state_enter(struct state_machine_data *data, state_e from, state_eve
     case STATE_STOP:
         state_stop_enter(&(data->stop), from, event);
         break;
+    default:
+        ASSERT(0); // Unknown state
     }
 }
 
@@ -161,51 +99,35 @@ static inline void process_event(struct state_machine_data *data, state_event_e 
             return;
         }
     }
-    ASSERT(0);
+    ASSERT(0); // No valid transition found
 }
 
 static inline state_event_e process_input(struct state_machine_data *data)
 {
-    data->common.enemy = enemy_get();
-    data->common.line = line_get();
-    data->common.cmd = ir_remote_get_cmd();
-    const struct input input = { .enemy = data->common.enemy, .line = data->common.line };
-    input_history_save(&data->input_history, &input);
-
-    if (data->common.cmd != IR_CMD_NONE) {
-        return STATE_EVENT_COMMAND;
-    } else if (has_internal_event(data)) {
+    // Placeholder for your input processing from simulator backend
+    // For now, just return internal event or NONE
+    if (has_internal_event(data)) {
         return take_internal_event(data);
-    } else if (timer_timeout(&data->timer)) {
-        timer_clear(&data->timer);
-        return STATE_EVENT_TIMEOUT;
-    } else if (data->common.line != LINE_NONE) {
-        return STATE_EVENT_LINE;
-    } else if (enemy_detected(&data->common.enemy)) {
-        return STATE_EVENT_ENEMY;
     }
     return STATE_EVENT_NONE;
 }
 
 static inline void state_machine_init(struct state_machine_data *data)
 {
-    data->state = STATE_WAIT;
+    data->state = STATE_IDLE;
     data->common.state_machine_data = data;
-    data->common.enemy.position = ENEMY_POS_NONE;
-    data->common.enemy.range = ENEMY_RANGE_NONE;
-    data->common.line = LINE_NONE;
-    data->common.cmd = IR_CMD_NONE;
     data->common.timer = &data->timer;
     timer_clear(&data->timer);
     data->internal_event = STATE_EVENT_NONE;
-    data->wait.common = &data->common;
-    data->search.common = &data->common;
-    data->attack.common = &data->common;
-    data->retreat.common = &data->common;
-    data->manual.common = &data->common;
-    state_search_init(&data->search);
-    state_attack_init(&data->attack);
-    state_retreat_init(&data->retreat);
+    data->idle.common = &data->common;
+    data->init.common = &data->common;
+    data->running.common = &data->common;
+    data->stop.common = &data->common;
+
+    state_idle_init(&data->idle);
+    state_init_init(&data->init);
+    state_running_init(&data->running);
+    state_stop_init(&data->stop);
 }
 
 #define INPUT_HISTORY_BUFFER_SIZE (6u)
@@ -213,7 +135,6 @@ void state_machine_run(void)
 {
     struct state_machine_data data;
 
-    // Allocate input history here so the internal buffer remains allocated
     LOCAL_RING_BUFFER(input_history, INPUT_HISTORY_BUFFER_SIZE, struct input);
     data.input_history = input_history;
     data.common.input_history = &data.input_history;

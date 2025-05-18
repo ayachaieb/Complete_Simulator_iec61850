@@ -3,7 +3,7 @@
 #include "app/drive.h"
 #include "app/enemy.h"
 #include "app/line.h"
-#include "app/state_machine.h"
+#include "state_machine.h"
 
 int main(void)
 {
