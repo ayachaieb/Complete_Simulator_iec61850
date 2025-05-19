@@ -103,9 +103,30 @@ export class SvConfigComponent implements OnInit {
   stopSimulation() {
     console.log('SvConfigComponent: Stopping simulation');
     this.simulationStatus = 'Stopping simulation...';
-    setTimeout(() => {
-      this.simulationStatus = '';
-    }, 20000);
+    this.itemService.stopSimulation().subscribe({
+      next: (response: any) => {
+        console.log('SvConfigComponent: stop simulation response:', response);
+        if ('message' in response) {
+          this.simulationStatus = response.message;
+          setTimeout(() => {
+            this.simulationStatus = '';
+          }, 20000);
+        } else if ('error' in response) {
+          this.simulationStatus = 'Error: ' + response.error;
+          setTimeout(() => {
+            this.simulationStatus = '';
+          }, 20000);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('SvConfigComponent: stop simulation error:', err);
+        const errorMessage = err.error?.error || err.message;
+        this.simulationStatus = 'Simulation failed: ' + errorMessage;
+        setTimeout(() => {
+          this.simulationStatus = '';
+        }, 20000);
+      }
+    });
   }
 
   onFileSelected(event: Event) {

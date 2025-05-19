@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "state_init.h": "c",
+        "ring_buffer.h": "c",
+        "state_machine.h": "c",
+        "state_common.h": "c",
+        "assert_handler.h": "c",
+        "enum_to_string.h": "c",
+        "state_idle.h": "c",
+        "stdio.h": "c"
+    }
+}

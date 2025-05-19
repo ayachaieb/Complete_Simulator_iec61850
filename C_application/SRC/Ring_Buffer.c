@@ -1,5 +1,5 @@
 #include "Ring_Buffer.h"
-
+#include "assert_handler.h"
 #include <string.h>
 
 void ring_buffer_put(struct ring_buffer *rb, const void *data)

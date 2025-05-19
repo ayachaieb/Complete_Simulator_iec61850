@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
+
 // Circular buffer (FIFO) that can store elements of any size.
 
 struct ring_buffer

@@ -121,6 +121,21 @@ app.post('/api/start-simulation', (req, res) => {
     res.status(500).json({ error: 'Failed to start simulation: ' + error.message });
   }
 });
+app.post('/api/stop-simulation', (req, res) => {
+  console.log('Processing /api/stop-simulation with config:');
+  
+  try {
+    const socket = ipc.server.sockets[Object.keys(ipc.server.sockets)[0]];
+    if (!socket) {
+      throw new Error('No C application connected');
+    }
+    ipc.server.emit(socket, 'stop_simulation');
+    res.json({ message: 'Simulation stopped' });
+  } catch (error) {
+    console.error('Stopping Simulation error:', error.message);
+    res.status(500).json({ error: 'Failed to stop simulation: ' + error.message });
+  }
+});
 
 app.post('/api/send-goose-message', (req, res) => {
   console.log('Processing /api/send-goose-message with config:', req.body);

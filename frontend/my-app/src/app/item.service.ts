@@ -30,8 +30,8 @@ export interface GooseConfig {
   providedIn: 'root'
 })
 export class ItemService {
-  //private apiUrl = 'http://localhost:3000/api';
-  private apiUrl = 'http://10.42.0.68:3000/api';
+  private apiUrl = 'http://localhost:3000/api';
+  //private apiUrl = 'http://10.42.0.68:3000/api';
   constructor(private http: HttpClient) {}
 
   getItems(): Observable<Item[]> {
@@ -49,6 +49,10 @@ export class ItemService {
     return this.http.post(`${this.apiUrl}/start-simulation`, config);
   }
 
+  stopSimulation(): Observable<any> {
+    console.log('ItemService: stopping simulation:');
+    return this.http.post(`${this.apiUrl}/stop-simulation`,"");
+  }
   
   verifyGooseConfig(config: GooseConfig): Observable<any> {
     console.log('ItemService: Verifying GOOSE config:', config);
