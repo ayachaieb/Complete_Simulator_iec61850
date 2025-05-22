@@ -25,6 +25,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Helper function to send message to C app with unified format
+function sendIpcMessage(socket, type, data) {
+  const message = { type, data };
+  ipc.server.emit(socket, 'message', message);
+  console.log(`Sent IPC message: ${message}`);
+}
 // API endpoints
 app.get('/api/items', (req, res) => {
   console.log('Serving /api/items');
@@ -120,7 +126,8 @@ app.post('/api/start-simulation', (req, res) => {
     // Store the response object to send later
     pendingResponses.set(requestId, res);
     // Emit event to C application with request ID
-    ipc.server.emit(socket, 'start_simulation', { config, requestId });
+    // Send unified message to C app
+    sendIpcMessage(socket, 'start_simulation', { config, requestId });
   } catch (error) {
     console.error('Simulation error:', error.message);
     res.status(500).json({ error: 'Failed to start simulation: ' + error.message });
@@ -136,7 +143,9 @@ app.post('/api/stop-simulation', (req, res) => {
       throw new Error('No C application connected');
     }
     pendingResponses.set(requestId, res);
-    ipc.server.emit(socket, 'stop_simulation', { requestId });
+       // Send unified message to C app
+    sendIpcMessage(socket, 'stop_simulation', {  requestId });
+    //ipc.server.emit(socket, 'stop_simulation', { requestId });
   } catch (error) {
     console.error('Stopping Simulation error:', error.message);
     res.status(500).json({ error: 'Failed to stop simulation: ' + error.message });
@@ -153,10 +162,12 @@ app.post('/api/send-goose-message', (req, res) => {
       throw new Error('No C application connected');
     }
     pendingResponses.set(requestId, res);
-    ipc.server.emit(socket, 'send-goose-message', { config, requestId });
+    sendIpcMessage(socket, 'send-goose-message', { config, requestId });
+   // ipc.server.emit(socket, 'send-goose-message', { config, requestId });
+   
   } catch (error) {
-    console.error('Simulation error:', error.message);
-    res.status(500).json({ error: 'Failed to start simulation: ' + error.message });
+    console.error('goose sending error:', error.message);
+    res.status(500).json({ error: 'Failed to send goose: ' + error.message });
   }
 });
 
@@ -175,7 +186,6 @@ app.listen(port, () => {
 ipc.config.id = 'sv_simulator';
 ipc.config.retry = 1500;
 ipc.config.silent = false;
-
 ipc.serve(() => {
   console.log('node-ipc server started');
   ipc.server.on('connect', (socket) => {
@@ -184,24 +194,22 @@ ipc.serve(() => {
   ipc.server.on('socket.disconnected', (socket, destroyedSocketID) => {
     console.log('C application disconnected');
   });
+
   ipc.server.on('message', (data, socket) => {
-    console.log('Received from C app:', data);
     try {
       const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
       const { requestId, ...response } = parsedData;
-      console.log('Parsed response from C app:', parsedData);
-      // Find the corresponding HTTP response
-      const res = pendingResponses.get(requestId);
-      if (res) {
-        res.json(response); // Send response to frontend
-        pendingResponses.delete(requestId); // Clean up
-      } else {
-        console.warn(`No pending response found for requestId: ${requestId}`);
+  
+      if (!requestId) {
+        console.warn('Received message without requestId:', parsedData);
+        return;
       }
-    } catch (error) {
-      console.error('Failed to parse C app response:', error.message);
+    } catch (err) {
+      console.error('Failed to parse or handle message from C app:', err.message);
     }
   });
+  
 });
+
 
 ipc.server.start();

@@ -1,7 +1,7 @@
 # Compiler settings
 CC = gcc
-CFLAGS =  -Wextra -g
-LDFLAGS = -lm
+CFLAGS =  -Wextra -g 
+LDFLAGS = -lm -lcjson
 
 # Essential source files
 SRC = main2.c State_Machine.c Ring_Buffer.c state_idle.c state_init.c state_running.c state_stop.c enum_to_string.c assert_handler.c

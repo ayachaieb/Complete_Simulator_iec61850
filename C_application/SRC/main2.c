@@ -6,6 +6,9 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <cjson/cJSON.h>
+#include <fcntl.h>
+#include <errno.h>
 
 #define SOCKET_PATH "/tmp/app.sv_simulator"
 #define BUFFER_SIZE 1024
@@ -39,6 +42,7 @@ void event_queue_push(state_event_e event)
     if ((event_queue.tail + 1) % QUEUE_SIZE != event_queue.head) {
         event_queue.events[event_queue.tail] = event;
         event_queue.tail = (event_queue.tail + 1) % QUEUE_SIZE;
+        printf("Pushed event: %d\n", event);
         pthread_cond_signal(&event_queue.cond);
     } else {
         fprintf(stderr, "Event queue full, dropping event\n");
@@ -59,6 +63,7 @@ state_event_e event_queue_pop(void)
     }
     state_event_e event = event_queue.events[event_queue.head];
     event_queue.head = (event_queue.head + 1) % QUEUE_SIZE;
+    printf("Popped event: %d\n", event);
     pthread_mutex_unlock(&event_queue.mutex);
     return event;
 }
@@ -106,6 +111,16 @@ int main(void)
         return 1;
     }
 
+    // Set socket to non-blocking
+    if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
+        perror("Failed to set socket non-blocking");
+        close(sock);
+        event_queue.shutdown = 1;
+        pthread_cond_signal(&event_queue.cond);
+        pthread_join(sm_thread, NULL);
+        return 1;
+    }
+
     // Configure server address
     struct sockaddr_un addr;
     memset(&addr, 0, sizeof(addr));
@@ -125,10 +140,19 @@ int main(void)
 
     // Buffer for receiving data
     char buffer[BUFFER_SIZE];
-    while (1) {
-        // Receive data from server
+    while (!event_queue.shutdown) {
+        // Receive data from server (non-blocking)
         ssize_t n = recv(sock, buffer, BUFFER_SIZE - 1, 0);
-        if (n <= 0) {
+        if (n < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                // No data available, sleep briefly to avoid CPU spinning
+                usleep(100000); // 100ms
+                continue;
+            }
+            perror("Receive failed");
+            break;
+        }
+        if (n == 0) {
             printf("Disconnected from server\n");
             break;
         }
@@ -137,28 +161,64 @@ int main(void)
 
         // Map socket messages to state machine events
         state_event_e event = STATE_EVENT_NONE;
-        const char *response = NULL;
+        char *response = NULL;
+        cJSON *json_response = cJSON_CreateObject();
+        if (!json_response) {
+            fprintf(stderr, "Failed to create JSON object\n");
+            break;
+        }
 
-        if (strstr(buffer, "start_configuration")) {
-            printf("Received start config: %s\n", buffer);
-            event = STATE_EVENT_start_config;
-            response = "{\"status\":\"Configuration started successfully\"}";
-        } else if (strstr(buffer, "start_simulation")) {
-            printf("Received start simulation: %s\n", buffer);
-            event = STATE_EVENT_start_simulation;
-            response = "{\"status\":\"Simulation started successfully\"}";
-        } else if (strstr(buffer, "stop_simulation")) {
-            printf("Received stop simulation: %s\n", buffer);
-            event = STATE_EVENT_stop_simulation;
-            response = "{\"status\":\"Simulation stopped successfully\"}";
-        } else if (strstr(buffer, "pause_simulation")) {
-            printf("Received pause simulation: %s\n", buffer);
-            event = STATE_EVENT_pause_simulation;
-            response = "{\"status\":\"Simulation paused successfully\"}";
-        } else if (strstr(buffer, "shutdown")) {
-            printf("Received shutdown: %s\n", buffer);
-            event = STATE_EVENT_shutdown;
-            response = "{\"status\":\"Shutdown initiated\"}";
+        // Parse incoming JSON to extract type and requestId
+        cJSON *json_request = cJSON_Parse(buffer);
+        if (!json_request) {
+            fprintf(stderr, "Failed to parse incoming JSON: %s\n", cJSON_GetErrorPtr());
+            cJSON_Delete(json_response);
+            continue;
+        }
+
+        cJSON *type = cJSON_GetObjectItem(json_request, "type");
+        cJSON *data = cJSON_GetObjectItem(json_request, "data");
+        cJSON *requestId = data ? cJSON_GetObjectItem(data, "requestId") : NULL;
+
+        if (type && cJSON_IsString(type)) {
+            if (strcmp(type->valuestring, "start_configuration") == 0) {
+                printf("Received start config: %s\n", buffer);
+                event = STATE_EVENT_start_config;
+                cJSON_AddStringToObject(json_response, "status", "Configuration started successfully");
+            } else if (strcmp(type->valuestring, "start_simulation") == 0) {
+                printf("Received start simulation: %s\n", buffer);
+                event = STATE_EVENT_start_simulation;
+                cJSON_AddStringToObject(json_response, "status", "Simulation started successfully");
+            } else if (strcmp(type->valuestring, "stop_simulation") == 0) {
+                printf("Received stop simulation: %s\n", buffer);
+                event = STATE_EVENT_stop_simulation;
+                cJSON_AddStringToObject(json_response, "status", "Simulation stopped successfully");
+            } else if (strcmp(type->valuestring, "pause_simulation") == 0) {
+                printf("Received pause simulation: %s\n", buffer);
+                event = STATE_EVENT_pause_simulation;
+                cJSON_AddStringToObject(json_response, "status", "Simulation paused successfully");
+            } else if (strcmp(type->valuestring, "shutdown") == 0) {
+                printf("Received shutdown: %s\n", buffer);
+                event = STATE_EVENT_shutdown;
+                cJSON_AddStringToObject(json_response, "status", "Shutdown initiated");
+            }
+
+            // Add requestId to response if present
+            if (requestId && cJSON_IsString(requestId)) {
+                cJSON_AddStringToObject(json_response, "requestId", requestId->valuestring);
+            }
+        }
+
+        cJSON_Delete(json_request);
+
+        // Convert JSON object to string
+        if (cJSON_GetObjectItem(json_response, "status")) {
+            response = cJSON_PrintUnformatted(json_response);
+            if (!response) {
+                fprintf(stderr, "Failed to serialize JSON response\n");
+                cJSON_Delete(json_response);
+                break;
+            }
         }
 
         // Send event to state machine
@@ -167,13 +227,20 @@ int main(void)
         }
 
         // Send response back to server
-        if (response && send(sock, response, strlen(response), 0) < 0) {
-            perror("Send failed");
-            break;
-        }
         if (response) {
-            printf("Sent response: %s\n", response);
+            ssize_t sent = send(sock, response, strlen(response), 0);
+            if (sent < 0) {
+                perror("Send failed");
+                cJSON_Delete(json_response);
+                free(response);
+                break;
+            }
+            printf("Sent response (%zd bytes): %s\n", sent, response);
         }
+
+        // Cleanup JSON resources
+        cJSON_Delete(json_response);
+        free(response);
     }
 
     // Cleanup
