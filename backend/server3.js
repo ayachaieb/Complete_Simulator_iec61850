@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const ipc = require('node-ipc').default;
 const app = express();
 const net = require('net');
 const fs = require('fs');

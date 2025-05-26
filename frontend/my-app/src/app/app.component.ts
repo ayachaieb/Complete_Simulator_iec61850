@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 //import { HttpClient } from '@angular/common/http';
-import { HttpClientModule } from '@angular/common/http'; // Add this
+import { HttpClientModule } from '@angular/common/http'; 
 import { SvConfigComponent } from './sv-config/sv-config.component';
 import { GooseConfigComponent } from './goose/goose.component';
 import { SinusSignalsComponent } from './sinus-signals/sinus-signals.component';

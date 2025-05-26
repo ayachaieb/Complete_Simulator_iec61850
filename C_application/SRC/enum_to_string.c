@@ -21,18 +21,18 @@ const char *state_to_string(state_e state)
 const char *state_event_to_string(state_event_e event)
 {
     switch (event) {
-    case STATE_EVENT_start_config:
-        return "start_config";
+    case STATE_EVENT_init_success:
+        return "init_success";
     case STATE_EVENT_shutdown:
         return "shutdown";
     case STATE_EVENT_start_simulation:
         return "start_simulation";
     case STATE_EVENT_stop_simulation:
-        return "stop";
+        return "stop_simulation";
     case STATE_EVENT_pause_simulation:
-        return "pause";
-    case STATE_EVENT_config_failed:
-        return "config_failed";
+        return "pause_simulation";
+    case STATE_EVENT_init_failed:
+        return "init_failed";
     case STATE_EVENT_NONE:
         return "NONE";
     }

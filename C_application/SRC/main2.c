@@ -9,7 +9,7 @@
 #include <cjson/cJSON.h>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <time.h>
 #define SOCKET_PATH "/tmp/app.sv_simulator"
 #define BUFFER_SIZE 1024
 
@@ -181,11 +181,7 @@ int main(void)
         cJSON *requestId = data ? cJSON_GetObjectItem(data, "requestId") : NULL;
 
         if (type && cJSON_IsString(type)) {
-            if (strcmp(type->valuestring, "start_configuration") == 0) {
-                printf("Received start config: %s\n", buffer);
-                event = STATE_EVENT_start_config;
-                cJSON_AddStringToObject(json_response, "status", "Configuration started successfully");
-            } else if (strcmp(type->valuestring, "start_simulation") == 0) {
+            if (strcmp(type->valuestring, "start_simulation") == 0) {
                 printf("Received start simulation: %s\n", buffer);
                 event = STATE_EVENT_start_simulation;
                 cJSON_AddStringToObject(json_response, "status", "Simulation started successfully");
@@ -197,10 +193,10 @@ int main(void)
                 printf("Received pause simulation: %s\n", buffer);
                 event = STATE_EVENT_pause_simulation;
                 cJSON_AddStringToObject(json_response, "status", "Simulation paused successfully");
-            } else if (strcmp(type->valuestring, "shutdown") == 0) {
-                printf("Received shutdown: %s\n", buffer);
-                event = STATE_EVENT_shutdown;
-                cJSON_AddStringToObject(json_response, "status", "Shutdown initiated");
+            } else if (strcmp(type->valuestring, "stop_simulation") == 0) {
+                printf("Received stop: %s\n", buffer);
+                event = STATE_EVENT_stop_simulation;
+                cJSON_AddStringToObject(json_response, "status", "stop initiated");
             }
 
             // Add requestId to response if present
@@ -228,6 +224,8 @@ int main(void)
 
         // Send response back to server
         if (response) {
+             usleep(5000000); // Simulate processing delay
+            printf("CBON \n");
             ssize_t sent = send(sock, response, strlen(response), 0);
             if (sent < 0) {
                 perror("Send failed");

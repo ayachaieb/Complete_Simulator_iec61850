@@ -67,24 +67,33 @@ void state_machine_run(state_machine_t *sm, state_event_e event)
     // Transition logic
     switch (current) {
         case STATE_IDLE:
-            if (event == STATE_EVENT_start_config) {
+            if (event == STATE_EVENT_start_simulation) {
                 next = STATE_INIT;
             }
-            break;
-        case STATE_INIT:
-            if (event == STATE_EVENT_start_simulation) {
-                next = STATE_RUNNING;
-            }
-            break;
-        case STATE_RUNNING:
-            if (event == STATE_EVENT_stop_simulation) {
+            else if (event == STATE_EVENT_shutdown) {
                 next = STATE_STOP;
             }
             break;
-        case STATE_STOP:
-            if (event == STATE_EVENT_start_config) {
-                next = STATE_INIT;
+        case STATE_INIT:
+            if (event == STATE_EVENT_init_success) {
+                next = STATE_RUNNING;
+            } else if (event == STATE_EVENT_init_failed) {
+                next = STATE_IDLE;
+            } else if (event == STATE_EVENT_shutdown) {
+                next = STATE_STOP;
+            }                                                                                                             
+            break;
+        case STATE_RUNNING:
+            if (event == STATE_EVENT_stop_simulation) {
+                next = STATE_IDLE;
             }
+            else if (event == STATE_EVENT_pause_simulation) {
+                next = STATE_INIT;
+            } else if (event == STATE_EVENT_shutdown) {
+                next = STATE_STOP; }
+            break;
+        case STATE_STOP:
+        printf("State STOP\n");
             break;
         default:
             break;

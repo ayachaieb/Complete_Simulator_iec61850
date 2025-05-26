@@ -13,12 +13,12 @@ typedef enum {
     STATE_STOP
 } state_e;
 typedef enum {
-    STATE_EVENT_start_config,
     STATE_EVENT_start_simulation,
+    STATE_EVENT_init_success,
+    STATE_EVENT_init_failed,
     STATE_EVENT_stop_simulation,
     STATE_EVENT_pause_simulation,
     STATE_EVENT_shutdown,
-    STATE_EVENT_config_failed,
     STATE_EVENT_NONE
 } state_event_e;
 
