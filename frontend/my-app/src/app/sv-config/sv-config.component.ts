@@ -127,13 +127,33 @@ startSimulation() {
     this.itemService.stopSimulation().subscribe({
       next: (response: any) => {
         console.log('SvConfigComponent: stop simulation response:', response);
-        if ('message' in response) {
+        // Check if the C app response contains a 'status' field
+        if ('status' in response) {
+          // If the status indicates success, set a success message
+          if (response.status.includes('Simulation stopped successfully')) {
+            this.simulationStatus = 'Simulation stopped successfully!';
+          } else {
+            // Otherwise, treat it as a general message or a potential issue
+            this.simulationStatus = 'Status: ' + response.status;
+          }
+          setTimeout(() => {
+            this.simulationStatus = '';
+          }, 20000); // Clear after 20 seconds
+        } else if ('message' in response) {
+          // Keep existing message handling for other potential responses
           this.simulationStatus = response.message;
           setTimeout(() => {
             this.simulationStatus = '';
           }, 20000);
         } else if ('error' in response) {
+          // Keep existing error handling
           this.simulationStatus = 'Error: ' + response.error;
+          setTimeout(() => {
+            this.simulationStatus = '';
+          }, 20000);
+        } else {
+          // Fallback if the response format is unexpected
+          this.simulationStatus = 'Unknown response from server.';
           setTimeout(() => {
             this.simulationStatus = '';
           }, 20000);

@@ -79,7 +79,7 @@ void state_machine_run(state_machine_t *sm, state_event_e event)
                 next = STATE_RUNNING;
             } else if (event == STATE_EVENT_init_failed) {
                 next = STATE_IDLE;
-            } else if (event == STATE_EVENT_shutdown) {
+            } else if (event == STATE_EVENT_stop_simulation) {
                 next = STATE_STOP;
             }                                                                                                             
             break;
@@ -89,7 +89,7 @@ void state_machine_run(state_machine_t *sm, state_event_e event)
             }
             else if (event == STATE_EVENT_pause_simulation) {
                 next = STATE_INIT;
-            } else if (event == STATE_EVENT_shutdown) {
+            } else if (event == STATE_EVENT_stop_simulation) {
                 next = STATE_STOP; }
             break;
         case STATE_STOP:
