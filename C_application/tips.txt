@@ -1,0 +1,7 @@
+modify makefile make all the obj in obj folder and binaries in bin folder
+delete state idle init running stop 
+ ipc module 
+ util module 
+ every function has a return value 0,1 -1
+ define macros for every constant even 0 or one 
+ iclude shouldnt contain ../inc/module.h but module.h  instead

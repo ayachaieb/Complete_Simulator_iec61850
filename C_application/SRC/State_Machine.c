@@ -1,10 +1,10 @@
-#include "State_Machine.h"
+#include "../INC/State_Machine.h"
 #include <stdio.h>
-#include "state_idle.h"
-#include "state_init.h"
-#include "state_running.h"
-#include "state_stop.h"
-#include "enum_to_string.h"
+#include "../INC/state_idle.h"
+#include "../INC/state_init.h"
+#include "../INC/state_running.h"
+#include "../INC/state_stop.h"
+#include "../INC/enum_to_string.h"
 
 
 

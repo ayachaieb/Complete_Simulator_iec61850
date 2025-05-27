@@ -1,4 +1,4 @@
-#include "State_Machine.h"
+#include "../INC/State_Machine.h" //  this type of include is inacceptable
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -10,10 +10,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <time.h>
-#define SOCKET_PATH "/tmp/app.sv_simulator"
+#define SOCKET_PATH "/tmp/app.sv_simulator" // Path to the Unix domain socket need to be  in /var directory
 #define BUFFER_SIZE 1024
-
-// Thread-safe event queue
 #define QUEUE_SIZE 16
 typedef struct {
     state_event_e events[QUEUE_SIZE];
@@ -111,7 +109,7 @@ int main(void)
         return 1;
     }
 
-    // Set socket to non-blocking
+    //  socket  non-blocking
     if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
         perror("Failed to set socket non-blocking");
         close(sock);

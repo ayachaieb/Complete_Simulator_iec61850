@@ -1,4 +1,4 @@
-#include "assert_handler.h"
+#include "../INC/assert_handler.h"
 
 void assert_handler(const char *condition, const char *file, int line)
 {

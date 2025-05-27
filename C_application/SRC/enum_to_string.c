@@ -1,4 +1,4 @@
-#include "enum_to_string.h"
+#include "../INC/enum_to_string.h"
 
 #ifndef DISABLE_ENUM_STRINGS
 

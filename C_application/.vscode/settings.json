@@ -7,6 +7,9 @@
         "assert_handler.h": "c",
         "enum_to_string.h": "c",
         "state_idle.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "cjson.h": "c",
+        "pthread.h": "c",
+        "cstdio": "c"
     }
 }

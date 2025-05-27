@@ -1,6 +1,6 @@
-#include "state_init.h"
+#include "../INC/state_init.h"
 //#include "common/trace.h"
-#include "enum_to_string.h"
+#include "../INC/enum_to_string.h"
 #include <stdio.h>
 void state_init_init(void *data)
 {

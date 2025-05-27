@@ -1,7 +1,7 @@
 // Example: state_idle.c
-#include "state_idle.h"
+#include "../INC/state_idle.h"
 //#include "common/trace.h"
-#include "enum_to_string.h"
+#include "../INC/enum_to_string.h"
 #include <stdio.h>
 void state_idle_init(void *data)
 {
