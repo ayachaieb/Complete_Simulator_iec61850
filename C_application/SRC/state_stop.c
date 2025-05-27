@@ -1,6 +1,6 @@
-#include "../INC/state_stop.h"
+#include "state_stop.h"
 //#include "common/trace.h"
-#include "../INC/enum_to_string.h"
+#include "enum_to_string.h"
 #include <stdio.h>
 void state_stop_init(void *data)
 {

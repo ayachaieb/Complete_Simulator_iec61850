@@ -1,4 +1,5 @@
-#include "../INC/State_Machine.h" //  this type of include is inacceptable
+#include "State_Machine.h" 
+#include "Ring_Buffer.h" 
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -13,59 +14,8 @@
 #define SOCKET_PATH "/tmp/app.sv_simulator" // Path to the Unix domain socket need to be  in /var directory
 #define BUFFER_SIZE 1024
 #define QUEUE_SIZE 16
-typedef struct {
-    state_event_e events[QUEUE_SIZE];
-    int head;
-    int tail;
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
-    int shutdown;
-} EventQueue;
-
-EventQueue event_queue = { .head = 0, .tail = 0, .shutdown = 0 };
-
 state_machine_t sm_data = { .current_state = STATE_IDLE, .handlers = NULL };
-
-// Initialize event queue
-void event_queue_init(void)
-{
-    pthread_mutex_init(&event_queue.mutex, NULL);
-    pthread_cond_init(&event_queue.cond, NULL);
-}
-
-// Push event to queue
-void event_queue_push(state_event_e event)
-{
-    pthread_mutex_lock(&event_queue.mutex);
-    if ((event_queue.tail + 1) % QUEUE_SIZE != event_queue.head) {
-        event_queue.events[event_queue.tail] = event;
-        event_queue.tail = (event_queue.tail + 1) % QUEUE_SIZE;
-        printf("Pushed event: %d\n", event);
-        pthread_cond_signal(&event_queue.cond);
-    } else {
-        fprintf(stderr, "Event queue full, dropping event\n");
-    }
-    pthread_mutex_unlock(&event_queue.mutex);
-}
-
-// Pop event from queue (blocks if empty)
-state_event_e event_queue_pop(void)
-{
-    pthread_mutex_lock(&event_queue.mutex);
-    while (event_queue.head == event_queue.tail && !event_queue.shutdown) {
-        pthread_cond_wait(&event_queue.cond, &event_queue.mutex);
-    }
-    if (event_queue.shutdown && event_queue.head == event_queue.tail) {
-        pthread_mutex_unlock(&event_queue.mutex);
-        return STATE_EVENT_shutdown;
-    }
-    state_event_e event = event_queue.events[event_queue.head];
-    event_queue.head = (event_queue.head + 1) % QUEUE_SIZE;
-    printf("Popped event: %d\n", event);
-    pthread_mutex_unlock(&event_queue.mutex);
-    return event;
-}
-
+EventQueue event_queue = { .head = 0, .tail = 0, .shutdown = 0 };
 // State machine thread
 void *state_machine_thread(void *arg)
 {
@@ -76,7 +26,7 @@ void *state_machine_thread(void *arg)
     }
     state_machine_init(sm);
     while (1) {
-        state_event_e event = event_queue_pop();
+        state_event_e event = event_queue_pop(event_queue);
         if (event == STATE_EVENT_shutdown) {
             break;
         }
@@ -88,8 +38,10 @@ void *state_machine_thread(void *arg)
 
 int main(void)
 {
+
+   // EventQueue event_queue = { .head = 0, .tail = 0, .shutdown = 0 };
     // Initialize event queue
-    event_queue_init();
+    event_queue_init(event_queue);
 
     // Create state machine thread
     pthread_t sm_thread;
@@ -217,7 +169,7 @@ int main(void)
 
         // Send event to state machine
         if (event != STATE_EVENT_NONE) {
-            event_queue_push(event);
+            event_queue_push(event,event_queue);
         }
 
         // Send response back to server

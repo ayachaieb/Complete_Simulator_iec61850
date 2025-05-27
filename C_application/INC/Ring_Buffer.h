@@ -16,10 +16,10 @@ typedef struct {
     pthread_cond_t cond;
     int shutdown;
 } EventQueue;
-EventQueue event_queue = { .head = 0, .tail = 0, .shutdown = 0 };
-// Initialize event queue
-void event_queue_init(void);
-// Push event to queue
-void event_queue_push(state_event_e event);
 
+// Initialize event queue
+void event_queue_init(  EventQueue event_queue);
+// Push event to queue
+void event_queue_push(state_event_e event,  EventQueue event_queue);
+state_event_e event_queue_pop(  EventQueue event_queue);
 #endif // RING_BUFFER_H

@@ -1,4 +1,4 @@
-#include "../INC/State_Machine.h"
+#include "State_Machine.h"
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
