@@ -3,7 +3,7 @@
 
 
 typedef struct state_machine state_machine_t;
-typedef struct state_machine_data state_machine_data_t;
+// typedef struct state_machine_data state_machine_data_t;
 typedef struct state_handler state_handler_t;
 typedef enum {
     STATE_IDLE,

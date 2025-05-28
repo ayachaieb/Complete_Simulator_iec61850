@@ -1,22 +1,19 @@
 #include "State_Machine.h"
 #include <stdio.h>
-#include "state_idle.h"
-#include "state_init.h"
-#include "state_running.h"
-#include "state_stop.h"
 #include "enum_to_string.h"
 
+// Function prototypes for state handlers
+void state_idle_init(void *data);
+void state_idle_enter(void *data, state_e from, state_event_e event);
 
+void state_init_init(void *data);
+void state_init_enter(void *data, state_e from, state_event_e event);
 
+void state_running_init(void *data);
+void state_running_enter(void *data, state_e from, state_event_e event);
 
-typedef struct state_machine_data {
-    state_e state;
-    struct state_idle_data idle;
-    struct state_init_data init;
-    struct state_running_data running;
-    struct state_stop_data stop;
-    state_event_e internal_event;
-} ;
+void state_stop_init(void *data);
+void state_stop_enter(void *data, state_e from, state_event_e event);
 
 void state_machine_free(state_machine_t *sm)
 {
@@ -56,7 +53,6 @@ void state_machine_init(state_machine_t *sm)
         sm->handlers[sm->current_state].enter( NULL,STATE_IDLE, STATE_EVENT_NONE);
     }
 }
-
 
 
 void state_machine_run(state_machine_t *sm, state_event_e event)
@@ -114,4 +110,50 @@ void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e ev
         sm->handlers[to].enter(NULL, from, event);
     }
     sm->current_state = to;
+}
+
+void state_idle_init(void *data)
+{
+    
+    // Initialize idle state data here
+}
+
+void state_idle_enter( void *data,state_e from, state_event_e event)
+{
+   // TRACE("Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    printf("Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // IDLE state entry logic here
+}
+
+void state_init_init(void *data)
+{
+    // initialisation
+}
+
+void state_init_enter(void *data ,state_e from, state_event_e event)
+{
+    printf("Entered INIT state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // INIT state entry logic  
+}
+
+void state_running_init(void *data)
+{
+    // Initialize running state data here
+}
+
+void state_running_enter(void *data, state_e from, state_event_e event)
+{
+    printf("Entered RUNNING state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // Add your RUNNING state entry logic here
+}
+
+void state_stop_init(void *data)
+{
+    //implementation
+}
+
+void state_stop_enter(void *data , state_e from, state_event_e event)
+{
+    printf("Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // implementation
 }

@@ -18,8 +18,8 @@ typedef struct {
 } EventQueue;
 
 // Initialize event queue
-void event_queue_init(  EventQueue event_queue);
+void event_queue_init( EventQueue* event_queue);
 // Push event to queue
-void event_queue_push(state_event_e event,  EventQueue event_queue);
-state_event_e event_queue_pop(  EventQueue event_queue);
+void event_queue_push(state_event_e event, EventQueue* event_queue);
+state_event_e event_queue_pop(EventQueue* event_queue);
 #endif // RING_BUFFER_H

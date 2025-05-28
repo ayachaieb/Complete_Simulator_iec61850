@@ -10,6 +10,8 @@
         "stdio.h": "c",
         "cjson.h": "c",
         "pthread.h": "c",
-        "cstdio": "c"
+        "cstdio": "c",
+        "un.h": "c",
+        "unistd.h": "c"
     }
 }

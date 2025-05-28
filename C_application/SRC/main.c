@@ -219,7 +219,6 @@ int main(void)
         if (event != STATE_EVENT_NONE) {
             event_queue_push(event);
         }
-
         // Send response back to server
         if (response) {
              usleep(5000000); // Simulate processing delay
@@ -238,7 +237,6 @@ int main(void)
         cJSON_Delete(json_response);
         free(response);
     }
-
     // Cleanup
     event_queue.shutdown = 1;
     pthread_cond_signal(&event_queue.cond);

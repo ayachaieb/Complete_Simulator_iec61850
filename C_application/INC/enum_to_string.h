@@ -1,11 +1,7 @@
 #ifndef ENUM_TO_STRING_H
 #define ENUM_TO_STRING_H
+#include "State_Machine.h"
 
-
-#include "state_idle.h"
-#include "state_init.h"
-#include "state_running.h"
-#include "state_stop.h"
 
 
 /* Functions to convert enum to readable string. String consume flash space, and

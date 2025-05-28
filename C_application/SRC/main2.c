@@ -13,7 +13,7 @@
 #include <time.h>
 #define SOCKET_PATH "/tmp/app.sv_simulator" // Path to the Unix domain socket need to be  in /var directory
 #define BUFFER_SIZE 1024
-#define QUEUE_SIZE 16
+
 state_machine_t sm_data = { .current_state = STATE_IDLE, .handlers = NULL };
 EventQueue event_queue = { .head = 0, .tail = 0, .shutdown = 0 };
 // State machine thread
@@ -26,7 +26,7 @@ void *state_machine_thread(void *arg)
     }
     state_machine_init(sm);
     while (1) {
-        state_event_e event = event_queue_pop(event_queue);
+        state_event_e event = event_queue_pop(&event_queue);
         if (event == STATE_EVENT_shutdown) {
             break;
         }
@@ -39,9 +39,9 @@ void *state_machine_thread(void *arg)
 int main(void)
 {
 
-   // EventQueue event_queue = { .head = 0, .tail = 0, .shutdown = 0 };
+
     // Initialize event queue
-    event_queue_init(event_queue);
+    event_queue_init(&event_queue);
 
     // Create state machine thread
     pthread_t sm_thread;
@@ -51,7 +51,7 @@ int main(void)
     }
     printf("Created state machine thread\n");
 
-    // Create Unix domain socket
+    // Create Unix domain socket event_queue,sm_thread
     int sock = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("Socket creation failed");
@@ -169,7 +169,7 @@ int main(void)
 
         // Send event to state machine
         if (event != STATE_EVENT_NONE) {
-            event_queue_push(event,event_queue);
+            event_queue_push(event,&event_queue);
         }
 
         // Send response back to server

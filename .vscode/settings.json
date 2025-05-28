@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "unistd.h": "c",
+        "state_init.h": "c",
+        "state_stop.h": "c",
+        "enum_to_string.h": "c",
+        "assert_handler.h": "c",
+        "string.h": "c",
+        "stdio.h": "c",
+        "state_running.h": "c"
+    }
+}
