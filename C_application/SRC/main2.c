@@ -20,16 +20,14 @@ int check_app_shutdown_status(void) {
     return !main_application_running;
 }
 
-// Callback function to handle events from the IPC module
-// This function acts as the bridge, pushing events to the state machine
+// Callback function 
 void ipc_event_handler(state_event_e event, const char *requestId) {
     printf("Main: IPC event handler received event: %d, requestId: %s\n", event, requestId ? requestId : "N/A");
 
-    // Push the event to the State Machine
+   
  
     StateMachine_push_event(event);
 
-    // --- Prepare and send a response back ---
     cJSON *json_response = cJSON_CreateObject();
     if (!json_response) {
         fprintf(stderr, "Main: Failed to create JSON response object for event handler.\n");
@@ -75,18 +73,17 @@ void ipc_event_handler(state_event_e event, const char *requestId) {
 
 
 int main(void) {
-    // 1. Register signal handler for graceful application shutdown
+  
     signal(SIGINT, handle_sigint);
     printf("Main: Registered SIGINT handler for graceful shutdown.\n");
-
-    // 2. Initialize the State Machine Module
+ 
     if (StateMachine_Launch() != 0) {
         fprintf(stderr, "Main: Failed to initialize StateMachineModule. Exiting.\n");
         return EXIT_FAILURE;
     }
-    printf("Main: StateMachineModule initialized.\n");
+    printf("Main: StateMachineModule launched.\n");
 
-    // 3. Initialize the IPC Socket Module, providing our callback for event handling
+
     if (ipc_init(ipc_event_handler) != 0) {
         fprintf(stderr, "Main: Failed to initialize ipc. Shutting down StateMachineModule.\n");
         StateMachine_shutdown(); // Clean up state machine if IPC fails
