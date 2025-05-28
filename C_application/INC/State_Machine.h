@@ -31,7 +31,16 @@ typedef struct state_machine {
     state_handler_t *handlers;
 } state_machine_t;
 
-void state_machine_init(state_machine_t *sm);
-void state_machine_run(state_machine_t *sm, state_event_e event);
-void state_machine_free(state_machine_t *sm);
+// void state_machine_init(state_machine_t *sm);
+// void state_machine_run(state_machine_t *sm, state_event_e event);
+// void state_machine_free(state_machine_t *sm);
+// Function to initialize the state machine module and start its thread
+int StateMachine_Launch(void);
+
+// Function to push events to the state machine (if event_queue is managed internally)
+void StateMachine_push_event(state_event_e event);
+
+// Function to signal shutdown and join the state machine thread
+void StateMachine_shutdown(void);
+int verif_shutdown(void);
 #endif

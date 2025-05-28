@@ -1,6 +1,11 @@
 #include "State_Machine.h"
 #include <stdio.h>
 #include "enum_to_string.h"
+#include "pthread.h"
+#include "Ring_Buffer.h"
+static state_machine_t sm_data_internal;
+static EventQueue event_queue_internal;
+static pthread_t sm_thread_internal;
 
 // Function prototypes for state handlers
 void state_idle_init(void *data);
@@ -156,4 +161,55 @@ void state_stop_enter(void *data , state_e from, state_event_e event)
 {
     printf("Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
     // implementation
+}
+
+// State machine thread function (made static as it's internal to the module)
+static void *state_machine_thread_internal(void *arg) {
+    state_machine_t *sm = (state_machine_t *)arg;
+    if (!sm) {
+        fprintf(stderr, "State machine pointer is NULL in internal thread\n");
+        return NULL;
+    }
+    state_machine_init(sm); 
+    while (1) {
+        state_event_e event = event_queue_pop(&event_queue_internal); 
+        if (event == STATE_EVENT_shutdown) {
+            break;
+        }
+        state_machine_run(sm, event); 
+    }
+    state_machine_free(sm);
+    return NULL;
+}
+
+int StateMachine_Launch(void) {
+    // Initialize internal structures
+    sm_data_internal.current_state = STATE_IDLE; 
+    sm_data_internal.handlers = NULL; 
+    event_queue_init(&event_queue_internal);
+
+    // Create state machine thread
+    if (pthread_create(&sm_thread_internal, NULL, state_machine_thread_internal, &sm_data_internal) != 0) {
+        perror("Failed to create state machine thread in module");
+        return -1; // Indicate failure
+    }
+    printf("Created state machine thread in module\n");
+    return 0; // Indicate success
+}
+
+void StateMachine_push_event(state_event_e event) {
+    event_queue_push(event, &event_queue_internal); 
+}
+int verif_shutdown(void) {
+    return event_queue_internal.shutdown;
+}
+
+void StateMachine_shutdown(void) {
+    printf("Shutting down StateMachine module...\n");
+    event_queue_internal.shutdown = 1;
+    pthread_cond_signal(&event_queue_internal.cond); // Signal to wake up the thread
+    pthread_join(sm_thread_internal, NULL); // Wait for the thread to finish
+    pthread_mutex_destroy(&event_queue_internal.mutex); // Cleanup mutex
+    pthread_cond_destroy(&event_queue_internal.cond);   // Cleanup cond var
+    printf("StateMachine module shutdown complete.\n");
 }
