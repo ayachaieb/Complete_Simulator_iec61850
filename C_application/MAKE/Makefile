@@ -1,14 +1,14 @@
 # Compiler settings
 CC = gcc
 CFLAGS = -Wall -Wextra -g 
-CFLAGS += -IINC
+CFLAGS += -I$(INC_DIR)
 LDFLAGS = -lm -lcjson
 
 # Directory structure
-SRC_DIR = SRC
-INC_DIR = INC
-OBJ_DIR = OBJ
-BIN_DIR = BIN
+SRC_DIR = ../SRC
+INC_DIR = ../INC
+OBJ_DIR = ../OBJ
+BIN_DIR = ../BIN
 
 # Exclusion list 
 EXCLUDE_SRC = goose_publisher.c goose_receiver.c parser.c sv_publisher.c main.c 

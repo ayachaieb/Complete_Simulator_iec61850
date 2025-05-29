@@ -221,12 +221,12 @@ const socketServer = net.createServer((socket) => {
 
 // Clean up old socket file if it exists
 try {
-  fs.unlinkSync('/tmp/app.sv_simulator');
+  fs.unlinkSync('/var/run/app.sv_simulator');
 } catch (err) {
   if (err.code !== 'ENOENT') throw err;
 }
 
 // Start socket server
-socketServer.listen('/tmp/app.sv_simulator', () => {
-  console.log('Socket server listening on /tmp/app.sv_simulator');
+socketServer.listen('/var/run/app.sv_simulator', () => {
+  console.log('Socket server listening on /var/run/app.sv_simulator');
 });

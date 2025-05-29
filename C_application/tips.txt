@@ -2,9 +2,16 @@ modify makefile make all the obj in obj folder and binaries in bin folder  ✓
 include shouldnt contain ../inc/module.h but module.h  instead ✓
 circularbuffer module  ✓ 
 delete state idle init running stop and replace it ✓
- ipc module 
- stateMachine module 
-  every function has a return value 0,1 -1
- util module 
- define macros for every constant even 0 or one 
- #define SOCKET_PATH "/tmp/app.sv_simulator" // Path to the Unix domain socket need to be  in /var directory
+ ipc module ✓
+ stateMachine module ✓
+  every function has a return value 0,1 -1 ✓ presque
+ util module ✓
+ define macros for every constant even 0 or one   ---- Not yet
+ #define SOCKET_PATH "/tmp/app.sv_simulator" //  ✓
+ == A REVERSERR
+ STATIC FUNCTIONS
+ NO RETURNING OBJECTS JUST STATUS
+ fix read make
+ elliminate printfs
+ module manager module
+ 

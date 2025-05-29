@@ -10,6 +10,7 @@
 
 typedef struct {
     state_event_e events[QUEUE_SIZE];
+    const char *requestIds[QUEUE_SIZE]; 
     int head;
     int tail;
     pthread_mutex_t mutex;
@@ -20,6 +21,6 @@ typedef struct {
 // Initialize event queue
 void event_queue_init( EventQueue* event_queue);
 // Push event to queue
-void event_queue_push(state_event_e event, EventQueue* event_queue);
-state_event_e event_queue_pop(EventQueue* event_queue);
+void event_queue_push(state_event_e event,const char *requestId, EventQueue* event_queue);
+state_event_e event_queue_pop(EventQueue* event_queue, const char **requestId);
 #endif // RING_BUFFER_H

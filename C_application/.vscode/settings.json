@@ -13,6 +13,7 @@
         "cstdio": "c",
         "un.h": "c",
         "unistd.h": "c",
-        "ipc.h": "c"
+        "ipc.h": "c",
+        "util.h": "c"
     }
 }
