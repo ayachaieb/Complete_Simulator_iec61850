@@ -1,77 +1,79 @@
 #include "Module_Manager.h"
 #include "State_Machine.h"
 #include "ipc.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
+#include "logger.h"
 
-//  to handle IPC events and route to state machine
 static void internal_ipc_event_handler(state_event_e event, const char *requestId) {
-    // printf("ModuleManager: IPC event handler received event: %s, requestId: %s\n", 
-    //        state_event_to_string(event), requestId ? requestId : "N/A");
-    // fflush(stdout);
+    LOG_DEBUG("ModuleManager", "IPC event handler received event: %d, requestId: %s", 
+              event, requestId ? requestId : "N/A");
     StateMachine_push_event(event, requestId);
 }
 
-// Initialize all modules in the correct order
 int ModuleManager_init(void) {
-    printf("ModuleManager: Initializing modules...\n");
+    LOG_INFO("ModuleManager", "Initializing modules...");
     
-    // Initialize state machine first
-    if ( SUCCESS != StateMachine_Launch()) {
-        fprintf(stderr, "ModuleManager: Failed to initialize StateMachineModule.\n");
+    if (SUCCESS != StateMachine_Launch()) {
+        LOG_ERROR("ModuleManager", "Failed to initialize StateMachineModule");
         return FAIL;
     }
     
-    // Initialize IPC after state machine
     int ipc_init_result = ipc_init(internal_ipc_event_handler);
     if (ipc_init_result != SUCCESS) {
-        fprintf(stderr, "ModuleManager: Failed to initialize IPC (error code: %d).\n", 
-                ipc_init_result);
-        StateMachine_shutdown(); // Clean up state machine if IPC fails
+        LOG_ERROR("ModuleManager", "Failed to initialize IPC (error code: %d)", ipc_init_result);
+        StateMachine_shutdown();
         return FAIL;
     }
     
-    printf("ModuleManager: All modules initialized successfully.\n");
+    LOG_INFO("ModuleManager", "All modules initialized successfully");
     return SUCCESS;
 }
 
 // Run the main application loop
 int ModuleManager_run(shutdown_check_callback_t shutdown_check) {
     if (!shutdown_check) {
-        fprintf(stderr, "ModuleManager: Invalid shutdown check callback provided.\n");
+        LOG_ERROR("ModuleManager", "Invalid shutdown check callback provided");
         return FAIL;
     }
     
-    printf("ModuleManager: Starting main application loop.\n");
+    LOG_INFO("ModuleManager", "Starting main application loop");
     return ipc_run_loop(shutdown_check);
 }
 
 // Shutdown all modules in the correct order
 int ModuleManager_shutdown(void) {
-    printf("ModuleManager: Shutting down all modules...\n");
+    LOG_INFO("ModuleManager", "Shutting down all modules...");
     
     // Shutdown order is typically reverse of initialization
     if (SUCCESS != ipc_shutdown()) {
-        fprintf(stderr, "ModuleManager: Failed to shut down IPC.\n");
+        LOG_ERROR("ModuleManager", "Failed to shut down IPC");
         return FAIL;
     }
     if (SUCCESS != StateMachine_shutdown()) {
-        fprintf(stderr, "ModuleManager: Failed to shut down StateMachineModule.\n");
+        LOG_ERROR("ModuleManager", "Failed to shut down StateMachineModule");
         return FAIL;
     }
     
-    printf("ModuleManager: All modules shut down successfully.\n");
+    LOG_INFO("ModuleManager", "All modules shut down successfully");
     return SUCCESS;
 }
 
-// Register a custom IPC handler if needed (otherwise internal handler is used)
+// Register a custom IPC handler if needed
 int ModuleManager_register_ipc_handler(void (*ipc_handler)(int, const char*)) {
     if (!ipc_handler) {
+        LOG_ERROR("ModuleManager", "Invalid IPC handler provided");
         return FAIL;
     }
     
     ipc_shutdown();
     int ipc_init_result = ipc_init(ipc_handler);
+    
+    if (ipc_init_result != SUCCESS) {
+        LOG_ERROR("ModuleManager", "Failed to register custom IPC handler");
+    } else {
+        LOG_INFO("ModuleManager", "Custom IPC handler registered successfully");
+    }
+    
     return ipc_init_result;
 }

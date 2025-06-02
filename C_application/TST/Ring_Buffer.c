@@ -1,19 +1,18 @@
 #include "Ring_Buffer.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>  // Add this for strdup()
 #include <pthread.h>
 #include "util.h"
-#include "logger.h"
+#include "logger.h"  
 
 int event_queue_init(EventQueue* event_queue)
 {
-    if (pthread_mutex_init(&event_queue->mutex, NULL) != EXIT_SUCCESS) {
-        LOG_ERROR("RingBuffer", "pthread_mutex_init() error");
+    if ( pthread_mutex_init(&event_queue->mutex, NULL) != EXIT_SUCCESS) {
+        LOG_ERROR("RingBuffer", "pthread_mutex_init() error", __FILE__, __LINE__);
         return FAIL;
     }
     if (pthread_cond_init(&event_queue->cond, NULL) != EXIT_SUCCESS) {                                    
-        LOG_ERROR("RingBuffer", "pthread_cond_init() error");                                        
+        LOG_ERROR("RingBuffer", "pthread_cond_init() error", __FILE__, __LINE__);                                        
         return FAIL;
     }        
     return SUCCESS;                                    
@@ -29,13 +28,13 @@ int event_queue_push(state_event_e event, const char *requestId, EventQueue* eve
         if (requestId) {
             event_queue->requestIds[event_queue->tail] = strdup(requestId);
             if (event_queue->requestIds[event_queue->tail] == NULL) {
-                LOG_ERROR("RingBuffer", "strdup failed for requestId. Event might be pushed without requestId");
+                LOG_ERROR("RingBuffer", "strdup failed for requestId. Event might be pushed without requestId", __FILE__, __LINE__);
                 event_queue->requestIds[event_queue->tail] = NULL;
                 pthread_mutex_unlock(&event_queue->mutex);
                 return FAIL;
             }
         } else {
-            LOG_WARN("RingBuffer", "NULL requestId provided, storing NULL in queue");
+            LOG_WARN("RingBuffer", "NULL requestId provided, storing NULL in queue", __FILE__, __LINE__);
             event_queue->requestIds[event_queue->tail] = NULL;
             pthread_mutex_unlock(&event_queue->mutex);
             return FAIL;
@@ -44,7 +43,7 @@ int event_queue_push(state_event_e event, const char *requestId, EventQueue* eve
         event_queue->tail = (event_queue->tail + 1) % QUEUE_SIZE;
         pthread_cond_signal(&event_queue->cond);
     } else {
-        LOG_ERROR("RingBuffer", "Event queue full, dropping event");
+        LOG_ERROR("RingBuffer", "Event queue full, dropping event", __FILE__, __LINE__);
         pthread_mutex_unlock(&event_queue->mutex);
         return FAIL;
     }
@@ -70,7 +69,7 @@ int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **
     if (requestId_out) {
         *requestId_out = popped_requestId; 
     } else {
-        LOG_WARN("RingBuffer", "NULL requestId_out pointer provided, not returning requestId");
+        LOG_WARN("RingBuffer", "NULL requestId_out pointer provided, not returning requestId", __FILE__, __LINE__);
         if (popped_requestId) {
             free((char*)popped_requestId);
             event_queue->requestIds[event_queue->head] = NULL;
