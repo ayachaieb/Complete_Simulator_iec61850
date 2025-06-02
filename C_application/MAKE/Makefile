@@ -1,6 +1,6 @@
-# Compiler settings
+# Compiler settings  make CFLAGS +="-DDEBUG" 
 CC = gcc
-CFLAGS = -Wall -Wextra -g 
+CFLAGS = -Wall -Wextra -g -DDEBUG
 CFLAGS += -I$(INC_DIR)
 LDFLAGS = -lm -lcjson
 

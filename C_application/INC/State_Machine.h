@@ -35,9 +35,9 @@ typedef struct state_machine {
 int StateMachine_Launch(void);
 
 // Function to push events to the state machine (if event_queue is managed internally)
-void StateMachine_push_event(state_event_e event, const char *requestId);
+int StateMachine_push_event(state_event_e event, const char *requestId);
 
 // Function to signal shutdown and join the state machine thread
-void StateMachine_shutdown(void);
+int StateMachine_shutdown(void);
 int verif_shutdown(void);
 #endif

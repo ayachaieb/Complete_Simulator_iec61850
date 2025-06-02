@@ -1,5 +1,4 @@
 modify makefile make all the obj in obj folder and binaries in bin folder  ✓
-include shouldnt contain ../inc/module.h but module.h  instead ✓
 circularbuffer module  ✓ 
 delete state idle init running stop and replace it ✓
  ipc module ✓
@@ -7,11 +6,17 @@ delete state idle init running stop and replace it ✓
   every function has a return value 0,1 -1 ✓ presque
  util module ✓
  define macros for every constant even 0 or one   ---- Not yet
- #define SOCKET_PATH "/tmp/app.sv_simulator" //  ✓
  == A REVERSERR
  STATIC FUNCTIONS
  NO RETURNING OBJECTS JUST STATUS
- fix read make
- elliminate printfs
+ fix readme 
+ elliminate printfs add a structure for errors instead
+ sv sould be imlemented instead
  module manager module
- 
+ no if(fuction())
+ // elliminate access to stdr at the end 
+ recommandations::
+ //**no void return for FUNCTIONS 
+ //** no printfs find an alternative to it
+ //** keep comparaisonns like this STATE_EVENT_shutdown ==event not like this event == STATE_EVENT_shutdown 
+ //** define macros for every constant even 0 or one  

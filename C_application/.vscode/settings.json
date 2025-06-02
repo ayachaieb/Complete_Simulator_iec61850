@@ -14,6 +14,9 @@
         "un.h": "c",
         "unistd.h": "c",
         "ipc.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "module_manager.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c"
     }
 }

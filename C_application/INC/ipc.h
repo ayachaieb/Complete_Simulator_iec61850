@@ -53,7 +53,7 @@ int ipc_run_loop(int (*shutdown_check_func)(void));
  * This function sets an internal flag to terminate the `ipc_run_loop()`
  * and attempts to close the socket file descriptor.
  */
-void ipc_shutdown(void);
+int ipc_shutdown(void);
 
 /**
  * @brief Sends a JSON response string back to the connected client.
@@ -67,4 +67,4 @@ void ipc_shutdown(void);
  */
 int ipc_send_response(const char *response_json);
 
-#endif // IPC_SOCKET_MODULE_H
+#endif 

@@ -1,165 +1,47 @@
-#include "State_Machine.h" 
-#include "Ring_Buffer.h" 
+#include "Module_Manager.h"
 #include <stdio.h>
-#include <pthread.h>
+#include <signal.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <cjson/cJSON.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <time.h>
-#define SOCKET_PATH "/tmp/app.sv_simulator" // Path to the Unix domain socket need to be  in /var directory
-#define BUFFER_SIZE 1024
+#include "util.h"
 
+volatile int main_application_running = 1;
 
+// Signal handler for graceful shutdown (Ctrl+C)
+void handle_sigint(int sig) {
+    printf("\nMain: SIGINT received, initiating graceful shutdown...\n");
+    main_application_running = 0; // Set the flag to stop main loop
+}
 
+// Shutdown check callback for the module manager
+int check_app_shutdown_status(void) {
+    return !main_application_running;
+}
 
-int main(void)
-{
-
-
-    StateMachine_Launch();
-    printf("just launched the state machine\n");
-
-    // Create Unix domain socket event_queue,sm_thread
-    int sock = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (sock < 0) {
-        perror("Socket creation failed");
-        StateMachine_shutdown();
-        return 1;
+int main(void) {
+    // Set up signal handler
+    signal(SIGINT, handle_sigint);
+    
+    // Initialize all modules through the module manager
+    if (SUCCESS != ModuleManager_init()) {
+        fprintf(stderr, "Main: Module initialization failed. Exiting.\n");
+        return EXIT_FAILURE;
     }
-
-    //  socket  non-blocking
-    if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
-        perror("Failed to set socket non-blocking");
-        close(sock);
-        StateMachine_shutdown();
-        return 1;
+    // just for debug
+    printf("Main: All modules initialized. Press Ctrl+C to shut down.\n");
+    fflush(stdout);
+    
+    // Run the main application loop through the module manager
+    int app_status = ModuleManager_run(check_app_shutdown_status);
+    
+    // Perform a clean shutdown regardless of how we exited the loop
+    printf("Main: Initiating application shutdown...\n");
+    ModuleManager_shutdown();
+    
+    if (FAIL == app_status ) {
+        fprintf(stderr, "Main: Application terminated with an error.\n");
+        return EXIT_FAILURE;
+    } else {
+        printf("Main: Application shutdown complete. Goodbye!\n");
+        return EXIT_SUCCESS;
     }
-
-    // Configure server address
-    struct sockaddr_un addr;
-    memset(&addr, 0, sizeof(addr));
-    addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path) - 1);
-
-    // Connect to server
-    if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
-        perror("Connection failed");
-        close(sock);
-        StateMachine_shutdown();
-        return 1;
-    }
-    printf("Connected to Node.js IPC server\n");
-
-    // Buffer for receiving data
-    char buffer[BUFFER_SIZE];
-    while (!verif_shutdown()) {
-        // Receive data from server (non-blocking)
-        ssize_t n = recv(sock, buffer, BUFFER_SIZE - 1, 0);
-        if (n < 0) {
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                // No data available, sleep briefly to avoid CPU spinning
-                usleep(100000); // 100ms
-                continue;
-            }
-            perror("Receive failed");
-            break;
-        }
-        if (n == 0) {
-            printf("Disconnected from server\n");
-            break;
-        }
-        buffer[n] = '\0';
-        printf("Received: %s\n", buffer);
-
-        // Map socket messages to state machine events
-        state_event_e event = STATE_EVENT_NONE;
-        char *response = NULL;
-        cJSON *json_response = cJSON_CreateObject();
-        if (!json_response) {
-            fprintf(stderr, "Failed to create JSON object\n");
-            break;
-        }
-
-        // Parse incoming JSON to extract type and requestId
-        cJSON *json_request = cJSON_Parse(buffer);
-        if (!json_request) {
-            fprintf(stderr, "Failed to parse incoming JSON: %s\n", cJSON_GetErrorPtr());
-            cJSON_Delete(json_response);
-            continue;
-        }
-
-        cJSON *type = cJSON_GetObjectItem(json_request, "type");
-        cJSON *data = cJSON_GetObjectItem(json_request, "data");
-        cJSON *requestId = data ? cJSON_GetObjectItem(data, "requestId") : NULL;
-
-        if (type && cJSON_IsString(type)) {
-            if (strcmp(type->valuestring, "start_simulation") == 0) {
-                printf("Received start simulation: %s\n", buffer);
-                event = STATE_EVENT_start_simulation;
-                cJSON_AddStringToObject(json_response, "status", "Simulation started successfully");
-            } else if (strcmp(type->valuestring, "stop_simulation") == 0) {
-                printf("Received stop simulation: %s\n", buffer);
-                event = STATE_EVENT_stop_simulation;
-                cJSON_AddStringToObject(json_response, "status", "Simulation stopped successfully");
-            } else if (strcmp(type->valuestring, "pause_simulation") == 0) {
-                printf("Received pause simulation: %s\n", buffer);
-                event = STATE_EVENT_pause_simulation;
-                cJSON_AddStringToObject(json_response, "status", "Simulation paused successfully");
-            } else if (strcmp(type->valuestring, "stop_simulation") == 0) {
-                printf("Received stop: %s\n", buffer);
-                event = STATE_EVENT_stop_simulation;
-                cJSON_AddStringToObject(json_response, "status", "stop initiated");
-            }
-
-            // Add requestId to response if present
-            if (requestId && cJSON_IsString(requestId)) {
-                cJSON_AddStringToObject(json_response, "requestId", requestId->valuestring);
-            }
-        }
-
-        cJSON_Delete(json_request);
-
-        // Convert JSON object to string
-        if (cJSON_GetObjectItem(json_response, "status")) {
-            response = cJSON_PrintUnformatted(json_response);
-            if (!response) {
-                fprintf(stderr, "Failed to serialize JSON response\n");
-                cJSON_Delete(json_response);
-                break;
-            }
-        }
-
-        // Send event to state machine
-        if (event != STATE_EVENT_NONE) {
-            StateMachine_push_event( event);
-        }
-
-        // Send response back to server
-        if (response) {
-             usleep(5000000); // Simulate processing delay
-            printf("CBON \n");
-            ssize_t sent = send(sock, response, strlen(response), 0);
-            if (sent < 0) {
-                perror("Send failed");
-                cJSON_Delete(json_response);
-                free(response);
-                break;
-            }
-            printf("Sent response (%zd bytes): %s\n", sent, response);
-        }
-
-        // Cleanup JSON resources
-        cJSON_Delete(json_response);
-        free(response);
-    }
-
-    // Cleanup
-    StateMachine_shutdown();
-    close(sock);
-    return 0;
 }

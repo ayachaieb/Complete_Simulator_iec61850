@@ -9,21 +9,21 @@
 #include <cjson/cJSON.h> 
 #include <fcntl.h>       
 #include <errno.h>       
-
+#include "util.h"
 
 #define SOCKET_PATH "/var/run/app.sv_simulator" 
 #define BUFFER_SIZE 1024                
 
 
-static int sock_fd = -1;                     
+static int sock_fd = FAIL;                     
 static struct sockaddr_un server_addr;       
-static volatile int internal_shutdown_flag = 0;
+static volatile int internal_shutdown_flag = EXIT_SUCCESS;
 static ipc_event_callback_t event_delivery_callback = NULL; 
 
 int ipc_init(ipc_event_callback_t event_cb) {
     if (!event_cb) {
         fprintf(stderr, "ipc_init: Error: event_cb cannot be NULL.\n");
-        return -1;
+        return FAIL;
     }
     event_delivery_callback = event_cb;
     internal_shutdown_flag = 0; 
@@ -32,15 +32,15 @@ int ipc_init(ipc_event_callback_t event_cb) {
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sock_fd < 0) {
         perror("ipc: Socket creation failed");
-        return -1;
+        return FAIL;
     }
 
 
     if (fcntl(sock_fd, F_SETFL, O_NONBLOCK) < 0) {
         perror("ipc: Failed to set socket non-blocking");
         close(sock_fd); 
-        sock_fd = -1; 
-        return -1;
+        sock_fd = FAIL; 
+        return FAIL;
     }
 
 
@@ -52,12 +52,12 @@ int ipc_init(ipc_event_callback_t event_cb) {
         if (errno != EINPROGRESS) {
             perror("ipc: Connection failed");
             close(sock_fd);
-            sock_fd = -1;
-            return -1;
+            sock_fd = FAIL;
+            return FAIL;
         }
     }
   //  printf("ipc: Connected to Node.js IPC server (or connection in progress).\n");
-    return 0;
+    return EXIT_SUCCESS; 
 }
 
 int ipc_run_loop(int (*shutdown_check_func)(void)) {
@@ -65,7 +65,7 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
 
     if (sock_fd < 0) {
         fprintf(stderr, "ipc: Socket not initialized.\n");
-        return -1;
+        return FAIL;
     }
 
     
@@ -73,19 +73,19 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
        
         ssize_t n = recv(sock_fd, buffer, BUFFER_SIZE - 1, 0);
 
-        if (n < 0) {
+        if (EXIT_SUCCESS > n) {
         
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 usleep(100000); 
                 continue;       // Continue to the next iteration of the loop
             }
             perror("ipc: Receive failed");
-            return -1; //  critical error
+            return FAIL; //  critical error
         }
-        if (n == 0) {
+        if (n == EXIT_SUCCESS) {
             //indicates that the peer has performed an orderly shutdown.
             printf("ipc: Disconnected from server.\n");
-            return 0; 
+            return EXIT_SUCCESS; 
         }
         buffer[n] = '\0'; // Null-terminate the received data
         printf("ipc: Received: %s\n", buffer);
@@ -113,19 +113,19 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
         }
 
         if (type_obj && cJSON_IsString(type_obj)) {
-            if (strcmp(type_obj->valuestring, "start_simulation") == 0) {
+            if (strcmp(type_obj->valuestring, "start_simulation") == EXIT_SUCCESS) {
                 event = STATE_EVENT_start_simulation;
                 printf("ipc: Event: start_simulation\n");
-            } else if (strcmp(type_obj->valuestring, "pause_simulation") == 0) {
+            } else if (strcmp(type_obj->valuestring, "pause_simulation") == EXIT_SUCCESS) {
                 event = STATE_EVENT_pause_simulation;
             }
-            else if (strcmp(type_obj->valuestring, "stop_simulation") == 0) {
+            else if (strcmp(type_obj->valuestring, "stop_simulation") == EXIT_SUCCESS) {
                 event = STATE_EVENT_stop_simulation;
-            } else if (strcmp(type_obj->valuestring, "init_success") == 0) {
+            } else if (strcmp(type_obj->valuestring, "init_success") == EXIT_SUCCESS) {
                 event = STATE_EVENT_init_success;
-            } else if (strcmp(type_obj->valuestring, "init_failed") == 0) {
+            } else if (strcmp(type_obj->valuestring, "init_failed") == EXIT_SUCCESS) {
                 event = STATE_EVENT_init_failed;
-            } else if (strcmp(type_obj->valuestring, "shutdown") == 0) {
+            } else if (strcmp(type_obj->valuestring, "shutdown") == EXIT_SUCCESS) {
                 event = STATE_EVENT_shutdown;
             } else {
                 fprintf(stderr, "ipc: Unknown event type: %s\n", type_obj->valuestring);
@@ -146,18 +146,24 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
             free(requestId_val);
         }
     }
-    return 0; 
+    return EXIT_SUCCESS; 
 }
 
-void ipc_shutdown(void) {
-    printf("ipc: Shutting down...\n");
-    internal_shutdown_flag = 1; 
+int ipc_shutdown(void) {
+    int status = EXIT_SUCCESS; // Assume success unless an error occurs
 
-    if (sock_fd >= 0) {
-        close(sock_fd); 
-        sock_fd = -1;   
+    printf("ipc: Shutting down...\n");
+    internal_shutdown_flag = EXIT_FAILURE; 
+
+    if (EXIT_SUCCESS <= sock_fd) {  
+        if (FAIL == close(sock_fd) ) {  
+            perror("close"); 
+            status = FAIL; 
+        } else {
+            sock_fd = FAIL; 
+        }
     }
-    printf("Ipc: Shutdown complete.\n");
+    return status; // Return success or failure
 }
 
 int ipc_send_response(const char *response_json) {
