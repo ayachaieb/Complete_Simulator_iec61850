@@ -1,43 +1,46 @@
 #include "State_Machine.h"
-#include <stdio.h>
 #include "util.h"
 #include "pthread.h"
 #include "ipc.h"
+#include <errno.h>
 #include "Ring_Buffer.h"
 #include <cjson/cJSON.h>
 #include <stdlib.h>
-#include "logger.h"
-#include "SV_Publisher.h"
-#include <errno.h>
+// Include the logger header
+#include "logger.h" 
+
 static state_machine_t sm_data_internal;
 static EventQueue event_queue_internal;
 static pthread_t sm_thread_internal;
+
 #define FAIL -1
 #define SUCCESS 0
+
 // Function prototypes for state handlers
-static bool state_idle_init(void *data);
-static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
+bool state_idle_init(void *data);
+bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
 
-static bool state_init_init(void *data);
-static bool state_init_enter(void *data, state_e from, state_event_e event, const char *requestId);
+bool state_init_init(void *data);
+bool state_init_enter(void *data, state_e from, state_event_e event, const char *requestId);
 
-static bool state_running_init(void *data);
-static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId);
+bool state_running_init(void *data);
+bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId);
 
-static bool state_stop_init(void *data);
-static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId);
-static void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId);
-static void state_machine_free(state_machine_t *sm)
+bool state_stop_init(void *data);
+bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId);
+
+void state_machine_free(state_machine_t *sm)
 {
     free(sm->handlers);
     sm->handlers = NULL;
 }
 
-static int state_machine_init(state_machine_t *sm)
+int state_machine_init(state_machine_t *sm)
 {
     // Allocate handlers array for 4 states
     sm->handlers = calloc(4, sizeof(state_handler_t));
     if (!sm->handlers) {
+        // Changed fprintf to logger_log with ERROR level
         LOG_ERROR("State_Machine", "Failed to allocate handlers"); 
         return FAIL;
     }
@@ -53,22 +56,12 @@ static int state_machine_init(state_machine_t *sm)
     sm->handlers[STATE_STOP].init = state_stop_init;
     sm->handlers[STATE_STOP].enter = state_stop_enter;
 
-    // // Initialize each state
-    // for (int i = 0; i < 4; i++) {
-    //     if (sm->handlers[i].init) {
-    //         sm->handlers[i].init(NULL);
-    //     }
-    //     else {
-    //         fprintf(stderr, "State handler for state %d is NULL\n", i);
-    //         return FAIL;
-    //     }
-    // }
-
     // Call the enter function for the initial state
     if (sm->handlers[sm->current_state].enter) {
         sm->handlers[sm->current_state].enter( NULL,STATE_IDLE, STATE_EVENT_NONE,NULL);
     }
     else {
+        // Changed fprintf to logger_log with ERROR level
         LOG_ERROR("State_Machine", "Enter handler for initial state %d is NULL", sm->current_state);
         return FAIL;
     }
@@ -76,22 +69,25 @@ static int state_machine_init(state_machine_t *sm)
 }
 
 
-static int state_machine_run(state_machine_t *sm, state_event_e event, const char *requestId)
+void state_machine_run(state_machine_t *sm, state_event_e event, const char *requestId)
 {
     if (!sm) {
-           LOG_ERROR("State_Machine", "State machine pointer is NULL in run function");
-        return FAIL;
+        // Changed fprintf to logger_log with ERROR level
+        LOG_ERROR("State_Machine", "State machine pointer is NULL in run function");
+        return;
     }
 
+    // Log the event and requestId (using DEBUG for potentially frequent messages)
     LOG_DEBUG("State_Machine", "State machine received event: %s, requestId: %s",
              state_event_to_string(event), requestId ? requestId : "N/A");
 
     // Handle shutdown event
     if (STATE_EVENT_shutdown ==event) {
+        // Changed printf to logger_log with INFO level
         LOG_INFO("State_Machine", "State machine received shutdown event, transitioning to STOP state.");
         sm->current_state = STATE_STOP;
         state_enter(sm, sm->current_state, sm->current_state, event,requestId);
-        return SUCCESS;
+        return;
     }
 
     state_e current = sm->current_state;
@@ -114,17 +110,21 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
                 next = STATE_IDLE;
             } else if (STATE_EVENT_stop_simulation == event ) {
                 next = STATE_STOP;
-            }                                                                                                             
+            }                                                                                                                                                                                                                                                                                                                                                                                                             
             break;
         case STATE_RUNNING:
             if (STATE_EVENT_stop_simulation == event  ) {
-                next = STATE_STOP;
+                next = STATE_IDLE;
             }
             else if (STATE_EVENT_pause_simulation == event  ) {
-                next = STATE_INIT;}
+                next = STATE_INIT;
+            } else if (STATE_EVENT_stop_simulation == event  ) {
+                next = STATE_STOP; 
+            }
             break;
         case STATE_STOP:
-        printf("State STOP\n");
+            // Changed printf to logger_log with INFO level
+            LOG_INFO("State_Machine", "State STOP");
             break;
         default:
             break;
@@ -133,67 +133,59 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
     if (next != current || event != STATE_EVENT_NONE) {
         state_enter(sm, next, current, event,requestId);
     }
-    return SUCCESS;
 }
 
-static void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId)
+void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId)
 {
     if (from != to) {
-        
+        // Changed printf to logger_log with INFO level
+        LOG_INFO("State_Machine", "State changed from %s to %s due to %s",
+                 state_to_string(from), state_to_string(to), state_event_to_string(event));
     
-    if (sm->handlers[to].enter) {
-       // printf("StateMachine-state_enter::Calling enter handler for state %s\n", state_to_string(to));
-        sm->handlers[to].enter(NULL, from, event,requestId);
+        if (sm->handlers[to].enter) {
+            // Changed printf to logger_log with DEBUG level
+            LOG_DEBUG("State_Machine", "Calling enter handler for state %s", state_to_string(to));
+            sm->handlers[to].enter(NULL, from, event,requestId);
+        }
+        sm->current_state = to;
     }
-    sm->current_state = to;
-}
 }
 
-static bool state_idle_init(void *data)
+bool state_idle_init(void *data)
 {
-        return true;
     // Initialize idle state data here
+    return true; // Assuming successful initialization
 }
 
-static bool state_idle_enter( void *data,state_e from, state_event_e event, const char *requestId)
+bool state_idle_enter( void *data,state_e from, state_event_e event, const char *requestId)
 {
-   // TRACE("Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
- LOG_INFO("State_Machine", "Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
- return true;
+    // TRACE("Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // Changed printf to logger_log with INFO level
+    LOG_INFO("State_Machine", "Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // Removed fflush(stdout)
+    // IDLE state entry logic here
+    return true; // Assuming successful entry
 }
-static bool state_init_init(void *data)
+
+bool state_init_init(void *data)
 {
     // initialisation  sv initialisation 
-     return true;
+    return true; // Assuming successful initialization
 }
 
-static bool state_init_enter(void *data ,state_e from, state_event_e event, const char *requestId)
+bool state_init_enter(void *data ,state_e from, state_event_e event, const char *requestId)
 {
+    // Changed printf to logger_log with INFO level
     LOG_INFO("State_Machine", "Entered INITIATION state from %s due to %s", state_to_string(from), state_event_to_string(event));
-      
-   const char* sv_interface = "lo"; 
-    if (!SVPublisher_init(sv_interface)) {
-        LOG_ERROR("State_Machine", "Failed to initialize SV Publisher module on interface %s", sv_interface);
-        
-        return FAIL;
-    }
-    else {
-        LOG_INFO("State_Machine", "SV Publisher initialized successfully on interface %s", sv_interface);
-        if(SUCCESS != StateMachine_push_event(STATE_EVENT_init_success, requestId)) {
-            LOG_ERROR("State_Machine", "Failed to push init success event to state machine");
-            return FAIL;
-        }
-        else {
-            LOG_INFO("State_Machine", "Init success event pushed to state machine");
-        }
-    }
-
-      cJSON *json_response = cJSON_CreateObject();
+    // Removed fflush(stdout)
+    
+    cJSON *json_response = cJSON_CreateObject();
     if (!json_response) {
-         LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
-        return FAIL;
+        // Changed fprintf to logger_log with ERROR level
+        LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
+        return false; // Indicate failure
     }
-  const char *status_msg = "state init currently executing ...";
+    const char *status_msg = "state init currently executing ...";
     cJSON_AddStringToObject(json_response, "status", status_msg);
     if (requestId) {
         cJSON_AddStringToObject(json_response, "requestId", requestId);
@@ -202,123 +194,122 @@ static bool state_init_enter(void *data ,state_e from, state_event_e event, cons
     char *response_str = cJSON_PrintUnformatted(json_response);
     if (response_str) {
         if(ipc_send_response(response_str)== FAIL) {
-              LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
+            // Changed fprintf to logger_log with ERROR level
+            LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
         } else {
-              LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
-        }
-        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
-    } else {
-        LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
-    }
-
-    cJSON_Delete(json_response); // Free the cJSON object
-
-}
-
-static bool state_running_init(void *data)
-{
-    // Initialize running state data here
-    return true; 
-}
-
-static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId)
-{
- LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s", state_to_string(from), state_event_to_string(event));
-  // Start the SV Publisher module here
-    if (!SVPublisher_start()) {
-        LOG_ERROR("State_Machine", "Failed to start SV Publisher module.");
-       
-        return FAIL;
-    }
-    LOG_INFO("State_Machine", "SV Publisher started in RUNNING state.");
-   
- 
- return SUCCESS;
-}
-
-static bool state_stop_init(void *data)
-{
-      return true;
-}
-
-static bool state_stop_enter(void *data , state_e from, state_event_e event, const char *requestId)
-{
-      LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
-      
-      // Stop the SV Publisher module here
-    SVPublisher_stop();
-    LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
-
-      cJSON *json_response = cJSON_CreateObject();
-    if (!json_response) {
-      LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
-        return FAIL; 
-    }
-  const char *status_msg = "state STOP currently executing ...";
-    cJSON_AddStringToObject(json_response, "status", status_msg);
-    if (requestId) {
-        cJSON_AddStringToObject(json_response, "requestId", requestId);
-    }
-
-    char *response_str = cJSON_PrintUnformatted(json_response);
-    if (response_str) {
-        if(ipc_send_response(response_str)== FAIL) {
-          LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
-        } else {
+            // Changed printf to logger_log with INFO level
             LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
         }
         free(response_str); // Free the string allocated by cJSON_PrintUnformatted
     } else {
+        // Changed fprintf to logger_log with ERROR level
         LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
     }
 
     cJSON_Delete(json_response); // Free the cJSON object
+    return true; // Assuming successful entry
 }
 
+bool state_running_init(void *data)
+{
+    // Initialize running state data here
+    return true; // Assuming successful initialization
+}
 
+bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId)
+{
+    // Changed printf to logger_log with INFO level
+    LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // Removed fflush(stdout)
+    // Add your RUNNING state entry logic here
+    return true; // Assuming successful entry
+}
+
+bool state_stop_init(void *data)
+{
+    //implementation
+    return true; // Assuming successful initialization
+}
+
+bool state_stop_enter(void *data , state_e from, state_event_e event, const char *requestId)
+{
+    // Changed printf to logger_log with INFO level
+    LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    // Removed fflush(stdout)
+    
+    cJSON *json_response = cJSON_CreateObject();
+    if (!json_response) {
+        // Changed fprintf to logger_log with ERROR level
+        LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
+        return false; // Indicate failure
+    }
+    const char *status_msg = "state STOP currently executing ...";
+    cJSON_AddStringToObject(json_response, "status", status_msg);
+    if (requestId) {
+        cJSON_AddStringToObject(json_response, "requestId", requestId);
+    }
+
+    char *response_str = cJSON_PrintUnformatted(json_response);
+    if (response_str) {
+        if(ipc_send_response(response_str)== FAIL) {
+            // Changed fprintf to logger_log with ERROR level
+            LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
+        } else {
+            // Changed printf to logger_log with INFO level
+            LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
+        }
+        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
+    } else {
+        // Changed fprintf to logger_log with ERROR level
+        LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
+    }
+
+    cJSON_Delete(json_response); // Free the cJSON object
+    return true; // Assuming successful entry
+}
+
+// State machine thread function (made static as it's internal to the module)
 static void *state_machine_thread_internal(void *arg) {
     state_machine_t *sm = (state_machine_t *)arg;
     const char *requestId = NULL; // Initialize requestId to NULL
     if (!sm) {
-          LOG_ERROR("State_Machine", "State machine pointer is NULL in internal thread");
+        // Changed fprintf to logger_log with ERROR level
+        LOG_ERROR("State_Machine", "State machine pointer is NULL in internal thread");
         return NULL;
     }
     int init_result =state_machine_init(sm); 
     if (init_result != SUCCESS) {
+        // Changed fprintf to logger_log with ERROR level
         LOG_ERROR("State_Machine", "State machine initialization failed in internal thread");
         return NULL;
-    
     }
     while (1) {
         state_event_e event ;
         if (SUCCESS == event_queue_pop(&event_queue_internal,&event, &requestId)) {
+            // If event is successfully popped, print it
+            // Changed printf to logger_log with DEBUG level
             LOG_DEBUG("State_Machine", "State machine thread popped event: %s, requestId: %s",
                       state_event_to_string(event), requestId ? requestId : "N/A");
         } else {
+            // Changed fprintf to logger_log with ERROR level
             LOG_ERROR("State_Machine", "Failed to pop event from queue in internal thread");
-          return NULL; 
+            return NULL; 
         }
-
         if (STATE_EVENT_shutdown == event  ) {
             break;
         }
-       if (SUCCESS!= state_machine_run(sm, event, requestId))
-        {
-            LOG_ERROR("State_Machine", "State machine run failed for event: %s, requestId: %s",
-                      state_event_to_string(event), requestId ? requestId : "N/A");
-            return NULL; 
-        }
+        state_machine_run(sm, event, requestId); // Run the state machine with the popped event
     }
     state_machine_free(sm);
     return NULL;
 }
 
 int StateMachine_Launch(void) {
-  
+ 
     sm_data_internal.current_state = STATE_IDLE; 
     sm_data_internal.handlers = NULL; 
     // to be modified
-     if (SUCCESS != event_queue_init(&event_queue_internal)){
+    if (SUCCESS != (&event_queue_internal)) {
      
         LOG_ERROR("State_Machine", "Failed to initialize event queue in module");
         return FAIL; 
@@ -326,31 +317,37 @@ int StateMachine_Launch(void) {
 
 
     if (pthread_create(&sm_thread_internal, NULL, state_machine_thread_internal, &sm_data_internal) != 0) {
-          LOG_ERROR("State_Machine", "Failed to create state machine thread in module: %s", strerror(errno)); 
-        return FAIL; // Indicate failure
+
+        LOG_ERROR("State_Machine", "Failed to create state machine thread in module: %s", strerror(errno)); 
+        return FAIL;
     }
+  
     LOG_INFO("State_Machine", "Created state machine thread in module");
     return EXIT_SUCCESS; 
 }
 
 int StateMachine_push_event(state_event_e event , const char *requestId) {
 
-int result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal); 
-return result_event_queue_push;
+    int result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal); 
+    return result_event_queue_push;
 }
+
 int verif_shutdown(void) {
     return event_queue_internal.shutdown;
 }
 
 int StateMachine_shutdown(void) {
+
     LOG_INFO("State_Machine", "Shutting down StateMachine module...");
-    event_queue_internal.shutdown = EXIT_FAILURE; // Set shutdown flag to true
+    event_queue_internal.shutdown = EXIT_FAILURE; 
+
     int c1 = pthread_cond_signal(&event_queue_internal.cond); // Signal to wake up the thread
     int c2 = pthread_join(sm_thread_internal, NULL); // Wait for the thread to finish
     int c3 = pthread_mutex_destroy(&event_queue_internal.mutex); // Cleanup mutex
     int c4 = pthread_cond_destroy(&event_queue_internal.cond);   // Cleanup cond var
     LOG_INFO("State_Machine", "StateMachine module shutdown complete.");
     if (c1 != 0 || c2 != 0 || c3 != 0 || c4 != 0) {
+
         LOG_ERROR("State_Machine", "Error during StateMachine shutdown: cond_signal=%d, join=%d, mutex_destroy=%d, cond_destroy=%d",
                      c1, c2, c3,c4);
         return EXIT_FAILURE; // Indicate failure
@@ -358,3 +355,4 @@ int StateMachine_shutdown(void) {
 
     return EXIT_SUCCESS; 
 }
+

@@ -46,6 +46,7 @@ static void default_log_handler(const log_entry_t* entry) {
     fprintf(stderr, "[%s.%03lu] [%s] [%s] %s (%s:%u)\n",
             time_str, entry->timestamp % 1000, level_str, entry->module,
             entry->message, entry->file, entry->line);
+  
 }
 
 static uint64_t get_timestamp_ms() {
@@ -150,7 +151,7 @@ void logger_log(log_level_t level, const char* module, const char* file,
     char msg_buffer[512];
     va_list args;
     va_start(args, format);
-    vsnprintf(msg_buffer, sizeof(msg_buffer), format, args);
+    vsnprintf(msg_buffer, sizeof(msg_buffer), format, args); 
     va_end(args);
     msg_buffer[sizeof(msg_buffer)-1] = '\0'; // Ensure null-termination
 
@@ -188,6 +189,7 @@ bool logger_init(size_t buffer_size, uint8_t flush_threshold) {
     (void)buffer_size;
     (void)flush_threshold;
     return true;
+    
 }
 
 void logger_set_level(log_level_t level) {

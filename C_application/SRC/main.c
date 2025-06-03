@@ -1,14 +1,17 @@
 #include "Module_Manager.h"
-#include <stdio.h>
+#include "logger.h"
 #include <signal.h>
 #include <stdlib.h>
 #include "util.h"
 
+// Define a module name for logging
+#define MODULE_NAME "Main"
+#define DEBUG
 volatile int main_application_running = 1;
 
 // Signal handler for graceful shutdown (Ctrl+C)
 void handle_sigint(int sig) {
-    printf("\nMain: SIGINT received, initiating graceful shutdown...\n");
+    LOG_INFO(MODULE_NAME, "SIGINT received, initiating graceful shutdown...");
     main_application_running = 0; // Set the flag to stop main loop
 }
 
@@ -18,30 +21,54 @@ int check_app_shutdown_status(void) {
 }
 
 int main(void) {
+    if (!logger_init(8192, 80)) {
+   
+        fprintf(stderr, "Failed to initialize logger. Exiting.\n");
+        return EXIT_FAILURE;
+    }
+    
     // Set up signal handler
     signal(SIGINT, handle_sigint);
     
     // Initialize all modules through the module manager
     if (SUCCESS != ModuleManager_init()) {
-        fprintf(stderr, "Main: Module initialization failed. Exiting.\n");
+        error_info_t err = {
+            .code = FAIL,
+            .description = "Module initialization failed. Exiting."
+        };
+        LOG_ERROR_CODE(MODULE_NAME, err);
+        logger_shutdown();
         return EXIT_FAILURE;
     }
-    // just for debug
-    printf("Main: All modules initialized. Press Ctrl+C to shut down.\n");
-    fflush(stdout);
+    
+    // Log successful initialization
+    LOG_INFO(MODULE_NAME, "All modules initialized. Press Ctrl+C to shut down.");
     
     // Run the main application loop through the module manager
     int app_status = ModuleManager_run(check_app_shutdown_status);
     
     // Perform a clean shutdown regardless of how we exited the loop
-    printf("Main: Initiating application shutdown...\n");
-    ModuleManager_shutdown();
+    LOG_INFO(MODULE_NAME, "Initiating application shutdown...");
     
-    if (FAIL == app_status ) {
-        fprintf(stderr, "Main: Application terminated with an error.\n");
+   if (FAIL == app_status) {
+        error_info_t err = {
+            .code = app_status,
+            .description = "Application terminated with an error."
+        };
+        LOG_ERROR_CODE(MODULE_NAME, err);
+   }
+   if(ModuleManager_shutdown() != SUCCESS) {
+        error_info_t err = {
+            .code = FAIL,
+            .description = "Module shutdown failed."
+        };
+        LOG_ERROR_CODE(MODULE_NAME, err);
+         logger_shutdown();
         return EXIT_FAILURE;
     } else {
-        printf("Main: Application shutdown complete. Goodbye!\n");
+        LOG_INFO(MODULE_NAME, "Application shutdown complete. Goodbye!");
+        logger_flush(); // Ensure all logs are written
+        logger_shutdown();
         return EXIT_SUCCESS;
     }
 }

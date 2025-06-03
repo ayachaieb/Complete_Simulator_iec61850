@@ -17,6 +17,9 @@
         "util.h": "c",
         "module_manager.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "time.h": "c",
+        "parser.h": "c",
+        "sv_publisher.h": "c"
     }
 }
