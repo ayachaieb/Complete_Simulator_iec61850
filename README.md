@@ -49,10 +49,6 @@ Before building the project, ensure you have the following installed:
     ```bash
     sudo apt install libxml2-dev
     ```
-* **OpenSSL development headers**: Required for TLS/SSL functionalities used by `libiec61850`.
-    ```bash
-    sudo apt install libssl-dev
-    ```
 * **cJSON development headers**: Used for JSON parsing (if `lcjson` is in your `LDFLAGS`).
     ```bash
     sudo apt install libcjson-dev # or build from source if not available in repos
@@ -113,12 +109,3 @@ The SV Publisher is integrated as a module (`sv_publisher_module.c/h`).
 ---
 
 ## Troubleshooting
-
-* **`hal_thread.h: No such file or directory`**: This indicates that the compiler cannot find the `libiec61850` header files. Ensure `LIBIEC_HOME` is correctly set in your `Makefile` and that `libiec61850` has been successfully built. Run `make clean` then `make debug` again.
-* **`static declaration of ‘state_enter’ follows non-static declaration`**: This means `state_enter` is called before its prototype is known. Ensure the `static bool state_enter(...)` prototype is placed at the top of your `State_Machine.c` file, before any calls to `state_enter`.
-* **Linking errors (`undefined reference to ...`)**: This usually means either:
-    * A source file containing the definition of the missing symbol is not being compiled or included in `SRC`.
-    * A required library (e.g., `libiec61850`, `libxml2`, `libcjson`, `pthread`) is not being linked. Check the `LDFLAGS` in the `Makefile`.
-    * The `libiec61850.a` file itself was not built or is in the wrong location. Rebuild `libiec61850` as described in the "Building" section.
-
-Feel free to open an issue or contact the project maintainer if you encounter further issues.
