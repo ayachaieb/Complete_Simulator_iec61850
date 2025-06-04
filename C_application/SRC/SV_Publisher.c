@@ -6,7 +6,7 @@
 #include <string.h>
 #include <pthread.h>      // For threading
 #include <errno.h>        // For strerror
-
+#include "util.h"        // For utility functions like Hal_getTimeInMs
 // Internal state for the SV Publisher module
 static SVPublisher g_svPublisher = NULL;
 static bool g_sv_publisher_running = false;
@@ -129,17 +129,17 @@ bool SVPublisher_start()
  * This function can be called to gracefully stop the publisher.
  * It waits for the publishing thread to terminate.
  */
-void SVPublisher_stop()
+int SVPublisher_stop()
 {
     // If not running, nothing to do
     if (!g_sv_publisher_running) {
         LOG_INFO("SV_Publisher_Module", "SV Publisher is not running or already stopped.");
-        return;
+        return FAIL;
     }
 
     LOG_INFO("SV_Publisher_Module", "Stopping SV Publisher thread...");
     g_sv_publisher_running = false; // Signal thread to stop
-    pthread_join(g_sv_publisher_thread, NULL); // Wait for thread to finish
+    pthread_join(g_sv_publisher_thread, NULL); 
 
     // Destroy the SV Publisher instance and clear handles
     if (g_svPublisher != NULL) {
@@ -149,6 +149,7 @@ void SVPublisher_stop()
         g_asdu2 = NULL;
         LOG_INFO("SV_Publisher_Module", "SV Publisher destroyed.");
     }
+    return SUCCESS;
 }
 
 /**

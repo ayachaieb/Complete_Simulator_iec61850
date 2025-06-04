@@ -19,12 +19,19 @@ static struct sockaddr_un server_addr;
 static volatile int internal_shutdown_flag = EXIT_SUCCESS;
 static ipc_event_callback_t event_delivery_callback = NULL; 
 
-int ipc_init(ipc_event_callback_t event_cb) {
-    if (!event_cb) {
-        LOG_ERROR("IPC", "Event callback cannot be NULL");
-        return FAIL;
-    }
-    event_delivery_callback = event_cb;
+
+static void internal_ipc_event_handler(state_event_e event, const char *requestId) {
+    LOG_DEBUG("ModuleManager", "IPC event handler received event: %d, requestId: %s", 
+              event, requestId ? requestId : "N/A");
+    StateMachine_push_event(event, requestId);
+}
+
+int ipc_init() {
+    // if (!event_cb) {
+    //     LOG_ERROR("IPC", "Event callback cannot be NULL");
+    //     return FAIL;
+    // }
+//event_delivery_callback = event_cb;
     internal_shutdown_flag = 0; 
 
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -76,7 +83,7 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
             LOG_ERROR("IPC", "Receive failed: %s", strerror(errno));
             return FAIL;
         }
-        if (n == EXIT_SUCCESS) {
+        if (EXIT_SUCCESS == n) {
             LOG_INFO("IPC", "Disconnected from server");
             return EXIT_SUCCESS; 
         }
@@ -135,9 +142,10 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
 
         cJSON_Delete(json_request);
 
-        if (event_delivery_callback) {
-            event_delivery_callback(event, requestId_val);
-        }
+        // if (event_delivery_callback) {
+        //     event_delivery_callback(event, requestId_val);
+        // }
+internal_ipc_event_handler(event, requestId_val);
 
         if (requestId_val) {
             free(requestId_val);

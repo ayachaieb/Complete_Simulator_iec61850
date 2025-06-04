@@ -125,6 +125,8 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
             break;
         case STATE_STOP:
         printf("State STOP\n");
+        if (STATE_EVENT_start_simulation == event  ) {
+                next = STATE_INIT;}
             break;
         default:
             break;

@@ -23,7 +23,7 @@ typedef void (*ipc_event_callback_t)(state_event_e event, const char *requestId)
  * -1 on failure (e.g., socket creation failed, failed to set non-blocking,
  * or connection failed for reasons other than EINPROGRESS).
  */
-int ipc_init(ipc_event_callback_t event_cb);
+int ipc_init();
 
 /**
  * @brief Runs the main communication loop for the IPC socket.

@@ -31,7 +31,7 @@ bool SVPublisher_start();
  * This function can be called to gracefully stop the publisher.
  * It waits for the publishing thread to terminate.
  */
-void SVPublisher_stop();
+int SVPublisher_stop();
 
 #ifdef __cplusplus
 }

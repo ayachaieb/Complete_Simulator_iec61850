@@ -5,11 +5,6 @@
 #include "util.h"
 #include "logger.h"
 
-static void internal_ipc_event_handler(state_event_e event, const char *requestId) {
-    LOG_DEBUG("ModuleManager", "IPC event handler received event: %d, requestId: %s", 
-              event, requestId ? requestId : "N/A");
-    StateMachine_push_event(event, requestId);
-}
 
 int ModuleManager_init(void) {
     LOG_INFO("ModuleManager", "Initializing modules...");
@@ -19,7 +14,7 @@ int ModuleManager_init(void) {
         return FAIL;
     }
     
-    int ipc_init_result = ipc_init(internal_ipc_event_handler);
+    int ipc_init_result = ipc_init();
     if (ipc_init_result != SUCCESS) {
         LOG_ERROR("ModuleManager", "Failed to initialize IPC (error code: %d)", ipc_init_result);
         StateMachine_shutdown();
