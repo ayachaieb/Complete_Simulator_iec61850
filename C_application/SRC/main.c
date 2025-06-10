@@ -57,7 +57,7 @@ int main(void) {
         };
         LOG_ERROR_CODE(MODULE_NAME, err);
    }
-   if(ModuleManager_shutdown() != SUCCESS) {
+   if(SUCCESS != ModuleManager_shutdown()) {
         error_info_t err = {
             .code = FAIL,
             .description = "Module shutdown failed."

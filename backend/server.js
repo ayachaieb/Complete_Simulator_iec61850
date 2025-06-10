@@ -1,29 +1,32 @@
 const express = require('express');
 const cors = require('cors');
-const ipc = require('node-ipc').default;
 const app = express();
+const net = require('net');
+const fs = require('fs');
 const port = 3000;
 
 // Sample data
 const items = [
   { id: 1, name: 'Item 1' },
   { id: 2, name: 'Item 2' },
-  { id: 3, name: 'Item 3' }
+  { id: 3, name: 'Item 3' },
 ];
 
-// in order to enable JSON parsing
+// Enable JSON parsing
 app.use(express.json());
 
 // CORS middleware
 app.use(cors({
   origin: 'http://localhost:4200',
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
 }));
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - Body:`, req.body);
   next();
 });
+
+// Helper function to send message to C app with unified format
 
 // API endpoints
 app.get('/api/items', (req, res) => {
@@ -72,7 +75,6 @@ app.post('/api/verify-config', (req, res) => {
   res.json({ message: 'Configuration is valid' });
 });
 
-
 app.post('/api/verify-goose-config', (req, res) => {
   console.log('Processing /api/verify-goose-config with config:', req.body);
   const config = req.body;
@@ -105,53 +107,72 @@ app.post('/api/verify-goose-config', (req, res) => {
   console.log('goose-config valid');
   res.json({ message: 'Configuration is valid' });
 });
+function sendToCApp(messageType, data) {
+  if (!clientSocket) {
+    throw new Error('No C application connected');
+  }
+
+  const message = JSON.stringify({
+    type: messageType,
+    data: data
+  });
+
+  clientSocket.write(message);
+}
+// Store pending HTTP responses to match with C app responses
+const pendingResponses = new Map();
 
 app.post('/api/start-simulation', (req, res) => {
   console.log('Processing /api/start-simulation with config:', req.body);
-  const config = req.body;
+  const requestId = Date.now().toString();
+  
   try {
-    const socket = ipc.server.sockets[Object.keys(ipc.server.sockets)[0]];
-    if (!socket) {
-      throw new Error('No C application connected');
-    }
-    ipc.server.emit(socket, 'start_simulation', { config });
-    res.json({ message: 'Simulation started' });
+    pendingResponses.set(requestId, res);
+    sendToCApp('start_simulation', {
+      config: req.body,
+      requestId: requestId
+    });
   } catch (error) {
     console.error('Simulation error:', error.message);
+    pendingResponses.delete(requestId);
     res.status(500).json({ error: 'Failed to start simulation: ' + error.message });
   }
 });
+
 app.post('/api/stop-simulation', (req, res) => {
-  console.log('Processing /api/stop-simulation with config:');
+  console.log('Processing /api/stop-simulation');
+  const requestId = Date.now().toString();
   
   try {
-    const socket = ipc.server.sockets[Object.keys(ipc.server.sockets)[0]];
-    if (!socket) {
-      throw new Error('No C application connected');
-    }
-    ipc.server.emit(socket, 'stop_simulation');
-    res.json({ message: 'Simulation stopped' });
+    pendingResponses.set(requestId, res);
+    sendToCApp('stop_simulation', {
+      requestId: requestId
+    });
   } catch (error) {
     console.error('Stopping Simulation error:', error.message);
+    pendingResponses.delete(requestId);
     res.status(500).json({ error: 'Failed to stop simulation: ' + error.message });
   }
 });
 
 app.post('/api/send-goose-message', (req, res) => {
   console.log('Processing /api/send-goose-message with config:', req.body);
-  const config = req.body;
+  const requestId = Date.now().toString();
+  
   try {
-    const socket = ipc.server.sockets[Object.keys(ipc.server.sockets)[0]];
-    if (!socket) {
-      throw new Error('No C application connected');
-    }
-    ipc.server.emit(socket, 'send-goose-message', { config });
-    res.json({ message: 'Goose Message Sent !' });
+    pendingResponses.set(requestId, res);
+    sendToCApp('send_goose_message', {
+      config: req.body,
+      requestId: requestId
+    });
   } catch (error) {
-    console.error('Simulation error:', error.message);
-    res.status(500).json({ error: 'Failed to start simulation: ' + error.message });
+    console.error('goose sending error:', error.message);
+    pendingResponses.delete(requestId);
+    res.status(500).json({ error: 'Failed to send goose: ' + error.message });
   }
 });
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -164,22 +185,48 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
-// Configure node-ipc server
-ipc.config.id = 'sv_simulator';
-ipc.config.retry = 1500;
-ipc.config.silent = false;
+// Create Unix domain socket server
+const socketServer = net.createServer((socket) => {
+  console.log('C application connected');
+  clientSocket = socket;
 
-ipc.serve(() => {
-  console.log('node-ipc server started');
-  ipc.server.on('connect', (socket) => {
-    console.log('C application connected via IPC');
+  socket.on('data', (data) => {
+    try {
+      const message = data.toString();
+      console.log('Received from C app:', message);
+      
+      const parsed = JSON.parse(message);
+      const { requestId, ...response } = parsed;
+      
+      const res = pendingResponses.get(requestId);
+      if (res) {
+        res.json(response);
+        pendingResponses.delete(requestId);
+      }
+    } catch (err) {
+      console.error('Error processing message:', err);
+    }
   });
-  ipc.server.on('socket.disconnected', (socket, destroyedSocketID) => {
+
+  socket.on('end', () => {
     console.log('C application disconnected');
+    clientSocket = null;
   });
-  ipc.server.on('message', (data, socket) => {
-    console.log('Received from C app:', data);
+
+  socket.on('error', (err) => {
+    console.error('Socket error:', err);
+    clientSocket = null;
   });
 });
 
-ipc.server.start();
+// Clean up old socket file if it exists
+try {
+  fs.unlinkSync('/var/run/app.sv_simulator');
+} catch (err) {
+  if (err.code !== 'ENOENT') throw err;
+}
+
+// Start socket server
+socketServer.listen('/var/run/app.sv_simulator', () => {
+  console.log('Socket server listening on /var/run/app.sv_simulator');
+});

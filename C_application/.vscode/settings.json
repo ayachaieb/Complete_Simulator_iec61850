@@ -20,6 +20,7 @@
         "stdlib.h": "c",
         "time.h": "c",
         "parser.h": "c",
-        "sv_publisher.h": "c"
+        "sv_publisher.h": "c",
+        "stdint.h": "c"
     }
 }

@@ -270,6 +270,28 @@ bool state_stop_enter(void *data , state_e from, state_event_e event, const char
 
 // State machine thread function (made static as it's internal to the module)
 static void *state_machine_thread_internal(void *arg) {
+
+// ------------------- TEST MAIN FUNCTION -------------------
+#include <stdio.h>
+int main() {
+    printf("\n--- State Machine Test Start ---\n");
+    int launch_result = StateMachine_Launch();
+    if (launch_result != 0) {
+        printf("Failed to launch state machine.\n");
+        return 1;
+    }
+    // Push a sequence of events
+    StateMachine_push_event(STATE_EVENT_start_simulation, "REQ1");
+    StateMachine_push_event(STATE_EVENT_init_success, "REQ2");
+    StateMachine_push_event(STATE_EVENT_stop_simulation, "REQ3");
+    StateMachine_push_event(STATE_EVENT_shutdown, "REQ4");
+    // Give some time for the thread to process events
+    sleep(1);
+    StateMachine_shutdown();
+    printf("--- State Machine Test End ---\n");
+    return 0;
+}
+// ----------------------------------------------------------
     state_machine_t *sm = (state_machine_t *)arg;
     const char *requestId = NULL; // Initialize requestId to NULL
     if (!sm) {

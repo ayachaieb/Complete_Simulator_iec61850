@@ -20,51 +20,68 @@ static volatile int internal_shutdown_flag = EXIT_SUCCESS;
 static ipc_event_callback_t event_delivery_callback = NULL; 
 
 
-static void internal_ipc_event_handler(state_event_e event, const char *requestId) {
+static void internal_ipc_event_handler(state_event_e event, const char *requestId) 
+{
     LOG_DEBUG("ModuleManager", "IPC event handler received event: %d, requestId: %s", 
               event, requestId ? requestId : "N/A");
     StateMachine_push_event(event, requestId);
 }
 
-int ipc_init() {
+int ipc_init(void) 
+{
+    int RetVal = SUCCESS;
     // if (!event_cb) {
     //     LOG_ERROR("IPC", "Event callback cannot be NULL");
     //     return FAIL;
     // }
 //event_delivery_callback = event_cb;
-    internal_shutdown_flag = 0; 
+    // internal_shutdown_flag = 0; 
 
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (sock_fd < 0) {
+    if (sock_fd < 0) 
+    {
         LOG_ERROR("IPC", "Socket creation failed: %s", strerror(errno));
-        return FAIL;
+        RetVal = FAIL;
     }
-
-    if (fcntl(sock_fd, F_SETFL, O_NONBLOCK) < 0) {
-        LOG_ERROR("IPC", "Failed to set socket non-blocking: %s", strerror(errno));
-        close(sock_fd); 
-        sock_fd = FAIL; 
-        return FAIL;
-    }
-
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sun_family = AF_UNIX;            
-    strncpy(server_addr.sun_path, SOCKET_PATH, sizeof(server_addr.sun_path) - 1);
-
-    if (connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
-        if (errno != EINPROGRESS) {
-            LOG_ERROR("IPC", "Connection failed: %s", strerror(errno));
-            close(sock_fd);
-            sock_fd = FAIL;
-            return FAIL;
+    else
+    {
+        if (fcntl(sock_fd, F_SETFL, O_NONBLOCK) < 0) //to be removed
+        {
+            LOG_ERROR("IPC", "Failed to set socket non-blocking: %s", strerror(errno));
+            close(sock_fd); 
+            sock_fd = FAIL; 
+            RetVal = FAIL;
         }
+        else
+        {
+            memset(&server_addr, 0, sizeof(server_addr));
+            server_addr.sun_family = AF_UNIX;            
+            strncpy(server_addr.sun_path, SOCKET_PATH, sizeof(server_addr.sun_path) - 1);
+
+            if (connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) 
+            {
+                if (errno != EINPROGRESS) 
+                {
+                    LOG_ERROR("IPC", "Connection failed: %s", strerror(errno));
+                    close(sock_fd);
+                    
+                    sock_fd = FAIL;
+                    RetVal = FAIL;
+                }
+            }
+            else
+            {
+                LOG_INFO("IPC", "Connected to Node.js IPC server (or connection in progress)");
+            }
+        }
+
     }
-    
-    LOG_INFO("IPC", "Connected to Node.js IPC server (or connection in progress)");
-    return EXIT_SUCCESS; 
+
+    return RetVal; 
 }
 
-int ipc_run_loop(int (*shutdown_check_func)(void)) {
+int ipc_run_loop(int (*shutdown_check_func)(void)) 
+{
     char buffer[BUFFER_SIZE]; 
 
     if (sock_fd < 0) {
@@ -72,18 +89,22 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
         return FAIL;
     }
 
-    while (!internal_shutdown_flag && (shutdown_check_func ? !shutdown_check_func() : 1)) {
+    while (!internal_shutdown_flag && (shutdown_check_func ? !shutdown_check_func() : 1)) //complexe implementation
+    {
         ssize_t n = recv(sock_fd, buffer, BUFFER_SIZE - 1, 0);
 
-        if (EXIT_SUCCESS > n) {
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                usleep(100000); 
+        if (EXIT_SUCCESS > n) 
+        {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) 
+            {
+                usleep(100000); // to be removed
                 continue;
             }
             LOG_ERROR("IPC", "Receive failed: %s", strerror(errno));
             return FAIL;
         }
-        if (EXIT_SUCCESS == n) {
+        if (EXIT_SUCCESS == n) 
+        {
             LOG_INFO("IPC", "Disconnected from server");
             return EXIT_SUCCESS; 
         }
@@ -137,6 +158,7 @@ int ipc_run_loop(int (*shutdown_check_func)(void)) {
                 LOG_WARN("IPC", "Unknown event type: %s", event_type);
                 cJSON_Delete(json_request);
                 continue;
+                //remove the continue
             }
         }
 
