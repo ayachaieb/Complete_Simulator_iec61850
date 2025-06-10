@@ -1,6 +1,7 @@
-# Ignore node_modules in all subdirectories
+# In root .gitignore
 **/node_modules/
-
-# Ignore all package-lock.json files
 **/package-lock.json
-**/dist/
+
+# Or specifically for your frontend app
+frontend/my-app/node_modules/
+frontend/my-app/package-lock.json
