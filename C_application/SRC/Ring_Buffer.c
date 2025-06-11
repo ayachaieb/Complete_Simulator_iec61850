@@ -66,33 +66,39 @@ int event_queue_push(state_event_e event, const char *requestId, EventQueue* eve
 }
 
 // Pop event from queue 
-int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **requestId_out)
+int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **requestId_out) 
 {
     int retval = SUCCESS;
     pthread_mutex_lock(&event_queue->mutex);
+
     while (event_queue->head == event_queue->tail && !event_queue->shutdown) {
         pthread_cond_wait(&event_queue->cond, &event_queue->mutex);
     }
-    if (event_queue->shutdown == 1 && event_queue->head == event_queue->tail) {
-        pthread_mutex_unlock(&event_queue->mutex);
-        *event = STATE_EVENT_shutdown; 
-        retval = SUCCESS; 
+
+    if (event_queue->shutdown && event_queue->head == event_queue->tail) {
+        *event = STATE_EVENT_shutdown;  // Shutdown case
+    } 
+    else {
+        *event = event_queue->events[event_queue->head];
+        const char *popped_requestId = event_queue->requestIds[event_queue->head];
+
+        if (requestId_out) {
+            *requestId_out = popped_requestId; 
+        } 
+        else {
+            LOG_WARN("RingBuffer", "NULL requestId_out pointer provided, not returning requestId");
+            if (popped_requestId) {
+                free((char*)popped_requestId);
+                event_queue->requestIds[event_queue->head] = NULL;
+            }
+            retval = FAIL; 
+        }
+
+        if (retval == SUCCESS) {  // Only advance head if not FAIL
+            event_queue->head = (event_queue->head + 1) % QUEUE_SIZE;
+        }
     }
 
-    *event = event_queue->events[event_queue->head];
-    const char *popped_requestId = event_queue->requestIds[event_queue->head];
-    if (requestId_out) {
-        *requestId_out = popped_requestId; 
-    } else {
-        LOG_WARN("RingBuffer", "NULL requestId_out pointer provided, not returning requestId");
-        if (popped_requestId) {
-            free((char*)popped_requestId);
-            event_queue->requestIds[event_queue->head] = NULL;
-        }
-        pthread_mutex_unlock(&event_queue->mutex);
-        retval = FAIL; 
-    }
-    event_queue->head = (event_queue->head + 1) % QUEUE_SIZE;
     pthread_mutex_unlock(&event_queue->mutex);
     return retval;
 }
