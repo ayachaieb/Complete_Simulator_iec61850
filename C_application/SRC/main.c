@@ -50,14 +50,17 @@ int main(void) {
     // Perform a clean shutdown regardless of how we exited the loop
     LOG_INFO(MODULE_NAME, "Initiating application shutdown...");
     
-   if (FAIL == app_status) {
+   if (FAIL == app_status)
+   {
         error_info_t err = {
             .code = app_status,
             .description = "Application terminated with an error."
         };
         LOG_ERROR_CODE(MODULE_NAME, err);
    }
-   if(SUCCESS != ModuleManager_shutdown()) {
+
+   if(SUCCESS != ModuleManager_shutdown())
+   {
         error_info_t err = {
             .code = FAIL,
             .description = "Module shutdown failed."
@@ -65,7 +68,9 @@ int main(void) {
         LOG_ERROR_CODE(MODULE_NAME, err);
          logger_shutdown();
         return EXIT_FAILURE;
-    } else {
+    }
+    else
+    {
         LOG_INFO(MODULE_NAME, "Application shutdown complete. Goodbye!");
         logger_flush(); // Ensure all logs are written
         logger_shutdown();

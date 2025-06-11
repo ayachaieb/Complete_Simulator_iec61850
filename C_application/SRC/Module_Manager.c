@@ -9,13 +9,16 @@
 int ModuleManager_init(void) {
     LOG_INFO("ModuleManager", "Initializing modules...");
     
-    if (SUCCESS != StateMachine_Launch()) {
+    if (SUCCESS != StateMachine_Launch())
+    {
         LOG_ERROR("ModuleManager", "Failed to initialize StateMachineModule");
         return FAIL;
     }
     
     int ipc_init_result = ipc_init();
-    if (ipc_init_result != SUCCESS) {
+    
+    if (ipc_init_result != SUCCESS) 
+    {
         LOG_ERROR("ModuleManager", "Failed to initialize IPC (error code: %d)", ipc_init_result);
         StateMachine_shutdown();
         return FAIL;
@@ -45,7 +48,8 @@ int ModuleManager_shutdown(void) {
         LOG_ERROR("ModuleManager", "Failed to shut down IPC");
         return FAIL;
     }
-    if (SUCCESS != StateMachine_shutdown()) {
+    if (SUCCESS != StateMachine_shutdown())
+    {
         LOG_ERROR("ModuleManager", "Failed to shut down StateMachineModule");
         return FAIL;
     }

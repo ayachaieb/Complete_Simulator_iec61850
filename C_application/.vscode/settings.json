@@ -1,27 +1,5 @@
 {
     "files.associations": {
-        "state_init.h": "c",
-        "ring_buffer.h": "c",
-        "state_machine.h": "c",
-        "state_common.h": "c",
-        "assert_handler.h": "c",
-        "enum_to_string.h": "c",
-        "state_idle.h": "c",
-        "stdio.h": "c",
-        "cjson.h": "c",
-        "pthread.h": "c",
-        "cstdio": "c",
-        "un.h": "c",
-        "unistd.h": "c",
-        "ipc.h": "c",
-        "util.h": "c",
-        "module_manager.h": "c",
-        "string.h": "c",
-        "stdlib.h": "c",
-        "time.h": "c",
-        "parser.h": "c",
-        "sv_publisher.h": "c",
-        "stdint.h": "c",
-        "functional": "c"
+        "state_machine.h": "c"
     }
 }

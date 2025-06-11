@@ -32,10 +32,10 @@ int ipc_init(void)
     {
         
         memset(&server_addr, 0, sizeof(server_addr));
-            server_addr.sun_family = AF_UNIX;            
-            strncpy(server_addr.sun_path, SOCKET_PATH, sizeof(server_addr.sun_path) - 1);
+        server_addr.sun_family = AF_UNIX;            
+        strncpy(server_addr.sun_path, SOCKET_PATH, sizeof(server_addr.sun_path) - 1);
 
-            if (connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) 
+        if (connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) 
             {
                 if (errno != EINPROGRESS) 
                 {
@@ -49,6 +49,7 @@ int ipc_init(void)
             else
             {
                 LOG_INFO("IPC", "Connected to Node.js IPC server (or connection in progress)");
+                RetVal= SUCCESS;
             }
         
 
@@ -208,7 +209,8 @@ int ipc_shutdown(void) {
     LOG_INFO("IPC", "Shutting down...");
     internal_shutdown_flag = EXIT_FAILURE; 
 
-    if (EXIT_SUCCESS <= sock_fd) {  
+    if (EXIT_SUCCESS <= sock_fd) {  // Check if the socket is still open
+
         if (FAIL == close(sock_fd)) {  
             LOG_ERROR("IPC", "Socket close failed: %s", strerror(errno));
             status = FAIL; 
@@ -220,24 +222,30 @@ int ipc_shutdown(void) {
 }
 
 int ipc_send_response(const char *response_json) {
+    int retval = FAIL;
     if (sock_fd < 0) {
         LOG_ERROR("IPC", "Socket not initialized for sending response");
-        return -1;
+        retval = FAIL;
     }
-    if (!response_json) {
+    else 
+    {    if (!response_json) 
+        {
         LOG_ERROR("IPC", "Cannot send NULL response");
-        return -1;
-    }
-
-
-    LOG_DEBUG("IPC", "Simulating processing delay before sending response");
-
-    ssize_t sent = send(sock_fd, response_json, strlen(response_json), 0);
-    if (sent < 0) {
-        LOG_ERROR("IPC", "Send failed: %s", strerror(errno));
-        return -1;
-    }
+        retval = FAIL;
+        }
+        else {
+            ssize_t sent = send(sock_fd, response_json, strlen(response_json), 0);
+            if (sent < 0) 
+            {
+            LOG_ERROR("IPC", "Send failed: %s", strerror(errno));
+            retval = FAIL;
+            }
     
-    LOG_DEBUG("IPC", "Sent response (%zd bytes): %s", sent, response_json);
-    return 0;
+            LOG_DEBUG("IPC", "Sent response (%zd bytes): %s", sent, response_json);
+            retval = SUCCESS;
+
+        }
+
+    }
+    return retval;
 }
