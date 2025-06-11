@@ -30,3 +30,17 @@ printf → LOG_INFO
 fprintf(stderr, ...) → LOG_ERROR
 
 Commented debug prints → LOG_DEBUG
+
+        // int select(int numfds, fd_set *readfds, fd_set *writefds,
+        //    fd_set *exceptfds, struct timeval *timeout); 
+
+
+        // if (fcntl(sock_fd, F_SETFL, O_NONBLOCK) < 0) //to be removed
+        // {
+        //     LOG_ERROR("IPC", "Failed to set socket non-blocking: %s", strerror(errno));
+        //     close(sock_fd); 
+        //     sock_fd = FAIL; 
+        //     RetVal = FAIL;
+        // }
+        // else
+        // {
