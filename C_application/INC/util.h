@@ -2,6 +2,7 @@
 #define ENUM_TO_STRING_H
 #include "State_Machine.h"
 typedef enum {
+    VALID = 0,
     SUCCESS = 0,
     FAIL = -1,
     ERROR_INVALID_PARAM = -2,

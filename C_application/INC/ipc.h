@@ -4,10 +4,6 @@
 #include <stddef.h> // For size_t
 #include "State_Machine.h" // Assuming this defines state_event_e
 
-// Callback function type for delivering events from the IPC module to the main application logic.
-// The `event` parameter indicates the mapped state machine event.
-// The `requestId` parameter (can be NULL) carries the original requestId from the incoming JSON.
-typedef void (*ipc_event_callback_t)(state_event_e event, const char *requestId);
 
 /**
  * @brief Initializes the IPC socket module.

@@ -21,6 +21,7 @@
         "time.h": "c",
         "parser.h": "c",
         "sv_publisher.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "functional": "c"
     }
 }
