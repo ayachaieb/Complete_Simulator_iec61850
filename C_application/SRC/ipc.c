@@ -10,7 +10,7 @@
 #include <fcntl.h>       
 #include <errno.h>       
 #include "util.h"
-
+#include "parser.h"
 #define SOCKET_PATH "/var/run/app.sv_simulator" 
 #define BUFFER_SIZE 1024                
 
@@ -104,7 +104,7 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
         
         // Data is available to read
         ssize_t n = recv(sock_fd, buffer, BUFFER_SIZE - 1, 0);
-        
+        //mechanism d erreur handling
         if (n < 0) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 continue;  // No data available, try again
@@ -122,40 +122,47 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
         // Ensure null termination
         buffer[n] = '\0';
         LOG_DEBUG("IPC", "Received: %s", buffer);
-        
+        printf("Received: %s\n", buffer); // For debugging purposes
         // Process the received JSON message
         state_event_e event = STATE_EVENT_NONE;
         char *requestId = NULL;
+         cJSON *type_obj,*data_obj ;
+         SimulationConfig config = {0}; // Initialize the config struct to zero
+        cJSON *json_request = NULL; // This will be set in the parse function
+        // cJSON *json_request = cJSON_Parse(buffer);
+        // if (!json_request) {
+        //     LOG_ERROR("IPC", "Failed to parse incoming JSON: %s", cJSON_GetErrorPtr());
+        //     continue;
+        // }
         
-        cJSON *json_request = cJSON_Parse(buffer);
-        if (!json_request) {
+        // // Extract message type
+        // cJSON *type_obj = cJSON_GetObjectItem(json_request, "type");
+        // if (!type_obj || !cJSON_IsString(type_obj)) {
+        //     LOG_ERROR("IPC", "Missing or invalid 'type' field in JSON message");
+        //     cJSON_Delete(json_request);
+        //     continue;
+        // }
+        
+        // // Extract data and requestId
+        // cJSON *data_obj = cJSON_GetObjectItem(json_request, "data");
+        // cJSON *requestId_obj = data_obj ? cJSON_GetObjectItem(data_obj, "requestId") : NULL;
+        
+        // if (requestId_obj && cJSON_IsString(requestId_obj)) {
+        //     requestId = strdup(requestId_obj->valuestring);
+        //     if (!requestId) {
+        //         LOG_ERROR("IPC", "Failed to duplicate requestId string: Out of memory");
+        //         cJSON_Delete(json_request);
+        //         continue;
+        //     }
+        // }
+        if ( parseSimulationConfig(buffer, &type_obj, &data_obj,&requestId,&config,json_request) == FAIL) 
+        {
             LOG_ERROR("IPC", "Failed to parse incoming JSON: %s", cJSON_GetErrorPtr());
             continue;
         }
-        
-        // Extract message type
-        cJSON *type_obj = cJSON_GetObjectItem(json_request, "type");
-        if (!type_obj || !cJSON_IsString(type_obj)) {
-            LOG_ERROR("IPC", "Missing or invalid 'type' field in JSON message");
-            cJSON_Delete(json_request);
-            continue;
-        }
-        
-        // Extract data and requestId
-        cJSON *data_obj = cJSON_GetObjectItem(json_request, "data");
-        cJSON *requestId_obj = data_obj ? cJSON_GetObjectItem(data_obj, "requestId") : NULL;
-        
-        if (requestId_obj && cJSON_IsString(requestId_obj)) {
-            requestId = strdup(requestId_obj->valuestring);
-            if (!requestId) {
-                LOG_ERROR("IPC", "Failed to duplicate requestId string: Out of memory");
-                cJSON_Delete(json_request);
-                continue;
-            }
-        }
-        
+
         // Process event type
-        const char* event_type = type_obj->valuestring;
+        char *event_type = type_obj->valuestring;
         if (strcmp(event_type, "start_simulation") == VALID) {
             event = STATE_EVENT_start_simulation;
             LOG_DEBUG("IPC", "Event: start_simulation");

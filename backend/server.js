@@ -51,14 +51,8 @@ app.post('/api/verify-config', (req, res) => {
   if (!config.macAddress || !/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(config.macAddress)) {
     errors.push('macAddress must be in format XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX');
   }
-  if (!config.GOid || !/^[A-Za-z0-9_]+$/.test(config.GOid)) {
-    errors.push('GOid must be alphanumeric with underscores');
-  }
   if (!config.interface || !/^[A-Za-z0-9]+$/.test(config.interface)) {
     errors.push('interface must be alphanumeric (e.g., eth0)');
-  }
-  if (!config.cbref || !/^[A-Za-z0-9_]+$/.test(config.cbref)) {
-    errors.push('cbref must be alphanumeric with underscores');
   }
   if (!config.svid || !/^[A-Za-z0-9_]+$/.test(config.svid)) {
     errors.push('svid must be alphanumeric with underscores');

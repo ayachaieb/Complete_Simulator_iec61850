@@ -17,9 +17,7 @@ export class SvConfigComponent implements OnInit {
   config: SVConfig = {
     appID: '',
     macAddress: '',
-    GOid: '',
     interface: '',
-    cbref: '',
     svid: '',
     scenariofile: ''
   };
@@ -199,9 +197,7 @@ startSimulation() {
           this.config = {
             appID: xmlConfig.querySelector('appID')?.textContent || '',
             macAddress: xmlConfig.querySelector('macAddress')?.textContent || '',
-            GOid: xmlConfig.querySelector('GOid')?.textContent || '',
             interface: xmlConfig.querySelector('interface')?.textContent || '',
-            cbref: xmlConfig.querySelector('cbref')?.textContent || '',
             svid: xmlConfig.querySelector('svid')?.textContent || '',
             scenariofile: xmlConfig.querySelector('scenariofile')?.textContent || ''
           };

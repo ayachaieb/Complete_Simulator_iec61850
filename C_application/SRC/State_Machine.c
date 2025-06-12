@@ -336,9 +336,6 @@ int StateMachine_push_event(state_event_e event , const char *requestId) {
 int result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal); 
 return result_event_queue_push;
 }
-int verif_shutdown(void) {
-    return event_queue_internal.shutdown;
-}
 
 int StateMachine_shutdown(void) {
     LOG_INFO("State_Machine", "Shutting down StateMachine module...");

@@ -1,127 +1,116 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include "parser.h"
-
-// Convert MAC string to byte array
-static int string_to_mac(const char* mac_str, uint8_t* mac_bytes) {
-    return sscanf(mac_str, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
-                  &mac_bytes[0], &mac_bytes[1], &mac_bytes[2],
-                  &mac_bytes[3], &mac_bytes[4], &mac_bytes[5]) == 6 ? 0 : -1;
+#include "parser.h" // Include this module's header
+#include <stdio.h>      // For fprintf, NULL
+#include <stdlib.h>     // For strdup, free
+#include <string.h>     // For strcmp, memset
+#include <cjson/cJSON.h> 
+#include "logger.h"    // For logging functions
+#include "util.h"      // For SUCCESS, FAIL, LOG_ERROR, LOG_DEBUG
+// --- Helper function to free allocated memory for SimulationConfig ---
+void freeSimulationConfig(SimulationConfig* config) {
+    if (config) {
+        if (config->appID) free(config->appID);
+        if (config->macAddress) free(config->macAddress);
+        if (config->interface) free(config->interface);
+        if (config->svid) free(config->svid);
+        if (config->scenariofile) free(config->scenariofile);
+        // Clear the struct members to avoid dangling pointers and indicate freed state
+        memset(config, 0, sizeof(SimulationConfig));
+    }
 }
 
-int parse_xml(const char *filename, Instance **instances, int *instance_count, int *sampling_time) {
-    xmlDoc *doc = xmlReadFile(filename, NULL, 0);
-    if (!doc) {
-        fprintf(stderr, "Failed to parse %s\n", filename);
-        return -1;
+// --- Main Parsing Function ---
+
+int parseSimulationConfig(
+    const char* buffer,
+    cJSON** type_obj_out,
+    cJSON** data_obj_out,
+    char** requestId_out,
+    SimulationConfig* config_out,
+    cJSON** json_request_out // Output parameter for the root cJSON object
+) {
+    // Initialize output pointers to NULL for safety
+    *type_obj_out = NULL;
+    *data_obj_out = NULL;
+    *requestId_out = NULL;
+    memset(config_out, 0, sizeof(SimulationConfig)); // Initialize config struct to all zeros/NULLs
+    *json_request_out = NULL; // Initialize root JSON pointer
+
+    cJSON *json_request = cJSON_Parse(buffer);
+    if (!json_request) {
+        LOG_ERROR("Parser", "Failed to parse incoming JSON: %s", cJSON_GetErrorPtr());
+        return FAIL;
     }
+    *json_request_out = json_request; // Store the root object for the caller to delete
 
-    xmlNode *root = xmlDocGetRootElement(doc);
-    if (!root || xmlStrcmp(root->name, (const xmlChar *)"instances")) {
-        fprintf(stderr, "Invalid root element\n");
-        xmlFreeDoc(doc);
-        return -1;
+    // Extract message type
+    cJSON *type_obj = cJSON_GetObjectItemCaseSensitive(json_request, "type");
+    if (!type_obj || !cJSON_IsString(type_obj)) { // Corrected: Use type_obj instead of *
+        LOG_ERROR("Parser", "Missing or invalid 'type' field in JSON message");
+        return FAIL; // json_request_out is already set, caller will delete it
     }
+    *type_obj_out = type_obj; // Pass the type object to the caller
 
-    // Count instances
-    int count = 0;
-    for (xmlNode *node = root->children; node; node = node->next) {
-        if (node->type == XML_ELEMENT_NODE && !xmlStrcmp(node->name, (const xmlChar *)"instance"))
-            count++;
+    // Extract data object
+    cJSON *data_obj = cJSON_GetObjectItemCaseSensitive(json_request, "data");
+    if (!data_obj || !cJSON_IsObject(data_obj)) { // Ensure 'data' is an object
+        LOG_ERROR("Parser", "Missing or invalid 'data' object in JSON message");
+        return FAIL;
     }
-    *instance_count = count;
-    *instances = malloc(count * sizeof(Instance));
-    if (!*instances) {
-        xmlFreeDoc(doc);
-        return -1;
-    }
+    *data_obj_out = data_obj; // Pass the data object to the caller
 
-    // Parse each instance
-    int i = 0;
-    for (xmlNode *node = root->children; node; node = node->next) {
-        if (node->type != XML_ELEMENT_NODE || xmlStrcmp(node->name, (const xmlChar *)"instance")) continue;
-
-        Instance *inst = &(*instances)[i++];
-        memset(inst, 0, sizeof(Instance));
-
-        for (xmlNode *child = node->children; child; child = child->next) {
-            if (child->type != XML_ELEMENT_NODE) continue;
-
-            if (!xmlStrcmp(child->name, (const xmlChar *)"SV_publisher")) {
-                for (xmlNode *sv = child->children; sv; sv = sv->next) {
-                    if (sv->type != XML_ELEMENT_NODE) continue;
-                    xmlChar *content = xmlNodeGetContent(sv);
-                    if (!xmlStrcmp(sv->name, (const xmlChar *)"appId")) {
-                        inst->appId = (uint16_t)strtol((char *)content, NULL, 0); // Hex or decimal
-                    } else if (!xmlStrcmp(sv->name, (const xmlChar *)"svInterface")) {
-                        inst->svInterface = strdup((char *)content);
-                    } else if (!xmlStrcmp(sv->name, (const xmlChar *)"svIDs")) {
-                        int svid_count = 0;
-                        for (xmlNode *svid = sv->children; svid; svid = svid->next) {
-                            if (svid->type == XML_ELEMENT_NODE && !xmlStrcmp(svid->name, (const xmlChar *)"svID"))
-                                svid_count++;
-                        }
-                        inst->svIDs = malloc(svid_count * sizeof(char *));
-                        inst->svIDCount = svid_count;
-                        int j = 0;
-                        for (xmlNode *svid = sv->children; svid; svid = svid->next) {
-                            if (svid->type == XML_ELEMENT_NODE && !xmlStrcmp(svid->name, (const xmlChar *)"svID")) {
-                                xmlChar *svid_content = xmlNodeGetContent(svid);
-                                inst->svIDs[j++] = strdup((char *)svid_content);
-                                xmlFree(svid_content);
-                            }
-                        }
-                    }
-                    xmlFree(content);
-                }
-            } else if (!xmlStrcmp(child->name, (const xmlChar *)"GOOSE_subscriber")) {
-                for (xmlNode *goose = child->children; goose; goose = goose->next) {
-                    if (goose->type != XML_ELEMENT_NODE) continue;
-                    xmlChar *content = xmlNodeGetContent(goose);
-                    if (!xmlStrcmp(goose->name, (const xmlChar *)"GOOSEInterface")) {
-                        inst->gooseInterface = strdup((char *)content);
-                    } else if (!xmlStrcmp(goose->name, (const xmlChar *)"GOOSEappId")) {
-                        inst->gooseAppId = (uint16_t)strtol((char *)content, NULL, 16); // Hex
-                    } else if (!xmlStrcmp(goose->name, (const xmlChar *)"dstMac")) {
-                        string_to_mac((char *)content, inst->dstMac);
-                    } else if (!xmlStrcmp(goose->name, (const xmlChar *)"goCbRef")) {
-                        inst->goCbRef = strdup((char *)content);
-                    }
-                    xmlFree(content);
-                }
-            } else if (!xmlStrcmp(child->name, (const xmlChar *)"scenarioConfigFile")) {
-                xmlChar *content = xmlNodeGetContent(child);
-                inst->scenarioConfigFile = strdup((char *)content);
-                xmlFree(content);
-            }
+    // Extract requestId
+    cJSON *requestId_obj = cJSON_GetObjectItemCaseSensitive(data_obj, "requestId");
+    if (requestId_obj && cJSON_IsString(requestId_obj)) {
+        *requestId_out = strdup(requestId_obj->valuestring);
+        if (!*requestId_out) {
+            LOG_ERROR("Parser", "Failed to duplicate requestId string: Out of memory");
+            return FAIL; // Memory error, caller needs to handle deletion of json_request
         }
+    } else {
+        LOG_DEBUG("Parser", "No 'requestId' found or it's not a string.");
+        // Not an error, requestId is optional or can be handled later.
     }
 
-    // Parse Sampling_time
-    for (xmlNode *node = root->children; node; node = node->next) {
-        if (node->type == XML_ELEMENT_NODE && !xmlStrcmp(node->name, (const xmlChar *)"Sampling_time")) {
-            xmlChar *content = xmlNodeGetContent(node);
-            *sampling_time = atoi((char *)content);
-            xmlFree(content);
-            break;
-        }
+    // --- Parse the 'config' object for SimulationConfig ---
+    cJSON *config_json_obj = cJSON_GetObjectItemCaseSensitive(data_obj, "config");
+    if (!config_json_obj || !cJSON_IsObject(config_json_obj)) {
+        LOG_ERROR("Parser", "Missing or invalid 'config' object within 'data'.");
+        return FAIL; // Not a valid config, caller needs to handle deletion
     }
 
-    xmlFreeDoc(doc);
-    return 0;
-}
+    // Parse each field of the config
+    cJSON *item;
 
-void free_instances(Instance *instances, int instance_count) {
-    for (int i = 0; i < instance_count; i++) {
-        free(instances[i].svInterface);
-        for (int j = 0; j < instances[i].svIDCount; j++) free(instances[i].svIDs[j]);
-        free(instances[i].svIDs);
-        free(instances[i].gooseInterface);
-        free(instances[i].goCbRef);
-        free(instances[i].scenarioConfigFile);
-    }
-    free(instances);
+    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "appID");
+    if (item && cJSON_IsString(item)) {
+        config_out->appID = strdup(item->valuestring);
+        if (!config_out->appID) { LOG_ERROR("Parser", "OOM for appID"); return FAIL; }
+    } else { LOG_ERROR("Parser", "Missing or invalid 'appID'."); return FAIL; }
+
+    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "macAddress");
+    if (item && cJSON_IsString(item)) {
+        config_out->macAddress = strdup(item->valuestring);
+        if (!config_out->macAddress) { LOG_ERROR("Parser", "OOM for macAddress"); return FAIL; }
+    } else { LOG_ERROR("Parser", "Missing or invalid 'macAddress'."); return FAIL; }
+
+    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "interface");
+    if (item && cJSON_IsString(item)) {
+        config_out->interface = strdup(item->valuestring);
+        if (!config_out->interface) { LOG_ERROR("Parser", "OOM for interface"); return FAIL; }
+    } else { LOG_ERROR("Parser", "Missing or invalid 'interface'."); return FAIL; }
+
+    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "svid");
+    if (item && cJSON_IsString(item)) {
+        config_out->svid = strdup(item->valuestring);
+        if (!config_out->svid) { LOG_ERROR("Parser", "OOM for svid"); return FAIL; }
+    } else { LOG_ERROR("Parser", "Missing or invalid 'svid'."); return FAIL; }
+
+    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "scenariofile");
+    if (item && cJSON_IsString(item)) {
+        config_out->scenariofile = strdup(item->valuestring);
+        if (!config_out->scenariofile) { LOG_ERROR("Parser", "OOM for scenariofile"); return FAIL; }
+    } else { LOG_ERROR("Parser", "Missing or invalid 'scenariofile'."); return FAIL; }
+
+    LOG_DEBUG("Parser", "Successfully parsed simulation config.");
+    return SUCCESS;
 }
