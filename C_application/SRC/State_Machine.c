@@ -106,10 +106,16 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
             break;
         case STATE_INIT:
             if (STATE_EVENT_init_success == event ) {
+                if (data_obj != NULL) {
                 next = STATE_RUNNING;
+            } else {
+                LOG_ERROR("State_Machine", "init_success event missing required configuration data");
+                next = STATE_IDLE;}
             } else if (STATE_EVENT_init_failed == event ) {
                 next = STATE_IDLE;
-            } else if (STATE_EVENT_stop_simulation == event ) {
+                StateMachine_push_event(STATE_EVENT_init_failed, requestId, NULL);
+            } else if (STATE_EVENT_stop_simulation == event || 
+                       STATE_EVENT_shutdown == event)  {
                 next = STATE_STOP;
             }                                                                                                             
             break;
@@ -182,6 +188,10 @@ static bool state_init_enter(void *data ,state_e from, state_event_e event, cons
     else 
     {
         LOG_INFO("State_Machine", "SV Publisher initialized successfully on interface %s", sv_interface);
+         if (data_obj) {
+            // Add your data_obj processing here
+            LOG_DEBUG("State_Machine", "Processing data object in INIT state");
+        }
         if(SUCCESS != StateMachine_push_event(STATE_EVENT_init_success, requestId, data_obj)) {
             LOG_ERROR("State_Machine", "Failed to push init success event to state machine");
             retval = FAIL;
@@ -227,28 +237,59 @@ static bool state_running_init(void *data)
     return true; 
 }
 
-static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId ,cJSON *data_obj)
-{   SV_SimulationConfig *config;
+static bool state_running_enter(void *data, state_e from, state_event_e event, 
+                              const char *requestId, cJSON *data_obj) {
+    SV_SimulationConfig config;  // Use stack allocation instead of pointer
     bool retval = SUCCESS;
- LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s", state_to_string(from), state_event_to_string(event));
-  // Start the SV Publisher module here
-if ( SUCCESS!= parseSVconfig(&data_obj, &config)) {
-        LOG_ERROR("State_Machine", "Failed to parse SV configuration data.");
-        retval = FAIL;
-    } else {
-        LOG_INFO("State_Machine", "Parsed SV configuration: appID=%s, macAddress=%s, interface=%s, svid=%s, scenariofile=%s",
-                 config->appID, config->macAddress, config->interface, config->svid, config->scenariofile);
+    
+    LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s", 
+            state_to_string(from), state_event_to_string(event));
+
+    // Validate input
+    if (!data_obj) {
+        LOG_ERROR("State_Machine", "No configuration data provided");
+        return FAIL;
     }
 
-    if (!SVPublisher_start()) {
-        LOG_ERROR("State_Machine", "Failed to start SV Publisher module.");
-       
+    // Initialize config (critical!)
+    memset(&config, 0, sizeof(SV_SimulationConfig));
+
+    // Parse configuration
+    if (parseSVconfig(data_obj, &config) != SUCCESS) {
+        LOG_ERROR("State_Machine", "Failed to parse SV configuration");
         retval = FAIL;
+        goto cleanup;
     }
-    LOG_INFO("State_Machine", "SV Publisher started in RUNNING state.");
-   
- 
- return retval;
+
+    // Validate parsed fields
+    if (!config.appID || !config.macAddress || !config.interface || 
+        !config.svid || !config.scenariofile) {
+        LOG_ERROR("State_Machine", "Invalid SV config (NULL field detected)");
+        retval = FAIL;
+        goto cleanup;
+    }
+
+    LOG_INFO("State_Machine", 
+           "SV config parsed: appID=%s, mac=%s, interface=%s, svid=%s, scenario=%s",
+           config.appID, config.macAddress, config.interface, 
+           config.svid, config.scenariofile);
+
+    // Start publisher
+    if (!SVPublisher_start()) {
+        LOG_ERROR("State_Machine", "Failed to start SV Publisher");
+        retval = FAIL;
+        goto cleanup;
+    }
+
+cleanup:
+    // Free allocated resources
+    free(config.appID);
+    free(config.macAddress);
+    free(config.interface);
+    free(config.svid);
+    free(config.scenariofile);
+    
+    return retval;
 }
 
 static bool state_stop_init(void *data)
@@ -290,43 +331,55 @@ static bool state_stop_enter(void *data , state_e from, state_event_e event, con
     cJSON_Delete(json_response); // Free the cJSON object
 }
 
-
 static void *state_machine_thread_internal(void *arg) {
     state_machine_t *sm = (state_machine_t *)arg;
-    const char *requestId = NULL; // Initialize requestId to NULL
-    cJSON **data_obj_out = NULL; // Initialize data_obj_out to NULL
-     if (NULL == sm) 
-     {
+    const char *requestId = NULL;
+    cJSON *data_obj = NULL;  // Change from cJSON** to cJSON*
+    
+    if (NULL == sm) {
         LOG_ERROR("State_Machine", "State machine pointer is NULL in internal thread");
         return NULL;
-     }
-    int init_result =state_machine_init(sm); 
+    }
+
+    int init_result = state_machine_init(sm); 
     if (init_result != SUCCESS) {
         LOG_ERROR("State_Machine", "State machine initialization failed in internal thread");
         return NULL;
     }
+
     while (1) {
-        state_event_e event ;
-        if (SUCCESS == event_queue_pop(&event_queue_internal,&event, &requestId,&data_obj_out)) {
+        state_event_e event;
+        if (SUCCESS == event_queue_pop(&event_queue_internal, &event, &requestId, &data_obj)) {
             LOG_DEBUG("State_Machine", "popped event: %s, requestId: %s",
-                      state_event_to_string(event), requestId ? requestId : "N/A");
+                     state_event_to_string(event), requestId ? requestId : "N/A");
         } else {
             LOG_ERROR("State_Machine", "Failed to pop event from queue in internal thread");
         }
 
-        if (STATE_EVENT_shutdown == event  ) {
+        if (STATE_EVENT_shutdown == event) {
+            if (data_obj) cJSON_Delete(data_obj);
             break;
         }
-       if (SUCCESS!= state_machine_run(sm, event, requestId, data_obj_out ? *data_obj_out : NULL)) {
-        {
+
+        // Now we can use data_obj directly since it's cJSON*
+        if (SUCCESS != state_machine_run(sm, event, requestId, data_obj)) {
             LOG_ERROR("State_Machine", "State machine run failed for event: %s, requestId: %s",
-                      state_event_to_string(event), requestId ? requestId : "N/A");
+                     state_event_to_string(event), requestId ? requestId : "N/A");
+        }
+
+        // Clean up after processing
+        if (requestId) {
+            free((char*)requestId);
+            requestId = NULL;
+        }
+        if (data_obj) {
+            cJSON_Delete(data_obj);
+            data_obj = NULL;
         }
     }
-    state_machine_free(sm);
 
+    state_machine_free(sm);
     return NULL;
-}
 }
 int StateMachine_Launch(void) {
   

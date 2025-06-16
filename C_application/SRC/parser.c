@@ -17,6 +17,40 @@ void freeSimulationConfig(SV_SimulationConfig* config) {
         memset(config, 0, sizeof(SV_SimulationConfig));
     }
 }
+
+/**
+ * @brief Frees all dynamically allocated memory in an SV_SimulationConfig structure
+ * @param config Pointer to the SV_SimulationConfig structure to clean up
+ */
+void freeSVconfig(SV_SimulationConfig* config) {
+    if (config == NULL) {
+        return;
+    }
+
+    // Free all string fields if they were allocated
+    if (config->appID) {
+        free(config->appID);
+        config->appID = NULL;
+    }
+    if (config->macAddress) {
+        free(config->macAddress);
+        config->macAddress = NULL;
+    }
+    if (config->interface) {
+        free(config->interface);
+        config->interface = NULL;
+    }
+    if (config->svid) {
+        free(config->svid);
+        config->svid = NULL;
+    }
+    if (config->scenariofile) {
+        free(config->scenariofile);
+        config->scenariofile = NULL;
+    }
+
+}
+
 void freeGOOSEConfig(GOOSE_SimulationConfig* config) {
     if (config) {
         if (config->GoCBRef) free(config->GoCBRef);
@@ -137,71 +171,59 @@ int parseGOOSEConfig(
         freeGOOSEConfig(config); // Free already allocated memory
         return FAIL;
     }
-}        
-parseSVconfig(
-    cJSON** data_obj,
-    SV_SimulationConfig* config_out)
-{
-    // --- Parse the 'config' object for SimulationConfig ---
+}  
+
+int parseSVconfig(cJSON* data_obj, SV_SimulationConfig* config_out) {
+    // Validate input parameters
+    if (!data_obj || !config_out) {
+        LOG_ERROR("Parser", "Invalid arguments: %s", 
+                 !data_obj ? "NULL data_obj" : "NULL config_out");
+        return FAIL;
+    }
+
+    // --- Parse the 'config' object ---
     cJSON *config_json_obj = cJSON_GetObjectItemCaseSensitive(data_obj, "config");
     if (!config_json_obj || !cJSON_IsObject(config_json_obj)) {
-        LOG_ERROR("Parser", "Missing or invalid 'config' object within 'data'.");
-        return FAIL; // Not a valid config, caller needs to handle deletion
+        LOG_ERROR("Parser", "Missing or invalid 'config' object");
+        return FAIL;
     }
 
-    // Parse each field of the config
-    cJSON *item;
+    // Initialize all pointers to NULL for safe cleanup
+    memset(config_out, 0, sizeof(SV_SimulationConfig));
 
-    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "appID");
-    if (item && cJSON_IsString(item))
-    {
-        config_out->appID = strdup(item->valuestring);
-        if (!config_out->appID) { LOG_ERROR("Parser", "OOM for appID"); return FAIL; 
-        }
-    } 
-    else
-    { 
-        LOG_ERROR("Parser", "Missing or invalid 'appID'."); return FAIL; 
-    }
+    // Helper macro for string field parsing (with error handling)
+    #define PARSE_STRING_FIELD(field, field_name) \
+        do { \
+            cJSON *item = cJSON_GetObjectItemCaseSensitive(config_json_obj, field_name); \
+            if (!item || !cJSON_IsString(item)) { \
+                LOG_ERROR("Parser", "Missing or invalid '" field_name "'"); \
+                goto cleanup; \
+            } \
+            config_out->field = strdup(item->valuestring); \
+            if (!config_out->field) { \
+                LOG_ERROR("Parser", "Memory allocation failed for '" field_name "'"); \
+                goto cleanup; \
+            } \
+        } while (0)
 
-    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "macAddress");
-    if (item && cJSON_IsString(item)) 
-    {
-        config_out->macAddress = strdup(item->valuestring);
-        if (!config_out->macAddress) { LOG_ERROR("Parser", "OOM for macAddress"); return FAIL; }
-    } else 
-    {
-         LOG_ERROR("Parser", "Missing or invalid 'macAddress'."); return FAIL; 
-    }
+    // Parse required fields
+    PARSE_STRING_FIELD(appID, "appID");
+    PARSE_STRING_FIELD(macAddress, "macAddress");
+    PARSE_STRING_FIELD(interface, "interface");
+    PARSE_STRING_FIELD(svid, "svid");
+    PARSE_STRING_FIELD(scenariofile, "scenariofile");
 
-    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "interface");
-    if (item && cJSON_IsString(item)) {
+    #undef PARSE_STRING_FIELD
 
-        config_out->interface = strdup(item->valuestring);
-        if (!config_out->interface) { LOG_ERROR("Parser", "OOM for interface"); return FAIL; }
-    }
-     else {
-         LOG_ERROR("Parser", "Missing or invalid 'interface'.");
-          return FAIL; 
-        }
+    return SUCCESS;  // Success case
 
-    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "svid");
-    if (item && cJSON_IsString(item)) {
-        config_out->svid = strdup(item->valuestring);
-        if (!config_out->svid) { LOG_ERROR("Parser", "OOM for svid"); return FAIL; }
-    }
-     else 
-     { 
-        LOG_ERROR("Parser", "Missing or invalid 'svid'."); return FAIL; 
-    }
-
-    item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "scenariofile");
-    if (item && cJSON_IsString(item)) {
-        config_out->scenariofile = strdup(item->valuestring);
-        if (!config_out->scenariofile) { LOG_ERROR("Parser", "OOM for scenariofile"); return FAIL; 
-        }
-    }
-     else { LOG_ERROR("Parser", "Missing or invalid 'scenariofile'."); 
+cleanup:
+    // Clean up on failure
+    free(config_out->appID);
+    free(config_out->macAddress);
+    free(config_out->interface);
+    free(config_out->svid);
+    free(config_out->scenariofile);
+    memset(config_out, 0, sizeof(SV_SimulationConfig));
     return FAIL;
- }
 }

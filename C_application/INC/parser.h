@@ -59,7 +59,7 @@ int parseGOOSEConfig(
     GOOSE_SimulationConfig* config
 );
 parseSVconfig(
-    cJSON** data_obj,
+    cJSON* data_obj,
     SV_SimulationConfig* config
 );
 
@@ -67,4 +67,5 @@ parseSVconfig(
 // This can be in parser.c if it's strictly internal, or here if external modules need it.
 void freeSimulationConfig (SV_SimulationConfig* config);
 void freeGOOSEConfig (GOOSE_SimulationConfig* config);
+void freeSVconfig(SV_SimulationConfig* config) ;
 #endif // PARSER_H

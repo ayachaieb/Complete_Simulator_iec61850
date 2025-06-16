@@ -56,7 +56,9 @@ futex(0x55f3d1a231f8, FUTEX_WAKE_PRIVATE, 1) = 1
 futex(0x7fae04bf9990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 20621, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
 --- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
 rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
-futex(0x7fae04bf9990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 20621, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7fae04bf9990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALT) = ? <unavailable>
++++ killed by SIGHUP +++
+ ERESTARTSYS (To be restarted if SA_RESTART is set)
 --- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
 rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
 futex(0x7fae04bf9990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 20621, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)

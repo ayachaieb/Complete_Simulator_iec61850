@@ -33,94 +33,97 @@ int event_queue_init(EventQueue* event_queue)
 }   
 
 
-int event_queue_push(state_event_e event, const char *requestId, EventQueue* event_queue, cJSON *data_obj)
-{   
+// Push event to queue
+int event_queue_push(state_event_e event, const char *requestId, EventQueue* event_queue, cJSON *data_obj) {
     int retval = SUCCESS;
     pthread_mutex_lock(&event_queue->mutex);
-    if ((event_queue->tail + 1) % QUEUE_SIZE != event_queue->head) 
-    {
-        event_queue->events[event_queue->tail] = event;
-        if (NULL != requestId) 
-        {
-            event_queue->requestIds[event_queue->tail] = strdup(requestId);
-            if (event_queue->requestIds[event_queue->tail] == NULL) 
-            {
-                LOG_ERROR("RingBuffer", "strdup failed for requestId. Event might be pushed without requestId");
-                event_queue->requestIds[event_queue->tail] = NULL;
-                pthread_mutex_unlock(&event_queue->mutex);
-                retval = FAIL;
-            }
-            if (data_obj != NULL) {
-                event_queue->data_objs[event_queue->tail] = cJSON_Duplicate(data_obj, 1);
-                if (event_queue->data_objs[event_queue->tail] == NULL) {
-                LOG_ERROR("RingBuffer", "Failed to duplicate data_obj (out of memory)..");
-                }
-                else {
-                    LOG_DEBUG("RingBuffer", "Data object duplicated successfully for event %d", event);
-                }
-            }
-        } else {
-            LOG_WARN("RingBuffer", "NULL requestId provided, storing NULL in queue");
-            event_queue->requestIds[event_queue->tail] = NULL;
-            pthread_mutex_unlock(&event_queue->mutex);
-            retval = FAIL;
-        }
-
-        event_queue->tail = (event_queue->tail + 1) % QUEUE_SIZE;
-        pthread_cond_signal(&event_queue->cond);
-    } else {
+    
+    if ((event_queue->tail + 1) % QUEUE_SIZE == event_queue->head) {
         LOG_ERROR("RingBuffer", "Event queue full, dropping event");
-        pthread_mutex_unlock(&event_queue->mutex);
         retval = FAIL;
+        goto unlock;
     }
+
+    // Store event
+    event_queue->events[event_queue->tail] = event;
+
+    // Handle requestId
+    if (requestId) {
+        event_queue->requestIds[event_queue->tail] = strdup(requestId);
+        if (!event_queue->requestIds[event_queue->tail]) {
+            LOG_ERROR("RingBuffer", "strdup failed for requestId");
+            retval = FAIL;
+            goto unlock;
+        }
+    } else {
+        event_queue->requestIds[event_queue->tail] = NULL;
+    }
+
+    // Handle JSON data
+    if (data_obj) {
+        event_queue->data_objs[event_queue->tail] = cJSON_Duplicate(data_obj, 1);
+        if (!event_queue->data_objs[event_queue->tail]) {
+            LOG_ERROR("RingBuffer", "Failed to duplicate JSON data");
+            if (event_queue->requestIds[event_queue->tail]) {
+                free((char*)event_queue->requestIds[event_queue->tail]);
+                event_queue->requestIds[event_queue->tail] = NULL;
+            }
+            retval = FAIL;
+            goto unlock;
+        }
+    } else {
+        event_queue->data_objs[event_queue->tail] = NULL;
+    }
+    LOG_DEBUG("RingBuffer", "Pushed event: %s, requestId: %s",
+              state_event_to_string(event), requestId ? requestId : "N/A");
+    event_queue->tail = (event_queue->tail + 1) % QUEUE_SIZE;
+    pthread_cond_signal(&event_queue->cond);
+
+unlock:
     pthread_mutex_unlock(&event_queue->mutex);
-    return retval; 
+    return retval;
 }
 // Pop event from queue 
+
 int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **requestId_out, cJSON **data_obj_out) 
 {
     int retval = SUCCESS;
     pthread_mutex_lock(&event_queue->mutex);
-
+    
     while (event_queue->head == event_queue->tail && !event_queue->shutdown) {
         pthread_cond_wait(&event_queue->cond, &event_queue->mutex);
     }
 
     if (event_queue->shutdown && event_queue->head == event_queue->tail) {
-        *event = STATE_EVENT_shutdown;  // Shutdown case
-    } 
-    else {
-        *event = event_queue->events[event_queue->head];
-        const char *popped_requestId = event_queue->requestIds[event_queue->head];
-        cJSON *popped_data_obj = event_queue->data_objs[event_queue->head];
-        if (requestId_out) {
-            *requestId_out = popped_requestId; 
-        } 
-        else {
-            LOG_WARN("RingBuffer", "NULL requestId_out pointer provided, not returning requestId");
-            if (popped_requestId) {
-                free((char*)popped_requestId);
-                event_queue->requestIds[event_queue->head] = NULL;
-            }
-            retval = FAIL; 
-        }
-        if (data_obj_out) {
-            *data_obj_out = popped_data_obj; 
-        } 
-        else {
-            LOG_WARN("RingBuffer", "NULL data_obj_out pointer provided, not returning data object");
-            if (popped_data_obj) {
-                cJSON_Delete(popped_data_obj);
-                event_queue->data_objs[event_queue->head] = NULL;
-            }
-            retval = FAIL; 
-        }
-        if (retval == SUCCESS) {  // Only advance head if not FAIL
-            event_queue->head = (event_queue->head + 1) % QUEUE_SIZE;
-            LOG_DEBUG("RingBuffer", "Popped event: %d, requestId: %s", *event, popped_requestId ? popped_requestId : "NULL");
-        }
+        *event = STATE_EVENT_shutdown;
+        retval = FAIL;
+        goto unlock;
     }
 
+    *event = event_queue->events[event_queue->head];
+    
+    // Transfer requestId
+    if (requestId_out) {
+        *requestId_out = event_queue->requestIds[event_queue->head];
+    } else if (event_queue->requestIds[event_queue->head]) {
+        free((char*)event_queue->requestIds[event_queue->head]);
+    }
+    event_queue->requestIds[event_queue->head] = NULL;
+    
+    // Transfer data_obj
+    if (data_obj_out) {
+        *data_obj_out = event_queue->data_objs[event_queue->head];
+    } else if (event_queue->data_objs[event_queue->head]) {
+        cJSON_Delete(event_queue->data_objs[event_queue->head]);
+    }
+    event_queue->data_objs[event_queue->head] = NULL;
+    
+    event_queue->head = (event_queue->head + 1) % QUEUE_SIZE;
+    LOG_DEBUG("RingBuffer", "Popped event: %s, requestId: %s",
+              state_event_to_string(*event), 
+              requestId_out && *requestId_out ? *requestId_out : "N/A");
+
+unlock:
     pthread_mutex_unlock(&event_queue->mutex);
     return retval;
 }
