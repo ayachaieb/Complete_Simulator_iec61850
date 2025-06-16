@@ -6,7 +6,7 @@
 #include "logger.h"    // For logging functions
 #include "util.h"      // For SUCCESS, FAIL, LOG_ERROR, LOG_DEBUG
 // --- Helper function to free allocated memory for SimulationConfig ---
-void freeSimulationConfig(SimulationConfig* config) {
+void freeSimulationConfig(SV_SimulationConfig* config) {
     if (config) {
         if (config->appID) free(config->appID);
         if (config->macAddress) free(config->macAddress);
@@ -14,25 +14,34 @@ void freeSimulationConfig(SimulationConfig* config) {
         if (config->svid) free(config->svid);
         if (config->scenariofile) free(config->scenariofile);
         // Clear the struct members to avoid dangling pointers and indicate freed state
-        memset(config, 0, sizeof(SimulationConfig));
+        memset(config, 0, sizeof(SV_SimulationConfig));
     }
 }
-
+void freeGOOSEConfig(GOOSE_SimulationConfig* config) {
+    if (config) {
+        if (config->GoCBRef) free(config->GoCBRef);
+        if (config->DatSet) free(config->DatSet);
+        if (config->GoID) free(config->GoID);
+        if (config->MACAddress) free(config->MACAddress);
+        if (config->AppID) free(config->AppID);
+        if (config->Interface) free(config->Interface);
+        // Clear the struct members to avoid dangling pointers and indicate freed state
+        memset(config, 0, sizeof(GOOSE_SimulationConfig));
+    }}
 // --- Main Parsing Function ---
 
-int parseSimulationConfig(
+int parseRequestConfig(
     const char* buffer,
     cJSON** type_obj_out,
     cJSON** data_obj_out,
     char** requestId_out,
-    SimulationConfig* config_out,
     cJSON** json_request_out // Output parameter for the root cJSON object
 ) {
     // Initialize output pointers to NULL for safety
     *type_obj_out = NULL;
     *data_obj_out = NULL;
     *requestId_out = NULL;
-    memset(config_out, 0, sizeof(SimulationConfig)); // Initialize config struct to all zeros/NULLs
+ 
     *json_request_out = NULL; // Initialize root JSON pointer
 
     cJSON *json_request = cJSON_Parse(buffer);
@@ -71,6 +80,68 @@ int parseSimulationConfig(
         // Not an error, requestId is optional or can be handled later.
     }
 
+   
+    LOG_DEBUG("Parser", "Successfully parsed simulation config.");
+    return SUCCESS;
+}
+int parseGOOSEConfig(
+    cJSON** data_obj,
+    GOOSE_SimulationConfig* config) 
+{
+    if (!data_obj || !*data_obj || !config) {
+        LOG_ERROR("Parser", "Invalid input parameters for GOOSE config parsing");
+        return FAIL;
+    }
+
+    cJSON *goose_data = *data_obj;
+
+    // Extract GoCBRef
+    cJSON *GoCBRef_obj = cJSON_GetObjectItemCaseSensitive(goose_data, "GoCBRef");
+    if (GoCBRef_obj && cJSON_IsString(GoCBRef_obj)) {
+        config->GoCBRef = strdup(GoCBRef_obj->valuestring);
+        if (!config->GoCBRef) {
+            LOG_ERROR("Parser", "Failed to duplicate GoCBRef string: Out of memory");
+            return FAIL;
+        }
+    } else {
+        LOG_ERROR("Parser", "Missing or invalid 'GoCBRef' field in GOOSE data");
+        return FAIL;
+    }
+
+    // Extract DatSet
+    cJSON *DatSet_obj = cJSON_GetObjectItemCaseSensitive(goose_data, "DatSet");
+    if (DatSet_obj && cJSON_IsString(DatSet_obj)) {
+        config->DatSet = strdup(DatSet_obj->valuestring);
+        if (!config->DatSet) {
+            LOG_ERROR("Parser", "Failed to duplicate DatSet string: Out of memory");
+            freeGOOSEConfig(config); // Free already allocated memory
+            return FAIL;
+        }
+    } else {
+        LOG_ERROR("Parser", "Missing or invalid 'DatSet' field in GOOSE data");
+        freeGOOSEConfig(config); // Free already allocated memory
+        return FAIL;
+    }
+
+    // Extract GoID
+    cJSON *GoID_obj = cJSON_GetObjectItemCaseSensitive(goose_data, "GoID");
+    if (GoID_obj && cJSON_IsString(GoID_obj)) {
+        config->GoID = strdup(GoID_obj->valuestring);
+        if (!config->GoID) {
+            LOG_ERROR("Parser", "Failed to duplicate GoID string: Out of memory");
+            freeGOOSEConfig(config); // Free already allocated memory
+            return FAIL;
+        }
+    } else {
+        LOG_ERROR("Parser", "Missing or invalid 'GoID' field in GOOSE data");
+        freeGOOSEConfig(config); // Free already allocated memory
+        return FAIL;
+    }
+}        
+parseSVconfig(
+    cJSON** data_obj,
+    SV_SimulationConfig* config_out)
+{
     // --- Parse the 'config' object for SimulationConfig ---
     cJSON *config_json_obj = cJSON_GetObjectItemCaseSensitive(data_obj, "config");
     if (!config_json_obj || !cJSON_IsObject(config_json_obj)) {
@@ -82,35 +153,55 @@ int parseSimulationConfig(
     cJSON *item;
 
     item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "appID");
-    if (item && cJSON_IsString(item)) {
+    if (item && cJSON_IsString(item))
+    {
         config_out->appID = strdup(item->valuestring);
-        if (!config_out->appID) { LOG_ERROR("Parser", "OOM for appID"); return FAIL; }
-    } else { LOG_ERROR("Parser", "Missing or invalid 'appID'."); return FAIL; }
+        if (!config_out->appID) { LOG_ERROR("Parser", "OOM for appID"); return FAIL; 
+        }
+    } 
+    else
+    { 
+        LOG_ERROR("Parser", "Missing or invalid 'appID'."); return FAIL; 
+    }
 
     item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "macAddress");
-    if (item && cJSON_IsString(item)) {
+    if (item && cJSON_IsString(item)) 
+    {
         config_out->macAddress = strdup(item->valuestring);
         if (!config_out->macAddress) { LOG_ERROR("Parser", "OOM for macAddress"); return FAIL; }
-    } else { LOG_ERROR("Parser", "Missing or invalid 'macAddress'."); return FAIL; }
+    } else 
+    {
+         LOG_ERROR("Parser", "Missing or invalid 'macAddress'."); return FAIL; 
+    }
 
     item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "interface");
     if (item && cJSON_IsString(item)) {
+
         config_out->interface = strdup(item->valuestring);
         if (!config_out->interface) { LOG_ERROR("Parser", "OOM for interface"); return FAIL; }
-    } else { LOG_ERROR("Parser", "Missing or invalid 'interface'."); return FAIL; }
+    }
+     else {
+         LOG_ERROR("Parser", "Missing or invalid 'interface'.");
+          return FAIL; 
+        }
 
     item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "svid");
     if (item && cJSON_IsString(item)) {
         config_out->svid = strdup(item->valuestring);
         if (!config_out->svid) { LOG_ERROR("Parser", "OOM for svid"); return FAIL; }
-    } else { LOG_ERROR("Parser", "Missing or invalid 'svid'."); return FAIL; }
+    }
+     else 
+     { 
+        LOG_ERROR("Parser", "Missing or invalid 'svid'."); return FAIL; 
+    }
 
     item = cJSON_GetObjectItemCaseSensitive(config_json_obj, "scenariofile");
     if (item && cJSON_IsString(item)) {
         config_out->scenariofile = strdup(item->valuestring);
-        if (!config_out->scenariofile) { LOG_ERROR("Parser", "OOM for scenariofile"); return FAIL; }
-    } else { LOG_ERROR("Parser", "Missing or invalid 'scenariofile'."); return FAIL; }
-
-    LOG_DEBUG("Parser", "Successfully parsed simulation config.");
-    return SUCCESS;
+        if (!config_out->scenariofile) { LOG_ERROR("Parser", "OOM for scenariofile"); return FAIL; 
+        }
+    }
+     else { LOG_ERROR("Parser", "Missing or invalid 'scenariofile'."); 
+    return FAIL;
+ }
 }

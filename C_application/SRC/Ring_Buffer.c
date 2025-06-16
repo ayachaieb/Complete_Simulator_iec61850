@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include "util.h"
 #include "logger.h"
-
+#include <cjson/cJSON.h> 
 int event_queue_init(EventQueue* event_queue)
 {   
     int  retval = SUCCESS;
@@ -32,20 +32,32 @@ int event_queue_init(EventQueue* event_queue)
     return retval;                                    
 }   
 
-// Push event to queue
-int event_queue_push(state_event_e event, const char *requestId, EventQueue* event_queue)
+
+int event_queue_push(state_event_e event, const char *requestId, EventQueue* event_queue, cJSON *data_obj)
 {   
     int retval = SUCCESS;
     pthread_mutex_lock(&event_queue->mutex);
-    if ((event_queue->tail + 1) % QUEUE_SIZE != event_queue->head) {
+    if ((event_queue->tail + 1) % QUEUE_SIZE != event_queue->head) 
+    {
         event_queue->events[event_queue->tail] = event;
-        if (NULL != requestId) {
+        if (NULL != requestId) 
+        {
             event_queue->requestIds[event_queue->tail] = strdup(requestId);
-            if (event_queue->requestIds[event_queue->tail] == NULL) {
+            if (event_queue->requestIds[event_queue->tail] == NULL) 
+            {
                 LOG_ERROR("RingBuffer", "strdup failed for requestId. Event might be pushed without requestId");
                 event_queue->requestIds[event_queue->tail] = NULL;
                 pthread_mutex_unlock(&event_queue->mutex);
                 retval = FAIL;
+            }
+            if (data_obj != NULL) {
+                event_queue->data_objs[event_queue->tail] = cJSON_Duplicate(data_obj, 1);
+                if (event_queue->data_objs[event_queue->tail] == NULL) {
+                LOG_ERROR("RingBuffer", "Failed to duplicate data_obj (out of memory)..");
+                }
+                else {
+                    LOG_DEBUG("RingBuffer", "Data object duplicated successfully for event %d", event);
+                }
             }
         } else {
             LOG_WARN("RingBuffer", "NULL requestId provided, storing NULL in queue");
@@ -64,9 +76,8 @@ int event_queue_push(state_event_e event, const char *requestId, EventQueue* eve
     pthread_mutex_unlock(&event_queue->mutex);
     return retval; 
 }
-
 // Pop event from queue 
-int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **requestId_out) 
+int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **requestId_out, cJSON **data_obj_out) 
 {
     int retval = SUCCESS;
     pthread_mutex_lock(&event_queue->mutex);
@@ -81,7 +92,7 @@ int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **
     else {
         *event = event_queue->events[event_queue->head];
         const char *popped_requestId = event_queue->requestIds[event_queue->head];
-
+        cJSON *popped_data_obj = event_queue->data_objs[event_queue->head];
         if (requestId_out) {
             *requestId_out = popped_requestId; 
         } 
@@ -93,9 +104,20 @@ int event_queue_pop(EventQueue* event_queue, state_event_e* event, const char **
             }
             retval = FAIL; 
         }
-
+        if (data_obj_out) {
+            *data_obj_out = popped_data_obj; 
+        } 
+        else {
+            LOG_WARN("RingBuffer", "NULL data_obj_out pointer provided, not returning data object");
+            if (popped_data_obj) {
+                cJSON_Delete(popped_data_obj);
+                event_queue->data_objs[event_queue->head] = NULL;
+            }
+            retval = FAIL; 
+        }
         if (retval == SUCCESS) {  // Only advance head if not FAIL
             event_queue->head = (event_queue->head + 1) % QUEUE_SIZE;
+            LOG_DEBUG("RingBuffer", "Popped event: %d, requestId: %s", *event, popped_requestId ? popped_requestId : "NULL");
         }
     }
 

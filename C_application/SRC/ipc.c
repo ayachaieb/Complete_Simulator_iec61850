@@ -11,6 +11,7 @@
 #include <errno.h>       
 #include "util.h"
 #include "parser.h"
+#include <cjson/cJSON.h> // For cJSON parsing
 #define SOCKET_PATH "/var/run/app.sv_simulator" 
 #define BUFFER_SIZE 1024                
 
@@ -122,40 +123,15 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
         // Ensure null termination
         buffer[n] = '\0';
         LOG_DEBUG("IPC", "Received: %s", buffer);
-        printf("Received: %s\n", buffer); // For debugging purposes
+        //printf("Received: %s\n", buffer); // For debugging purposes
         // Process the received JSON message
         state_event_e event = STATE_EVENT_NONE;
         char *requestId = NULL;
-         cJSON *type_obj,*data_obj ;
-         SimulationConfig config = {0}; // Initialize the config struct to zero
+        cJSON *type_obj,*data_obj ;
+        //SV_SimulationConfig config = {0}; // Initialize the config struct to zero
         cJSON *json_request = NULL; // This will be set in the parse function
-        // cJSON *json_request = cJSON_Parse(buffer);
-        // if (!json_request) {
-        //     LOG_ERROR("IPC", "Failed to parse incoming JSON: %s", cJSON_GetErrorPtr());
-        //     continue;
-        // }
-        
-        // // Extract message type
-        // cJSON *type_obj = cJSON_GetObjectItem(json_request, "type");
-        // if (!type_obj || !cJSON_IsString(type_obj)) {
-        //     LOG_ERROR("IPC", "Missing or invalid 'type' field in JSON message");
-        //     cJSON_Delete(json_request);
-        //     continue;
-        // }
-        
-        // // Extract data and requestId
-        // cJSON *data_obj = cJSON_GetObjectItem(json_request, "data");
-        // cJSON *requestId_obj = data_obj ? cJSON_GetObjectItem(data_obj, "requestId") : NULL;
-        
-        // if (requestId_obj && cJSON_IsString(requestId_obj)) {
-        //     requestId = strdup(requestId_obj->valuestring);
-        //     if (!requestId) {
-        //         LOG_ERROR("IPC", "Failed to duplicate requestId string: Out of memory");
-        //         cJSON_Delete(json_request);
-        //         continue;
-        //     }
-        // }
-        if ( parseSimulationConfig(buffer, &type_obj, &data_obj,&requestId,&config,json_request) == FAIL) 
+
+        if ( parseRequestConfig(buffer, &type_obj, &data_obj,&requestId,&json_request) == FAIL) 
         {
             LOG_ERROR("IPC", "Failed to parse incoming JSON: %s", cJSON_GetErrorPtr());
             continue;
@@ -192,14 +168,11 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
             continue;
         }
         
+       
+        
+    
+        StateMachine_push_event(event, requestId, data_obj); 
         cJSON_Delete(json_request);
-        
-        // Process the event
-        LOG_DEBUG("ModuleManager", "IPC event handler received event: %d, requestId: %s",
-                 event, requestId ? requestId : "N/A");
-        
-        StateMachine_push_event(event, requestId);
-        
         // Free allocated memory
         if (requestId) {
             free(requestId);

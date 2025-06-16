@@ -1,6 +1,6 @@
 #ifndef STATE_MACHINE_H
 #define STATE_MACHINE_H
-
+#include <cjson/cJSON.h> // For cJSON parsing
 
 typedef struct state_machine state_machine_t;
 // typedef struct state_machine_data state_machine_data_t;
@@ -23,7 +23,7 @@ typedef enum {
 
 typedef struct state_handler {
     void (*init)(void *);
-    void (*enter)(void*,state_e, state_event_e, const char *requestId);
+    void (*enter)(void*,state_e, state_event_e, const char *requestId, cJSON *data_obj);
 } state_handler_t;
 
 typedef struct state_machine {
@@ -35,7 +35,7 @@ typedef struct state_machine {
 int StateMachine_Launch(void);
 
 // Function to push events to the state machine (if event_queue is managed internally)
-int StateMachine_push_event(state_event_e event, const char *requestId);
+int StateMachine_push_event(state_event_e event, const char *requestId,cJSON *data_obj);
 
 // Function to signal shutdown and join the state machine thread
 int StateMachine_shutdown(void);

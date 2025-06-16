@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "logger.h"
 #include "SV_Publisher.h"
+#include "parser.h" 
 #include <errno.h>
 static state_machine_t sm_data_internal;
 static EventQueue event_queue_internal;
@@ -19,14 +20,16 @@ static bool state_idle_init(void *data);
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
 
 static bool state_init_init(void *data);
-static bool state_init_enter(void *data, state_e from, state_event_e event, const char *requestId);
+static bool state_init_enter(void *data, state_e from, state_event_e event, const char *requestId, cJSON *data_obj);
 
 static bool state_running_init(void *data);
-static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId);
+static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId, cJSON *data_obj);
 
 static bool state_stop_init(void *data);
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId);
-static void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId);
+
+static void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId, cJSON *data_obj); 
+
 static void state_machine_free(state_machine_t *sm)
 {
     free(sm->handlers);
@@ -58,7 +61,7 @@ else{
 
     // Call the enter function for the initial state
     if (sm->handlers[sm->current_state].enter) {
-        sm->handlers[sm->current_state].enter( NULL,STATE_IDLE, STATE_EVENT_NONE,NULL);
+        sm->handlers[sm->current_state].enter( NULL,STATE_IDLE, STATE_EVENT_NONE,NULL,NULL);
     }
     else {
         LOG_ERROR("State_Machine", "Enter handler for initial state %d is NULL", sm->current_state);
@@ -69,7 +72,7 @@ else{
 }
 
 
-static int state_machine_run(state_machine_t *sm, state_event_e event, const char *requestId)
+static int state_machine_run(state_machine_t *sm, state_event_e event, const char *requestId, cJSON *data_obj)
 {
     int retval = SUCCESS;
     if (!sm) {
@@ -84,7 +87,7 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
     if (STATE_EVENT_shutdown ==event) {
         LOG_INFO("State_Machine", "State machine received shutdown event, transitioning to STOP state.");
         sm->current_state = STATE_STOP;
-        state_enter(sm, sm->current_state, sm->current_state, event,requestId);
+        state_enter(sm, sm->current_state, sm->current_state, event,requestId, data_obj);
         retval = SUCCESS;
     }
 
@@ -127,19 +130,22 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
     }
 
     if (next != current || event != STATE_EVENT_NONE) {
-        state_enter(sm, next, current, event,requestId);
+        state_enter(sm, next, current, event,requestId, data_obj);
     }
     return retval;
 }
 
-static void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId)
+static void state_enter(state_machine_t *sm, state_e to, state_e from, state_event_e event, const char *requestId, cJSON *data_obj)
 {
     if (from != to) {
         
     
     if (sm->handlers[to].enter) {
        // printf("StateMachine-state_enter::Calling enter handler for state %s\n", state_to_string(to));
-        sm->handlers[to].enter(NULL, from, event,requestId);
+     
+
+     
+        sm->handlers[to].enter(NULL, from, event,requestId, data_obj);
     }
     sm->current_state = to;
 }
@@ -163,7 +169,7 @@ static bool state_init_init(void *data)
      return true;
 }
 
-static bool state_init_enter(void *data ,state_e from, state_event_e event, const char *requestId)
+static bool state_init_enter(void *data ,state_e from, state_event_e event, const char *requestId, cJSON *data_obj)
 {
     int retval = SUCCESS;
     LOG_INFO("State_Machine", "Entered INITIATION state from %s due to %s", state_to_string(from), state_event_to_string(event));
@@ -173,41 +179,43 @@ static bool state_init_enter(void *data ,state_e from, state_event_e event, cons
         LOG_ERROR("State_Machine", "Failed to initialize SV Publisher module on interface %s", sv_interface);
         retval = FAIL;
     }
-    else {
+    else 
+    {
         LOG_INFO("State_Machine", "SV Publisher initialized successfully on interface %s", sv_interface);
-        if(SUCCESS != StateMachine_push_event(STATE_EVENT_init_success, requestId)) {
+        if(SUCCESS != StateMachine_push_event(STATE_EVENT_init_success, requestId, data_obj)) {
             LOG_ERROR("State_Machine", "Failed to push init success event to state machine");
             retval = FAIL;
         }
-        else {
+        else 
+        {
             LOG_INFO("State_Machine", "Init success event pushed to state machine");
+                    cJSON *json_response = cJSON_CreateObject();
+        if (!json_response) {
+            LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
+            retval = FAIL;
+            }
+        const char *status_msg = "state init currently executing ...";
+        cJSON_AddStringToObject(json_response, "status", status_msg);
+        if (requestId) {
+            cJSON_AddStringToObject(json_response, "requestId", requestId);
+        }
+
+        char *response_str = cJSON_PrintUnformatted(json_response);
+        if (response_str) {
+            if(ipc_send_response(response_str)== FAIL) {
+                LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
+            } else {
+                 LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
+            }
+            free(response_str); // Free the string allocated by cJSON_PrintUnformatted
+        }
+         else {
+            LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
+        }
+
+        cJSON_Delete(json_response); // Free the cJSON object
         }
     
-
-    cJSON *json_response = cJSON_CreateObject();
-    if (!json_response) {
-         LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
-        retval = FAIL;
-    }
-  const char *status_msg = "state init currently executing ...";
-    cJSON_AddStringToObject(json_response, "status", status_msg);
-    if (requestId) {
-        cJSON_AddStringToObject(json_response, "requestId", requestId);
-    }
-
-    char *response_str = cJSON_PrintUnformatted(json_response);
-    if (response_str) {
-        if(ipc_send_response(response_str)== FAIL) {
-              LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
-        } else {
-              LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
-        }
-        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
-    } else {
-        LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
-    }
-
-    cJSON_Delete(json_response); // Free the cJSON object
 }
     return retval;
 
@@ -219,11 +227,19 @@ static bool state_running_init(void *data)
     return true; 
 }
 
-static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId)
-{
+static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId ,cJSON *data_obj)
+{   SV_SimulationConfig *config;
     bool retval = SUCCESS;
  LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s", state_to_string(from), state_event_to_string(event));
   // Start the SV Publisher module here
+if ( SUCCESS!= parseSVconfig(&data_obj, &config)) {
+        LOG_ERROR("State_Machine", "Failed to parse SV configuration data.");
+        retval = FAIL;
+    } else {
+        LOG_INFO("State_Machine", "Parsed SV configuration: appID=%s, macAddress=%s, interface=%s, svid=%s, scenariofile=%s",
+                 config->appID, config->macAddress, config->interface, config->svid, config->scenariofile);
+    }
+
     if (!SVPublisher_start()) {
         LOG_ERROR("State_Machine", "Failed to start SV Publisher module.");
        
@@ -278,11 +294,12 @@ static bool state_stop_enter(void *data , state_e from, state_event_e event, con
 static void *state_machine_thread_internal(void *arg) {
     state_machine_t *sm = (state_machine_t *)arg;
     const char *requestId = NULL; // Initialize requestId to NULL
-   
-    // if (NULL == sm) {
-    //       LOG_ERROR("State_Machine", "State machine pointer is NULL in internal thread");
-    //     return NULL;
-    // }
+    cJSON **data_obj_out = NULL; // Initialize data_obj_out to NULL
+     if (NULL == sm) 
+     {
+        LOG_ERROR("State_Machine", "State machine pointer is NULL in internal thread");
+        return NULL;
+     }
     int init_result =state_machine_init(sm); 
     if (init_result != SUCCESS) {
         LOG_ERROR("State_Machine", "State machine initialization failed in internal thread");
@@ -290,8 +307,8 @@ static void *state_machine_thread_internal(void *arg) {
     }
     while (1) {
         state_event_e event ;
-        if (SUCCESS == event_queue_pop(&event_queue_internal,&event, &requestId)) {
-            LOG_DEBUG("State_Machine", "State machine thread popped event: %s, requestId: %s",
+        if (SUCCESS == event_queue_pop(&event_queue_internal,&event, &requestId,&data_obj_out)) {
+            LOG_DEBUG("State_Machine", "popped event: %s, requestId: %s",
                       state_event_to_string(event), requestId ? requestId : "N/A");
         } else {
             LOG_ERROR("State_Machine", "Failed to pop event from queue in internal thread");
@@ -300,7 +317,7 @@ static void *state_machine_thread_internal(void *arg) {
         if (STATE_EVENT_shutdown == event  ) {
             break;
         }
-       if (SUCCESS!= state_machine_run(sm, event, requestId))
+       if (SUCCESS!= state_machine_run(sm, event, requestId, data_obj_out ? *data_obj_out : NULL)) {
         {
             LOG_ERROR("State_Machine", "State machine run failed for event: %s, requestId: %s",
                       state_event_to_string(event), requestId ? requestId : "N/A");
@@ -310,7 +327,7 @@ static void *state_machine_thread_internal(void *arg) {
 
     return NULL;
 }
-
+}
 int StateMachine_Launch(void) {
   
     sm_data_internal.current_state = STATE_IDLE; 
@@ -331,13 +348,38 @@ int StateMachine_Launch(void) {
     return EXIT_SUCCESS; 
 }
 
-int StateMachine_push_event(state_event_e event , const char *requestId) {
+int StateMachine_push_event(state_event_e event , const char *requestId, cJSON *data_obj)
+{
+    int result_event_queue_push = SUCCESS;
+    if (event == STATE_EVENT_NONE) {
+        LOG_ERROR("State_Machine", "Attempted to push an event with STATE_EVENT_NONE");
+        return EXIT_FAILURE; // Invalid event
+    }
 
-int result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal); 
-return result_event_queue_push;
+    if (event_queue_internal.shutdown) {
+        LOG_ERROR("State_Machine", "Event queue is shutting down, cannot push event: %s", state_event_to_string(event));
+        return EXIT_FAILURE; // Queue is shutting down
+    }
+
+    if (NULL!=data_obj) {
+
+        int result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal, data_obj);   
+
+          LOG_INFO("State_Machine", "Pushing event: %s, requestId: %s",
+                  state_event_to_string(event), requestId ? requestId : "N/A");
+    } else {
+        result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal, data_obj);  
+        LOG_INFO("State_Machine"," Pushing event without data: %s, requestId: %s",
+                  state_event_to_string(event), requestId ? requestId : "N/A");
+                 
+
+    }
+
+    return result_event_queue_push;
 }
 
-int StateMachine_shutdown(void) {
+int StateMachine_shutdown(void) 
+{
     LOG_INFO("State_Machine", "Shutting down StateMachine module...");
     event_queue_internal.shutdown = EXIT_FAILURE; // Set shutdown flag to true
     int c1 = pthread_cond_signal(&event_queue_internal.cond); // Signal to wake up the thread

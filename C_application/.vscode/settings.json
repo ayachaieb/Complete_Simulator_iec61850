@@ -4,6 +4,7 @@
         "module_manager.h": "c",
         "ring_buffer.h": "c",
         "ipc.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "cjson.h": "c"
     }
 }
