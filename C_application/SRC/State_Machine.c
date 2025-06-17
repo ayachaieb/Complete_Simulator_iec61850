@@ -196,12 +196,13 @@ static bool state_init_enter(void *data ,state_e from, state_event_e event, cons
 
         // Variable to hold the interface for SVPublisher_init (e.g., from the first config)
         const char* sv_interface_for_publisher = NULL;
-
+        SV_SimulationConfig svconfig_tab[array_size]; // Array to hold all configurations if needed
         for (int i = 0; i < array_size; i++) {
             cJSON *instance_json_obj = cJSON_GetArrayItem(data_obj, i);
             if (instance_json_obj) {
                 SV_SimulationConfig current_config = {0}; // Initialize a new config struct for each instance
                 if (parseSVconfig(instance_json_obj, &current_config) == SUCCESS) {
+                    svconfig_tab[i] = current_config; // Store the parsed config in the array
                     LOG_INFO("State_Machine", "Successfully parsed instance %d: appId=%s, dstMac=%s, svInterface=%s, scenarioConfigFile=%s, svIDs=%s", 
                              i, current_config.appId, current_config.dstMac, current_config.svInterface, current_config.scenarioConfigFile, current_config.svIDs);
                     

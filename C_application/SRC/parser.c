@@ -63,7 +63,16 @@ void freeGOOSEConfig(GOOSE_SimulationConfig* config) {
         memset(config, 0, sizeof(GOOSE_SimulationConfig));
     }}
 // --- Main Parsing Function ---
-
+/**
+ * @brief Parses a JSON request buffer and extracts the type, data, and requestId.
+ * 
+ * @param buffer The JSON string to parse.
+ * @param type_obj_out Pointer to store the type object.
+ * @param data_obj_out Pointer to store the data object (config array).
+ * @param requestId_out Pointer to store the requestId string.
+ * @param json_request_out Pointer to store the root cJSON object (to be freed by caller).
+ * @return int Returns SUCCESS on successful parsing, FAIL on error.
+ */
 int parseRequestConfig(
     const char* buffer,
     cJSON** type_obj_out,
@@ -114,15 +123,19 @@ int parseRequestConfig(
 
     // Extract the 'config' array from the data_container_obj
     cJSON *config_array_obj = cJSON_GetObjectItemCaseSensitive(data_container_obj, "config");
-    if (!config_array_obj || !cJSON_IsArray(config_array_obj)) {
-        LOG_ERROR("Parser", "Missing or invalid 'config' array in 'data' object");
-        return FAIL;
+    if (config_array_obj && cJSON_IsArray(config_array_obj)) {
+        *data_obj_out = config_array_obj; // Pass the config array to the caller if it exists and is an array
+        LOG_DEBUG("Parser", "Successfully parsed simulation config.");
+    } else {
+        LOG_DEBUG("Parser", "'config' array not found or is invalid in 'data' object. Proceeding without it.");
+        *data_obj_out = data_container_obj; // Pass the entire data object if 'config' is not present or invalid
     }
-    *data_obj_out = config_array_obj; // Pass the config array to the caller
 
-    LOG_DEBUG("Parser", "Successfully parsed simulation config.");
     return SUCCESS;
 }
+
+
+
 int parseGOOSEConfig(
     cJSON** data_obj,
     GOOSE_SimulationConfig* config) 
