@@ -5,14 +5,16 @@
 #include <cjson/cJSON.h> // For cJSON parsing
 
 
-// Define a struct to hold the parsed simulation configuration data
+
 typedef struct {
-    char* appID;
-    char* macAddress;
-    char* interface;
-    char* svid;
-    char* scenariofile;
+    char *appId;
+    char *dstMac;
+    char *svInterface;
+    char *scenarioConfigFile;
+    char *svIDs;
 } SV_SimulationConfig;
+
+
 typedef struct {
     char* GoCBRef; // Reference to the GOOSE Control Block
     char* DatSet;  // Data Set reference

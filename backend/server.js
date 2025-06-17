@@ -41,29 +41,41 @@ app.get('/', (req, res) => {
 
 app.post('/api/verify-config', (req, res) => {
   console.log('Processing /api/verify-config with config:', req.body);
-  const config = req.body;
-  const errors = [];
+  const configs = req.body;
+  const allErrors = [];
 
-  // Validation rules
-  if (!config.appID || !/^0[xX][0-9A-Fa-f]{1,4}$/.test(config.appID)) {
-    errors.push('appID must be a hexadecimal value (e.g., 0x1000 or 0X1000)');
-  }
-  if (!config.macAddress || !/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(config.macAddress)) {
-    errors.push('macAddress must be in format XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX');
-  }
-  if (!config.interface || !/^[A-Za-z0-9]+$/.test(config.interface)) {
-    errors.push('interface must be alphanumeric (e.g., eth0)');
-  }
-  if (!config.svid || !/^[A-Za-z0-9_]+$/.test(config.svid)) {
-    errors.push('svid must be alphanumeric with underscores');
-  }
-  if (!config.scenariofile || !/^[A-Za-z0-9_]+\.[xX][mM][lL]$/.test(config.scenariofile)) {
-    errors.push('scenariofile must be a valid XML filename (e.g., scenario.xml or SCENARIO.XML)');
+  if (!Array.isArray(configs)) {
+    return res.status(400).json({ errors: ["Request body must be an array of configurations."] });
   }
 
-  if (errors.length > 0) {
-    console.log('Validation errors:', errors);
-    return res.status(400).json({ errors });
+configs.forEach((config, index) => {
+    const errors = [];
+
+    // Validation rules for new XML structure
+    if (!config.appId || !/^[0-9]{1,4}$/.test(config.appId)) {
+      errors.push(`Instance ${index}: appId must be a numeric value (e.g., 1000)`);
+    }
+    if (!config.dstMac || !/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(config.dstMac)) {
+      errors.push(`Instance ${index}: dstMac must be in format XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX`);
+    }
+    if (!config.svInterface || !/^[A-Za-z0-9]+$/.test(config.svInterface)) {
+      errors.push(`Instance ${index}: svInterface must be alphanumeric (e.g., enp0s31f6)`);
+    }
+    if (!config.scenarioConfigFile || !/^[A-Za-z0-9_]+\.[tT][xX][tT]$/.test(config.scenarioConfigFile)) {
+      errors.push(`Instance ${index}: scenarioConfigFile must be a valid TXT filename (e.g., scenario.txt)`);
+    }
+    if (!config.svIDs || !/^[A-Za-z0-9]+$/.test(config.svIDs)) {
+      errors.push(`Instance ${index}: svIDs  must be alphanumeric(e.g., sv2004)`);
+    }
+
+    if (errors.length > 0) {
+      allErrors.push(...errors);
+    }
+  });
+
+ if (allErrors.length > 0) {
+    console.log("Validation errors:", allErrors);
+    return res.status(400).json({ errors: allErrors });
   }
   console.log('Config valid');
   res.json({ message: 'Configuration is valid' });

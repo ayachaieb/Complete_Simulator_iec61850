@@ -1,0 +1,37 @@
+<instances>
+    <instance>
+        <appId>1000</appId>
+        <dstMac>01:0c:cd:02:00:00</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid1</svIDs>
+    </instance>
+    <instance>
+        <appId>2000</appId>
+        <dstMac>01:0c:cd:02:10:08</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid22</svIDs>
+    </instance>
+    <instance>
+        <appId>3000</appId>
+        <dstMac>01:0c:cd:02:ff:ff</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario_DPA.txt</scenarioConfigFile>
+        <svIDs>svid333</svIDs>
+    </instance>
+    <instance>
+        <appId>4000</appId>
+        <dstMac>01:0c:cd:02:01:01</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario_DPA.txt</scenarioConfigFile>
+        <svIDs>svid4444</svIDs>
+    </instance>
+    <instance>
+        <appId>5000</appId>
+        <dstMac>01:0c:cd:02:ab:cd</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid55555</svIDs>
+    </instance>
+</instances>

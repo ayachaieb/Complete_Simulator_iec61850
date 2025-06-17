@@ -1,5 +1,6 @@
 #include "util.h"
 #include "State_Machine.h"
+#include <stdint.h>
 #ifndef DISABLE_ENUM_STRINGS
 
 
@@ -38,5 +39,22 @@ const char *state_event_to_string(state_event_e event)
     }
     return "";
 }
+int string_to_mac(const char *mac_str, uint8_t *dstAddress)
+{
+    if (!mac_str)
+        return -1;
 
+    char temp[18]; // Buffer for MAC string (17 chars + null terminator)
+    strncpy(temp, mac_str, sizeof(temp));
+    temp[sizeof(temp) - 1] = '\0';
+
+    char *token = strtok(temp, ":");
+    int i = 0;
+    while (token && i < 6)
+    {
+        dstAddress[i++] = (uint8_t)strtol(token, NULL, 16);
+        token = strtok(NULL, ":");
+    }
+    return (i == 6) ? 0 : -1; // Success if exactly 6 bytes parsed
+}
 #endif // DISABLE_ENUM_STRINGS

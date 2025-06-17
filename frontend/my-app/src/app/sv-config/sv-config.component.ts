@@ -14,13 +14,7 @@ import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common
 export class SvConfigComponent implements OnInit {
   title = 'IEC 61850 SV Configuration';
   items: Item[] = [];
-  config: SVConfig = {
-    appID: '',
-    macAddress: '',
-    interface: '',
-    svid: '',
-    scenariofile: ''
-  };
+  config:any = {};
   configStatus: string = '';
   simulationStatus: string = '';
   isConfigValid: boolean = false;
@@ -189,18 +183,21 @@ startSimulation() {
           if (errorNode) {
             throw new Error('Invalid XML format');
           }
-          const xmlConfig = xmlDoc.querySelector('SVConfig');
-          if (!xmlConfig) {
-            throw new Error('Invalid XML structure: Missing SVConfig root element');
+    const instances = xmlDoc.querySelectorAll('instance');
+          if (instances.length === 0) {
+            throw new Error('Invalid XML structure: Missing instance elements');
           }
 
-          this.config = {
-            appID: xmlConfig.querySelector('appID')?.textContent || '',
-            macAddress: xmlConfig.querySelector('macAddress')?.textContent || '',
-            interface: xmlConfig.querySelector('interface')?.textContent || '',
-            svid: xmlConfig.querySelector('svid')?.textContent || '',
-            scenariofile: xmlConfig.querySelector('scenariofile')?.textContent || ''
-          };
+          this.config = [];
+          instances.forEach(instanceElement => {
+            this.config.push({
+              appId: instanceElement.querySelector('appId')?.textContent || '',
+              dstMac: instanceElement.querySelector('dstMac')?.textContent || '',
+              svInterface: instanceElement.querySelector('svInterface')?.textContent || '',
+              scenarioConfigFile: instanceElement.querySelector('scenarioConfigFile')?.textContent || '',
+              svIDs: instanceElement.querySelector('svIDs')?.textContent || ''
+            });
+          });
           this.configStatus = 'XML config loaded successfully';
           console.log('SvConfigComponent: XML config loaded:', this.config);
           this.startConfig();

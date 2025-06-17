@@ -1,0 +1,44 @@
+# Phase 0
+duration_ms=20000
+channel1_voltage1=8550.74
+channel1_voltage2=8550.74
+channel1_voltage3=8550.74
+channel1_current1=400.0
+channel1_current2=400.0
+channel1_current3=400.0
+channel1_voltage1_phi=0.0
+channel1_voltage2_phi=240.0
+channel1_voltage3_phi=120.0
+channel1_current1_phi=0.0
+channel1_current2_phi=240.0
+channel1_current3_phi=120.0
+
+# Phase 1
+duration_ms=1200
+channel1_voltage1=8550.74
+channel1_voltage2=8550.74
+channel1_voltage3=8850.74
+channel1_current1=544.0
+channel1_current2=544.0
+channel1_current3=544.0
+channel1_voltage1_phi=0.0
+channel1_voltage2_phi=240.0
+channel1_voltage3_phi=120.0
+channel1_current1_phi=0.0
+channel1_current2_phi=240.0
+channel1_current3_phi=120.0
+
+# Phase 2
+duration_ms=10000
+channel1_voltage1=8550.74
+channel1_voltage2=8550.74
+channel1_voltage3=8550.74
+channel1_current1=400.0
+channel1_current2=400.0
+channel1_current3=400.0
+channel1_voltage1_phi=0.0
+channel1_voltage2_phi=240.0
+channel1_voltage3_phi=120.0
+channel1_current1_phi=0.0
+channel1_current2_phi=240.0
+channel1_current3_phi=120.0

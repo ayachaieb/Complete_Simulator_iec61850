@@ -8,11 +8,11 @@
 // --- Helper function to free allocated memory for SimulationConfig ---
 void freeSimulationConfig(SV_SimulationConfig* config) {
     if (config) {
-        if (config->appID) free(config->appID);
-        if (config->macAddress) free(config->macAddress);
-        if (config->interface) free(config->interface);
-        if (config->svid) free(config->svid);
-        if (config->scenariofile) free(config->scenariofile);
+        if (config->appId) free(config->appId);
+        if (config->dstMac) free(config->dstMac);
+        if (config->svInterface) free(config->svInterface);
+        if (config->svIDs) free(config->svIDs);
+        if (config->scenarioConfigFile) free(config->scenarioConfigFile);
         // Clear the struct members to avoid dangling pointers and indicate freed state
         memset(config, 0, sizeof(SV_SimulationConfig));
     }
@@ -28,25 +28,25 @@ void freeSVconfig(SV_SimulationConfig* config) {
     }
 
     // Free all string fields if they were allocated
-    if (config->appID) {
-        free(config->appID);
-        config->appID = NULL;
+    if (config->appId) {
+        free(config->appId);
+        config->appId = NULL;
     }
-    if (config->macAddress) {
-        free(config->macAddress);
-        config->macAddress = NULL;
+    if (config->dstMac) {
+        free(config->dstMac);
+        config->dstMac = NULL;
     }
-    if (config->interface) {
-        free(config->interface);
-        config->interface = NULL;
+    if (config->svInterface) {
+        free(config->svInterface);
+        config->svInterface = NULL;
     }
-    if (config->svid) {
-        free(config->svid);
-        config->svid = NULL;
+    if (config->svIDs) {
+        free(config->svIDs);
+        config->svIDs = NULL;
     }
-    if (config->scenariofile) {
-        free(config->scenariofile);
-        config->scenariofile = NULL;
+    if (config->scenarioConfigFile) {
+        free(config->scenarioConfigFile);
+        config->scenarioConfigFile = NULL;
     }
 
 }
@@ -93,28 +93,33 @@ int parseRequestConfig(
     }
     *type_obj_out = type_obj; // Pass the type object to the caller
 
-    // Extract data object
-    cJSON *data_obj = cJSON_GetObjectItemCaseSensitive(json_request, "data");
-    if (!data_obj || !cJSON_IsObject(data_obj)) { // Ensure 'data' is an object
+  // Extract the main data object (which contains 'config' array and 'requestId')
+    cJSON *data_container_obj = cJSON_GetObjectItemCaseSensitive(json_request, "data");
+    if (!data_container_obj || !cJSON_IsObject(data_container_obj)) {
         LOG_ERROR("Parser", "Missing or invalid 'data' object in JSON message");
         return FAIL;
     }
-    *data_obj_out = data_obj; // Pass the data object to the caller
 
-    // Extract requestId
-    cJSON *requestId_obj = cJSON_GetObjectItemCaseSensitive(data_obj, "requestId");
+    // Extract requestId from the data_container_obj
+    cJSON *requestId_obj = cJSON_GetObjectItemCaseSensitive(data_container_obj, "requestId");
     if (requestId_obj && cJSON_IsString(requestId_obj)) {
         *requestId_out = strdup(requestId_obj->valuestring);
         if (!*requestId_out) {
             LOG_ERROR("Parser", "Failed to duplicate requestId string: Out of memory");
-            return FAIL; // Memory error, caller needs to handle deletion of json_request
+            return FAIL;
         }
     } else {
         LOG_DEBUG("Parser", "No 'requestId' found or it's not a string.");
-        // Not an error, requestId is optional or can be handled later.
     }
 
-   
+    // Extract the 'config' array from the data_container_obj
+    cJSON *config_array_obj = cJSON_GetObjectItemCaseSensitive(data_container_obj, "config");
+    if (!config_array_obj || !cJSON_IsArray(config_array_obj)) {
+        LOG_ERROR("Parser", "Missing or invalid 'config' array in 'data' object");
+        return FAIL;
+    }
+    *data_obj_out = config_array_obj; // Pass the config array to the caller
+
     LOG_DEBUG("Parser", "Successfully parsed simulation config.");
     return SUCCESS;
 }
@@ -173,18 +178,18 @@ int parseGOOSEConfig(
     }
 }  
 
-int parseSVconfig(cJSON* data_obj, SV_SimulationConfig* config_out) {
+int parseSVconfig(cJSON* instance_json_obj, SV_SimulationConfig* config_out) 
+{
     // Validate input parameters
-    if (!data_obj || !config_out) {
+    if (!instance_json_obj || !config_out) {
         LOG_ERROR("Parser", "Invalid arguments: %s", 
-                 !data_obj ? "NULL data_obj" : "NULL config_out");
+                 !instance_json_obj ? "NULL instance_json_obj" : "NULL config_out");
         return FAIL;
     }
 
-    // --- Parse the 'config' object ---
-    cJSON *config_json_obj = cJSON_GetObjectItemCaseSensitive(data_obj, "config");
-    if (!config_json_obj || !cJSON_IsObject(config_json_obj)) {
-        LOG_ERROR("Parser", "Missing or invalid 'config' object");
+    // Ensure the input is an object
+    if (!cJSON_IsObject(instance_json_obj)) {
+        LOG_ERROR("Parser", "Input data_obj is not a JSON object");
         return FAIL;
     }
 
@@ -194,7 +199,7 @@ int parseSVconfig(cJSON* data_obj, SV_SimulationConfig* config_out) {
     // Helper macro for string field parsing (with error handling)
     #define PARSE_STRING_FIELD(field, field_name) \
         do { \
-            cJSON *item = cJSON_GetObjectItemCaseSensitive(config_json_obj, field_name); \
+            cJSON *item = cJSON_GetObjectItemCaseSensitive(instance_json_obj, field_name); \
             if (!item || !cJSON_IsString(item)) { \
                 LOG_ERROR("Parser", "Missing or invalid '" field_name "'"); \
                 goto cleanup; \
@@ -206,12 +211,12 @@ int parseSVconfig(cJSON* data_obj, SV_SimulationConfig* config_out) {
             } \
         } while (0)
 
-    // Parse required fields
-    PARSE_STRING_FIELD(appID, "appID");
-    PARSE_STRING_FIELD(macAddress, "macAddress");
-    PARSE_STRING_FIELD(interface, "interface");
-    PARSE_STRING_FIELD(svid, "svid");
-    PARSE_STRING_FIELD(scenariofile, "scenariofile");
+    // Parse required fields based on the new JSON structure
+    PARSE_STRING_FIELD(appId, "appId");
+    PARSE_STRING_FIELD(dstMac, "dstMac");
+    PARSE_STRING_FIELD(svInterface, "svInterface");
+    PARSE_STRING_FIELD(scenarioConfigFile, "scenarioConfigFile");
+    PARSE_STRING_FIELD(svIDs, "svIDs");
 
     #undef PARSE_STRING_FIELD
 
@@ -219,11 +224,12 @@ int parseSVconfig(cJSON* data_obj, SV_SimulationConfig* config_out) {
 
 cleanup:
     // Clean up on failure
-    free(config_out->appID);
-    free(config_out->macAddress);
-    free(config_out->interface);
-    free(config_out->svid);
-    free(config_out->scenariofile);
-    memset(config_out, 0, sizeof(SV_SimulationConfig));
+    // Assuming SV_SimulationConfig has these fields as char* that need freeing
+    free(config_out->appId);
+    free(config_out->dstMac);
+    free(config_out->svInterface);
+    free(config_out->scenarioConfigFile);
+    free(config_out->svIDs);
+    memset(config_out, 0, sizeof(SV_SimulationConfig)); // Clear the struct
     return FAIL;
 }
