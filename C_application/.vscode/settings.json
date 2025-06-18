@@ -5,6 +5,13 @@
         "ring_buffer.h": "c",
         "ipc.h": "c",
         "stdlib.h": "c",
-        "cjson.h": "c"
+        "cjson.h": "c",
+        "sv_publisher.h": "c",
+        "goose_subscriber.h": "c",
+        "hal_thread.h": "c",
+        "goose_receiver.h": "c",
+        "parser.h": "c",
+        "logger.h": "c",
+        "mms_value.h": "c"
     }
 }

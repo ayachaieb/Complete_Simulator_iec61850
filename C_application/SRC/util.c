@@ -57,4 +57,12 @@ int string_to_mac(const char *mac_str, uint8_t *dstAddress)
     }
     return (i == 6) ? 0 : -1; // Success if exactly 6 bytes parsed
 }
+// Dummy function for parsing MAC address string to uint8_t array
+int parse_mac_address(const char* mac_str, uint8_t mac_array[6]) {
+    if (mac_str == NULL) return -1;
+    int result = sscanf(mac_str, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
+                        &mac_array[0], &mac_array[1], &mac_array[2],
+                        &mac_array[3], &mac_array[4], &mac_array[5]);
+    return result == 6;
+}
 #endif // DISABLE_ENUM_STRINGS

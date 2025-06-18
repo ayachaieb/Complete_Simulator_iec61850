@@ -13,5 +13,6 @@ typedef enum {
 const char *state_event_to_string(state_event_e event);
 const char *state_to_string(state_e state);
 const int string_to_mac(const char *mac_str, uint8_t *dstAddress);
+const int parse_mac_address(const char *mac_str, uint8_t *dstAddress);
 #endif
 

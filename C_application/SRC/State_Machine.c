@@ -174,78 +174,64 @@ static bool state_init_init(void *data)
     // initialisation  sv initialisation 
      return true;
 }
+
 static bool state_init_enter(void *data ,state_e from, state_event_e event, const char *requestId, cJSON *data_obj)
 {
     int retval = SUCCESS;
     LOG_INFO("State_Machine", "Entered INITIATION state from %s due to %s", state_to_string(from), state_event_to_string(event));
       
-    // Declare a dynamic array or linked list to store parsed configurations if needed globally
-    // For this example, we will process them within the loop.
+    SV_SimulationConfig *svconfig_tab = NULL; // Pointer for dynamic array
+    int array_size = 0;
 
     // data_obj now holds the cJSON array of configurations
     if (cJSON_IsArray(data_obj)) {
-        int array_size = cJSON_GetArraySize(data_obj);
+        array_size = cJSON_GetArraySize(data_obj);
         LOG_INFO("State_Machine", "Received %d configuration instances.", array_size);
 
-        // Example: Store configurations in a dynamically allocated array
-        // SV_SimulationConfig *all_configs = malloc(array_size * sizeof(SV_SimulationConfig));
-        // if (!all_configs) {
-        //     LOG_ERROR("State_Machine", "Failed to allocate memory for all configurations.");
-        //     return FAIL;
-        // }
+        if (array_size > 0) {
+            // Dynamically allocate memory for the array of SV_SimulationConfig
+            svconfig_tab = (SV_SimulationConfig *)malloc(array_size * sizeof(SV_SimulationConfig));
+            if (!svconfig_tab) {
+                LOG_ERROR("State_Machine", "Failed to allocate memory for SV_SimulationConfig array.");
+                retval = FAIL;
+                goto cleanup; // Jump to cleanup if allocation fails
+            }
+            // Initialize allocated memory to zeros
+            memset(svconfig_tab, 0, array_size * sizeof(SV_SimulationConfig));
+        }
 
-        // Variable to hold the interface for SVPublisher_init (e.g., from the first config)
-        const char* sv_interface_for_publisher = NULL;
-        SV_SimulationConfig svconfig_tab[array_size]; // Array to hold all configurations if needed
         for (int i = 0; i < array_size; i++) {
             cJSON *instance_json_obj = cJSON_GetArrayItem(data_obj, i);
             if (instance_json_obj) {
-                SV_SimulationConfig current_config = {0}; // Initialize a new config struct for each instance
-                if (parseSVconfig(instance_json_obj, &current_config) == SUCCESS) {
-                    svconfig_tab[i] = current_config; // Store the parsed config in the array
+                // Parse directly into the dynamically allocated array element
+                if (parseSVconfig(instance_json_obj, &svconfig_tab[i]) == SUCCESS) {
                     LOG_INFO("State_Machine", "Successfully parsed instance %d: appId=%s, dstMac=%s, svInterface=%s, scenarioConfigFile=%s, svIDs=%s", 
-                             i, current_config.appId, current_config.dstMac, current_config.svInterface, current_config.scenarioConfigFile, current_config.svIDs);
+                             i, svconfig_tab[i].appId, svconfig_tab[i].dstMac, svconfig_tab[i].svInterface, svconfig_tab[i].scenarioConfigFile, svconfig_tab[i].svIDs);
                     
-                    // Example: Use the svInterface from the first config for SVPublisher_init
-                    if (i == 0) {
-                         sv_interface_for_publisher = strdup(current_config.svInterface); 
-                    }
-
-                    // If you need to store all configurations, uncomment and use all_configs[i] = current_config;
-                    // Be careful with memory management if storing: you might need to deep copy strings.
-
-                    // IMPORTANT: Free the dynamically allocated strings within current_config
-                    // if you are not storing them or if you are done processing this single config.
-                    // If you store them in an array, free them when the array is no longer needed.
-                    // For this example, we free them immediately after processing.
-                    free(current_config.appId);
-                    free(current_config.dstMac);
-                    free(current_config.svInterface);
-                    free(current_config.scenarioConfigFile);
-                    free(current_config.svIDs);
-
                 } else {
                     LOG_ERROR("State_Machine", "Failed to parse instance %d.", i);
                     retval = FAIL; // Mark as failed if any instance fails to parse
+                    goto cleanup; // Jump to cleanup if parsing fails for any instance
                 }
             } else {
                 LOG_ERROR("State_Machine", "Failed to get instance %d from array.", i);
                 retval = FAIL; // Mark as failed if any instance is missing
+                goto cleanup; // Jump to cleanup if any instance is missing
             }
         }
 
-        // Now, after parsing all configurations, proceed with SVPublisher_init or other actions
+        // Now, after parsing all configurations, proceed with SVPublisher_init
         if (retval == SUCCESS) { // Only proceed if all parsing was successful
-            if (sv_interface_for_publisher) {
-                if (!SVPublisher_init(sv_interface_for_publisher)) {
-                    LOG_ERROR("State_Machine", "Failed to initialize SV Publisher module on interface %s", sv_interface_for_publisher);
-                    retval = FAIL;
-                } else {
-                    LOG_INFO("State_Machine", "SV Publisher initialized successfully on interface %s", sv_interface_for_publisher);
-                }
-            } else {
-                LOG_ERROR("State_Machine", "No SV interface found for SV Publisher initialization.");
+            if (SUCCESS!=SVPublisher_init(svconfig_tab, array_size)) {
+                LOG_ERROR("State_Machine", "Failed to initialize SV Publisher module");
                 retval = FAIL;
+                // If SVPublisher_init fails, we need to free the memory allocated for svconfig_tab and its members
+                goto cleanup; 
+            } else {
+                LOG_INFO("State_Machine", "SV Publisher initialized successfully ");
+                // If SVPublisher_init succeeds, it is now responsible for managing svconfig_tab memory
+                // So, we set svconfig_tab to NULL to prevent double freeing in cleanup
+                svconfig_tab = NULL; 
             }
         }
 
@@ -292,12 +278,23 @@ static bool state_init_enter(void *data ,state_e from, state_event_e event, cons
         }
     }
 
-    // No cleanup for config.appID etc. here, as they are freed within the loop for each current_config
-    // If you store all_configs, you would free them after the loop or when all_configs is no longer needed.
+cleanup:
+    // This cleanup block is executed if an error occurs before SVPublisher_init takes ownership
+    // or if svconfig_tab was never allocated.
+    if (svconfig_tab != NULL) {
+        for (int i = 0; i < array_size; i++) {
+            // Only free if the pointer is not NULL (i.e., it was successfully strdup\'d)
+            free(svconfig_tab[i].appId);
+            free(svconfig_tab[i].dstMac);
+            free(svconfig_tab[i].svInterface);
+            free(svconfig_tab[i].scenarioConfigFile);
+            free(svconfig_tab[i].svIDs);
+        }
+        free(svconfig_tab);
+    }
     
     return retval;
 }
-
 
 
 static bool state_running_init(void *data)
@@ -314,29 +311,6 @@ static bool state_running_enter(void *data, state_e from, state_event_e event,
     LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s", 
             state_to_string(from), state_event_to_string(event));
 
-    // Initialize config (critical!)
-   // memset(&config, 0, sizeof(SV_SimulationConfig));
-
-    // Parse configuration
-    // if (parseSVconfig(data_obj, &config) != SUCCESS) {
-    //     LOG_ERROR("State_Machine", "Failed to parse SV configuration");
-    //     retval = FAIL;
-    //     goto cleanup;
-    // }
-
-    // Validate parsed fields
-    // if (!config.appID || !config.macAddress || !config.interface || 
-    //     !config.svid || !config.scenariofile) {
-    //     LOG_ERROR("State_Machine", "Invalid SV config (NULL field detected)");
-    //     retval = FAIL;
-    //     goto cleanup;
-    // }
-
-    // LOG_INFO("State_Machine", 
-    //        "SV config parsed: appID=%s, mac=%s, interface=%s, svid=%s, scenario=%s",
-    //        config.appID, config.macAddress, config.interface, 
-    //        config.svid, config.scenariofile);
-
     // Start publisher
     if (!SVPublisher_start()) {
         LOG_ERROR("State_Machine", "Failed to start SV Publisher");
@@ -344,13 +318,6 @@ static bool state_running_enter(void *data, state_e from, state_event_e event,
       //  goto cleanup;
     }
 
-// cleanup:
-//     // Free allocated resources
-//     free(config.appID);
-//     free(config.macAddress);
-//     free(config.interface);
-//     free(config.svid);
-//     free(config.scenariofile);
     
     return retval;
 }
@@ -394,7 +361,8 @@ static bool state_stop_enter(void *data , state_e from, state_event_e event, con
     cJSON_Delete(json_response); // Free the cJSON object
 }
 
-static void *state_machine_thread_internal(void *arg) {
+static void *state_machine_thread_internal(void *arg) 
+{
     state_machine_t *sm = (state_machine_t *)arg;
     const char *requestId = NULL;
     cJSON *data_obj = NULL;  // Change from cJSON** to cJSON*

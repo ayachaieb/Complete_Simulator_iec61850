@@ -1,0 +1,24 @@
+# Phase 0
+duration_ms=10000
+channel1_voltage1=57.74
+channel1_voltage2=57.74
+channel1_voltage3=57.74
+channel1_current1=1.0
+channel1_current2=1.0
+channel1_current3=1.0
+# Phase 1
+duration_ms=1200
+channel1_voltage1=57.74
+channel1_voltage2=57.74
+channel1_voltage3=57.74
+channel1_current1=8.0
+channel1_current2=8.0
+channel1_current3=8.0
+# Phase 2
+duration_ms=10000
+channel1_voltage1=57.74
+channel1_voltage2=57.74
+channel1_voltage3=57.74
+channel1_current1=1.0
+channel1_current2=1.0
+channel1_current3=1.0

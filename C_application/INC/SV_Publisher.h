@@ -2,7 +2,7 @@
 #define SV_PUBLISHER_H
 
 #include <stdbool.h> // For bool type
-
+#include "parser.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -15,7 +15,7 @@ extern "C" {
  * @param interface_name The network interface name (e.g., "eth0") to use for publishing.
  * @return true if initialization is successful, false otherwise.
  */
-bool SVPublisher_init(const char* interface_name);
+bool SVPublisher_init(SV_SimulationConfig* instances,int number_publishers);
 
 /**
  * @brief Starts the SV publishing loop in a separate thread.
@@ -31,7 +31,7 @@ bool SVPublisher_start();
  * This function can be called to gracefully stop the publisher.
  * It waits for the publishing thread to terminate.
  */
-int SVPublisher_stop();
+void SVPublisher_stop();
 
 #ifdef __cplusplus
 }

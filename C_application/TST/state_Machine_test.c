@@ -28,7 +28,6 @@ bool state_running_enter(void *data, state_e from, state_event_e event, const ch
 
 bool state_stop_init(void *data);
 bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId);
-
 void state_machine_free(state_machine_t *sm)
 {
     free(sm->handlers);
