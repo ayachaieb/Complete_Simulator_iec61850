@@ -52,8 +52,9 @@ configs.forEach((config, index) => {
     const errors = [];
 
     // Validation rules for new XML structure
-    if (!config.appId || !/^[0-9]{1,4}$/.test(config.appId)) {
-      errors.push(`Instance ${index}: appId must be a numeric value (e.g., 1000)`);
+    const appIdNum = parseInt(config.appId, 10);
+    if (isNaN(appIdNum) || appIdNum < 1 || appIdNum > 999999) {
+      errors.push(`Instance ${index}: appId must be a number between 1 and 999999`);
     }
     if (!config.dstMac || !/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(config.dstMac)) {
       errors.push(`Instance ${index}: dstMac must be in format XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX`);

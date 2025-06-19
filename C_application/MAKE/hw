@@ -1,0 +1,1517 @@
+==521590== Memcheck, a memory error detector
+==521590== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==521590== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==521590== Command: ../BIN/sv_simulator
+==521590== 
+==521590== Thread 4:
+==521590== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==521590==    at 0x4A89A66: sendto (sendto.c:27)
+==521590==    by 0x117E35: Ethernet_sendPacket (ethernet_linux.c:273)
+==521590==    by 0x115453: SVPublisher_publish (sv_publisher.c:480)
+==521590==    by 0x110222: timer_handler (SV_Publisher.c:293)
+==521590==    by 0x49A451F: ??? (in /usr/lib/x86_64-linux-gnu/libc.so.6)
+==521590==    by 0x4A76819: __libc_read (read.c:26)
+==521590==    by 0x4A76819: read (read.c:24)
+==521590==    by 0x49EEC35: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:516)
+==521590==    by 0x49EFD95: _IO_default_uflow (genops.c:362)
+==521590==    by 0x49E241B: _IO_getline_info (iogetline.c:60)
+==521590==    by 0x49E140F: fgets (iofgets.c:53)
+==521590==    by 0x110BA0: loadScenarioFile (SV_Publisher.c:426)
+==521590==    by 0x110FFE: thread_task (SV_Publisher.c:556)
+==521590==  Address 0x4b9cc51 is 65 bytes inside a block of size 1,518 alloc'd
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x114955: preparePacketBuffer (sv_publisher.c:129)
+==521590==    by 0x114E45: SVPublisher_createEx (sv_publisher.c:275)
+==521590==    by 0x114E92: SVPublisher_create (sv_publisher.c:288)
+==521590==    by 0x110FB3: thread_task (SV_Publisher.c:550)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 
+==521590== Process terminating with default action of signal 1 (SIGHUP)
+==521590==    at 0x4A7D63B: select (select.c:69)
+==521590==    by 0x10B89E: ipc_run_loop (ipc.c:280)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== HEAP SUMMARY:
+==521590==     in use at exit: 41,943 bytes in 355 blocks
+==521590==   total heap usage: 664 allocs, 309 frees, 84,361 bytes allocated
+==521590== 
+==521590== Thread 1:
+==521590== 4 bytes in 1 blocks are still reachable in loss record 1 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10B4B5: ipc_init (ipc.c:69)
+==521590==    by 0x10CB3C: ModuleManager_init (Module_Manager.c:18)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 4 bytes in 1 blocks are still reachable in loss record 2 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10BB46: ipc_run_loop (ipc.c:329)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 4 bytes in 1 blocks are still reachable in loss record 3 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10BBFC: ipc_run_loop (ipc.c:337)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 5 bytes in 1 blocks are still reachable in loss record 4 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10C8C5: main (main.c:45)
+==521590== 
+==521590== 7 bytes in 1 blocks are still reachable in loss record 5 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111240: SVPublisher_init (SV_Publisher.c:611)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 7 bytes in 1 blocks are still reachable in loss record 6 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111EE3: SVPublisher_init (SV_Publisher.c:741)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 8 bytes in 2 blocks are still reachable in loss record 7 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10B9E5: ipc_run_loop (ipc.c:306)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 8 bytes in 2 blocks are still reachable in loss record 8 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10BA4F: ipc_run_loop (ipc.c:311)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 9 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10B4B5: ipc_init (ipc.c:69)
+==521590==    by 0x10CB3C: ModuleManager_init (Module_Manager.c:18)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 10 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10BB46: ipc_run_loop (ipc.c:329)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 11 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111209: SVPublisher_init (SV_Publisher.c:610)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 12 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111240: SVPublisher_init (SV_Publisher.c:611)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 13 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111EE3: SVPublisher_init (SV_Publisher.c:741)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 14 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x112306: SVPublisher_start (SV_Publisher.c:788)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 15 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10BBFC: ipc_run_loop (ipc.c:337)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 16 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x11235D: SVPublisher_stop (SV_Publisher.c:822)
+==521590==    by 0x10F064: state_running_enter (State_Machine.c:318)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 13 bytes in 1 blocks are still reachable in loss record 17 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x11235D: SVPublisher_stop (SV_Publisher.c:822)
+==521590==    by 0x10F179: state_stop_enter (State_Machine.c:352)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 18 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10CAF0: ModuleManager_init (Module_Manager.c:10)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 19 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F6AA: StateMachine_Launch (State_Machine.c:448)
+==521590==    by 0x10CAF5: ModuleManager_init (Module_Manager.c:12)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 20 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10E7EC: state_idle_enter (State_Machine.c:170)
+==521590==    by 0x10E403: state_machine_init (State_Machine.c:66)
+==521590==    by 0x10F3A4: state_machine_thread_internal (State_Machine.c:392)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 21 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10CBB5: ModuleManager_init (Module_Manager.c:27)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 22 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10C8C5: main (main.c:45)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 23 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10CC38: ModuleManager_run (Module_Manager.c:38)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 24 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10E882: state_init_enter (State_Machine.c:182)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 25 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10E8ED: state_init_enter (State_Machine.c:190)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 26 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10EBEE: state_init_enter (State_Machine.c:232)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 27 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F7DA: StateMachine_push_event (State_Machine.c:469)
+==521590==    by 0x10EC4D: state_init_enter (State_Machine.c:246)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 28 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10ECBB: state_init_enter (State_Machine.c:250)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 29 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10EDE1: state_init_enter (State_Machine.c:267)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 30 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F00C: state_running_enter (State_Machine.c:312)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 31 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F05A: state_running_enter (State_Machine.c:317)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 32 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F16B: state_stop_enter (State_Machine.c:349)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 33 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F1A8: state_stop_enter (State_Machine.c:353)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 14 bytes in 1 blocks are still reachable in loss record 34 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F2D1: state_stop_enter (State_Machine.c:371)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 15 bytes in 5 blocks are still reachable in loss record 35 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x11855C: StringUtils_copyString (string_utilities.c:47)
+==521590==    by 0x112AC0: GooseReceiver_setInterfaceId (goose_receiver.c:111)
+==521590==    by 0x110D31: setupGooseSubscriber (SV_Publisher.c:504)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 15 bytes in 5 blocks are indirectly lost in loss record 36 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10D95F: parseSVconfig (parser.c:230)
+==521590==    by 0x10E9DA: state_init_enter (State_Machine.c:208)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 15 bytes in 5 blocks are definitely lost in loss record 37 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x111861: SVPublisher_init (SV_Publisher.c:687)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 22 bytes in 1 blocks are still reachable in loss record 38 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111209: SVPublisher_init (SV_Publisher.c:610)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 22 bytes in 1 blocks are still reachable in loss record 39 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111240: SVPublisher_init (SV_Publisher.c:611)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 22 bytes in 1 blocks are still reachable in loss record 40 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111EE3: SVPublisher_init (SV_Publisher.c:741)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 22 bytes in 1 blocks are still reachable in loss record 41 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x112306: SVPublisher_start (SV_Publisher.c:788)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 22 bytes in 1 blocks are still reachable in loss record 42 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x11235D: SVPublisher_stop (SV_Publisher.c:822)
+==521590==    by 0x10F064: state_running_enter (State_Machine.c:318)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 22 bytes in 1 blocks are still reachable in loss record 43 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x11235D: SVPublisher_stop (SV_Publisher.c:822)
+==521590==    by 0x10F179: state_stop_enter (State_Machine.c:352)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 44 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F6AA: StateMachine_Launch (State_Machine.c:448)
+==521590==    by 0x10CAF5: ModuleManager_init (Module_Manager.c:12)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 45 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10E7EC: state_idle_enter (State_Machine.c:170)
+==521590==    by 0x10E403: state_machine_init (State_Machine.c:66)
+==521590==    by 0x10F3A4: state_machine_thread_internal (State_Machine.c:392)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 46 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10E882: state_init_enter (State_Machine.c:182)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 47 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10E8ED: state_init_enter (State_Machine.c:190)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 48 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10EBEE: state_init_enter (State_Machine.c:232)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 49 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F7DA: StateMachine_push_event (State_Machine.c:469)
+==521590==    by 0x10EC4D: state_init_enter (State_Machine.c:246)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 50 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10ECBB: state_init_enter (State_Machine.c:250)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 51 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10EDE1: state_init_enter (State_Machine.c:267)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 52 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F00C: state_running_enter (State_Machine.c:312)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 53 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10BBFC: ipc_run_loop (ipc.c:337)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 54 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F05A: state_running_enter (State_Machine.c:317)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 55 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F16B: state_stop_enter (State_Machine.c:349)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 56 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F1A8: state_stop_enter (State_Machine.c:353)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 23 bytes in 1 blocks are still reachable in loss record 57 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F2D1: state_stop_enter (State_Machine.c:371)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 24 bytes in 1 blocks are still reachable in loss record 58 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10CAF0: ModuleManager_init (Module_Manager.c:10)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 24 bytes in 1 blocks are still reachable in loss record 59 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10CAF0: ModuleManager_init (Module_Manager.c:10)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 24 bytes in 1 blocks are still reachable in loss record 60 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10CBB5: ModuleManager_init (Module_Manager.c:27)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 24 bytes in 1 blocks are still reachable in loss record 61 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10CC38: ModuleManager_run (Module_Manager.c:38)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 24 bytes in 1 blocks are still reachable in loss record 62 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10BB46: ipc_run_loop (ipc.c:329)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 26 bytes in 2 blocks are still reachable in loss record 63 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10B9E5: ipc_run_loop (ipc.c:306)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 26 bytes in 2 blocks are still reachable in loss record 64 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10BA4F: ipc_run_loop (ipc.c:311)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 27 bytes in 1 blocks are still reachable in loss record 65 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111209: SVPublisher_init (SV_Publisher.c:610)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 28 bytes in 2 blocks are still reachable in loss record 66 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10F7DA: StateMachine_push_event (State_Machine.c:469)
+==521590==    by 0x10BD68: ipc_run_loop (ipc.c:359)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 28 bytes in 5 blocks are indirectly lost in loss record 67 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10D7DF: parseSVconfig (parser.c:228)
+==521590==    by 0x10E9DA: state_init_enter (State_Machine.c:208)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 29 bytes in 1 blocks are still reachable in loss record 68 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F05A: state_running_enter (State_Machine.c:317)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 31 bytes in 1 blocks are still reachable in loss record 69 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10CC38: ModuleManager_run (Module_Manager.c:38)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 36 bytes in 1 blocks are still reachable in loss record 70 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10E8ED: state_init_enter (State_Machine.c:190)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 36 bytes in 1 blocks are still reachable in loss record 71 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F1A8: state_stop_enter (State_Machine.c:353)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 37 bytes in 1 blocks are still reachable in loss record 72 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10CBB5: ModuleManager_init (Module_Manager.c:27)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 39 bytes in 1 blocks are still reachable in loss record 73 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F6AA: StateMachine_Launch (State_Machine.c:448)
+==521590==    by 0x10CAF5: ModuleManager_init (Module_Manager.c:12)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 39 bytes in 1 blocks are still reachable in loss record 74 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10EBEE: state_init_enter (State_Machine.c:232)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 40 bytes in 5 blocks are still reachable in loss record 75 of 143
+==521590==    at 0x48487A9: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x117811: EthernetHandleSet_addSocket (ethernet_linux.c:75)
+==521590==    by 0x1140B2: gooseReceiverLoop (goose_receiver.c:959)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 40 bytes in 5 blocks are indirectly lost in loss record 76 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10DADE: parseSVconfig (parser.c:232)
+==521590==    by 0x10E9DA: state_init_enter (State_Machine.c:208)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 40 bytes in 5 blocks are indirectly lost in loss record 77 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x111B6E: SVPublisher_init (SV_Publisher.c:716)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 41 bytes in 1 blocks are still reachable in loss record 78 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10E7EC: state_idle_enter (State_Machine.c:170)
+==521590==    by 0x10E403: state_machine_init (State_Machine.c:66)
+==521590==    by 0x10F3A4: state_machine_thread_internal (State_Machine.c:392)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 43 bytes in 1 blocks are still reachable in loss record 79 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10ECBB: state_init_enter (State_Machine.c:250)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 43 bytes in 1 blocks are still reachable in loss record 80 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x112306: SVPublisher_start (SV_Publisher.c:788)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 46 bytes in 2 blocks are still reachable in loss record 81 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10F7DA: StateMachine_push_event (State_Machine.c:469)
+==521590==    by 0x10BD68: ipc_run_loop (ipc.c:359)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 47 bytes in 1 blocks are still reachable in loss record 82 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x11235D: SVPublisher_stop (SV_Publisher.c:822)
+==521590==    by 0x10F064: state_running_enter (State_Machine.c:318)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 47 bytes in 1 blocks are still reachable in loss record 83 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x11235D: SVPublisher_stop (SV_Publisher.c:822)
+==521590==    by 0x10F179: state_stop_enter (State_Machine.c:352)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 52 bytes in 1 blocks are still reachable in loss record 84 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10C8C5: main (main.c:45)
+==521590== 
+==521590== 52 bytes in 1 blocks are still reachable in loss record 85 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F00C: state_running_enter (State_Machine.c:312)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 54 bytes in 1 blocks are still reachable in loss record 86 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F7DA: StateMachine_push_event (State_Machine.c:469)
+==521590==    by 0x10EC4D: state_init_enter (State_Machine.c:246)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 55 bytes in 1 blocks are still reachable in loss record 87 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F16B: state_stop_enter (State_Machine.c:349)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 59 bytes in 1 blocks are still reachable in loss record 88 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10E882: state_init_enter (State_Machine.c:182)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 60 bytes in 1 blocks are still reachable in loss record 89 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10B4B5: ipc_init (ipc.c:69)
+==521590==    by 0x10CB3C: ModuleManager_init (Module_Manager.c:18)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 64 bytes in 1 blocks are still reachable in loss record 90 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x10E2A3: state_machine_init (State_Machine.c:45)
+==521590==    by 0x10F3A4: state_machine_thread_internal (State_Machine.c:392)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 91 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111AFA: SVPublisher_init (SV_Publisher.c:714)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 92 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111C61: SVPublisher_init (SV_Publisher.c:725)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 93 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111E9D: SVPublisher_init (SV_Publisher.c:736)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 94 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x112275: SVPublisher_start (SV_Publisher.c:783)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 95 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x1122AA: SVPublisher_start (SV_Publisher.c:785)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 96 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x1123D7: SVPublisher_stop (SV_Publisher.c:831)
+==521590==    by 0x10F064: state_running_enter (State_Machine.c:318)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 65 bytes in 5 blocks are still reachable in loss record 97 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x111138: thread_task (SV_Publisher.c:588)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 70 bytes in 5 blocks are still reachable in loss record 98 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5B6: logger_log (logger.c:161)
+==521590==    by 0x10EACA: state_init_enter (State_Machine.c:209)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 75 bytes in 5 blocks are still reachable in loss record 99 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111C61: SVPublisher_init (SV_Publisher.c:725)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 77 bytes in 5 blocks are indirectly lost in loss record 100 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10DA20: parseSVconfig (parser.c:231)
+==521590==    by 0x10E9DA: state_init_enter (State_Machine.c:208)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 77 bytes in 5 blocks are definitely lost in loss record 101 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x111A07: SVPublisher_init (SV_Publisher.c:705)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 80 bytes in 5 blocks are still reachable in loss record 102 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x11814C: LinkedList_create (linked_list.c:41)
+==521590==    by 0x1129D4: GooseReceiver_createEx (goose_receiver.c:72)
+==521590==    by 0x112A04: GooseReceiver_create (goose_receiver.c:84)
+==521590==    by 0x110CE8: setupGooseSubscriber (SV_Publisher.c:497)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 80 bytes in 5 blocks are still reachable in loss record 103 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x11814C: LinkedList_create (linked_list.c:41)
+==521590==    by 0x11829A: LinkedList_add (linked_list.c:111)
+==521590==    by 0x112A52: GooseReceiver_addSubscriber (goose_receiver.c:96)
+==521590==    by 0x110E7D: setupGooseSubscriber (SV_Publisher.c:522)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 80 bytes in 5 blocks are still reachable in loss record 104 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x117791: EthernetHandleSet_new (ethernet_linux.c:58)
+==521590==    by 0x114097: gooseReceiverLoop (goose_receiver.c:958)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 85 bytes in 5 blocks are definitely lost in loss record 105 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x11192E: SVPublisher_init (SV_Publisher.c:698)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 90 bytes in 5 blocks are indirectly lost in loss record 106 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10D89E: parseSVconfig (parser.c:229)
+==521590==    by 0x10E9DA: state_init_enter (State_Machine.c:208)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 94 bytes in 2 blocks are still reachable in loss record 107 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10B9E5: ipc_run_loop (ipc.c:306)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 104 bytes in 1 blocks are still reachable in loss record 108 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10EDE1: state_init_enter (State_Machine.c:267)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 104 bytes in 1 blocks are still reachable in loss record 109 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F2D1: state_stop_enter (State_Machine.c:371)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 105 bytes in 5 blocks are still reachable in loss record 110 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x11DD7A: MmsValue_newUtcTime (mms_value.c:1902)
+==521590==    by 0x11444D: GooseSubscriber_create (goose_subscriber.c:48)
+==521590==    by 0x110D46: setupGooseSubscriber (SV_Publisher.c:506)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 111 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111AFA: SVPublisher_init (SV_Publisher.c:714)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 112 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111C61: SVPublisher_init (SV_Publisher.c:725)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 113 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111E9D: SVPublisher_init (SV_Publisher.c:736)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 114 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x112275: SVPublisher_start (SV_Publisher.c:783)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 115 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x1122AA: SVPublisher_start (SV_Publisher.c:785)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 116 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x1123D7: SVPublisher_stop (SV_Publisher.c:831)
+==521590==    by 0x10F064: state_running_enter (State_Machine.c:318)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 110 bytes in 5 blocks are still reachable in loss record 117 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x111138: thread_task (SV_Publisher.c:588)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 115 bytes in 2 blocks are still reachable in loss record 118 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10F7DA: StateMachine_push_event (State_Machine.c:469)
+==521590==    by 0x10BD68: ipc_run_loop (ipc.c:359)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 115 bytes in 5 blocks are still reachable in loss record 119 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5FF: logger_log (logger.c:164)
+==521590==    by 0x10EACA: state_init_enter (State_Machine.c:209)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 130 bytes in 5 blocks are still reachable in loss record 120 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111E9D: SVPublisher_init (SV_Publisher.c:736)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 140 bytes in 5 blocks are still reachable in loss record 121 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x117B7D: Ethernet_createSocket (ethernet_linux.c:186)
+==521590==    by 0x1142CA: GooseReceiver_startThreadless (goose_receiver.c:1059)
+==521590==    by 0x114140: GooseReceiver_start (goose_receiver.c:993)
+==521590==    by 0x110E8D: setupGooseSubscriber (SV_Publisher.c:524)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 140 bytes in 5 blocks are indirectly lost in loss record 122 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x117B7D: Ethernet_createSocket (ethernet_linux.c:186)
+==521590==    by 0x11490C: preparePacketBuffer (sv_publisher.c:117)
+==521590==    by 0x114E45: SVPublisher_createEx (sv_publisher.c:275)
+==521590==    by 0x114E92: SVPublisher_create (sv_publisher.c:288)
+==521590==    by 0x110FB3: thread_task (SV_Publisher.c:550)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 150 bytes in 5 blocks are still reachable in loss record 123 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x1122AA: SVPublisher_start (SV_Publisher.c:785)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 160 bytes in 5 blocks are still reachable in loss record 124 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x117613: Thread_create (thread_linux.c:57)
+==521590==    by 0x114160: GooseReceiver_start (goose_receiver.c:994)
+==521590==    by 0x110E8D: setupGooseSubscriber (SV_Publisher.c:524)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 165 bytes in 5 blocks are still reachable in loss record 125 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x1123D7: SVPublisher_stop (SV_Publisher.c:831)
+==521590==    by 0x10F064: state_running_enter (State_Machine.c:318)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 177 bytes in 5 blocks are still reachable in loss record 126 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111AFA: SVPublisher_init (SV_Publisher.c:714)
+==521590==    by 0x10EB80: state_init_enter (State_Machine.c:226)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 215 bytes in 5 blocks are still reachable in loss record 127 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x112275: SVPublisher_start (SV_Publisher.c:783)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 240 bytes in 5 blocks are still reachable in loss record 128 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x112991: GooseReceiver_createEx (goose_receiver.c:64)
+==521590==    by 0x112A04: GooseReceiver_create (goose_receiver.c:84)
+==521590==    by 0x110CE8: setupGooseSubscriber (SV_Publisher.c:497)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 250 bytes in 5 blocks are still reachable in loss record 129 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x111138: thread_task (SV_Publisher.c:588)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 288 bytes in 1 blocks are possibly lost in loss record 130 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==521590==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==521590==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==521590==    by 0x49F77B4: allocate_stack (allocatestack.c:430)
+==521590==    by 0x49F77B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==521590==    by 0x10F62B: StateMachine_Launch (State_Machine.c:444)
+==521590==    by 0x10CAF5: ModuleManager_init (Module_Manager.c:12)
+==521590==    by 0x10C7E7: main (main.c:34)
+==521590== 
+==521590== 440 bytes in 5 blocks are indirectly lost in loss record 131 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x114EBE: SVPublisher_addASDU (sv_publisher.c:294)
+==521590==    by 0x110647: setupSVPublisher (SV_Publisher.c:367)
+==521590==    by 0x111062: thread_task (SV_Publisher.c:570)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 440 bytes in 5 blocks are indirectly lost in loss record 132 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x114EBE: SVPublisher_addASDU (sv_publisher.c:294)
+==521590==    by 0x110670: setupSVPublisher (SV_Publisher.c:368)
+==521590==    by 0x111062: thread_task (SV_Publisher.c:570)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 450 (200 direct, 250 indirect) bytes in 1 blocks are definitely lost in loss record 133 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x10E913: state_init_enter (State_Machine.c:194)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 586 bytes in 2 blocks are still reachable in loss record 134 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10BA4F: ipc_run_loop (ipc.c:311)
+==521590==    by 0x10CC44: ModuleManager_run (Module_Manager.c:39)
+==521590==    by 0x10C8D4: main (main.c:48)
+==521590== 
+==521590== 680 bytes in 5 blocks are still reachable in loss record 135 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x4A0A58E: strdup (strdup.c:42)
+==521590==    by 0x10C5D3: logger_log (logger.c:162)
+==521590==    by 0x10EACA: state_init_enter (State_Machine.c:209)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 1,152 bytes in 4 blocks are possibly lost in loss record 136 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==521590==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==521590==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==521590==    by 0x49F77B4: allocate_stack (allocatestack.c:430)
+==521590==    by 0x49F77B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==521590==    by 0x1121EA: SVPublisher_start (SV_Publisher.c:774)
+==521590==    by 0x10F024: state_running_enter (State_Machine.c:316)
+==521590==    by 0x10E764: state_enter (State_Machine.c:155)
+==521590==    by 0x10E6E6: state_machine_run (State_Machine.c:140)
+==521590==    by 0x10F4DE: state_machine_thread_internal (State_Machine.c:413)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 1,440 bytes in 5 blocks are possibly lost in loss record 137 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==521590==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==521590==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==521590==    by 0x49F77B4: allocate_stack (allocatestack.c:430)
+==521590==    by 0x49F77B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==521590==    by 0x11770B: Thread_start (thread_linux.c:89)
+==521590==    by 0x114185: GooseReceiver_start (goose_receiver.c:1000)
+==521590==    by 0x110E8D: setupGooseSubscriber (SV_Publisher.c:524)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 2,480 bytes in 5 blocks are still reachable in loss record 138 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x1143F9: GooseSubscriber_create (goose_subscriber.c:41)
+==521590==    by 0x110D46: setupGooseSubscriber (SV_Publisher.c:506)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 4,096 bytes in 1 blocks are still reachable in loss record 139 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x49E0BA3: _IO_file_doallocate (filedoalloc.c:101)
+==521590==    by 0x49EFCDF: _IO_doallocbuf (genops.c:347)
+==521590==    by 0x49EEF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==521590==    by 0x49ED6D4: _IO_new_file_xsputn (fileops.c:1243)
+==521590==    by 0x49ED6D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==521590==    by 0x49D714C: outstring_func (vfprintf-internal.c:239)
+==521590==    by 0x49D714C: __vfprintf_internal (vfprintf-internal.c:1263)
+==521590==    by 0x49C279E: printf (printf.c:33)
+==521590==    by 0x110F12: thread_task (SV_Publisher.c:541)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 7,590 bytes in 5 blocks are still reachable in loss record 140 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x112A19: GooseReceiver_create (goose_receiver.c:87)
+==521590==    by 0x110CE8: setupGooseSubscriber (SV_Publisher.c:497)
+==521590==    by 0x11103E: thread_task (SV_Publisher.c:564)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 7,590 bytes in 5 blocks are indirectly lost in loss record 141 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x11805A: Memory_malloc (lib_memory.c:33)
+==521590==    by 0x114955: preparePacketBuffer (sv_publisher.c:129)
+==521590==    by 0x114E45: SVPublisher_createEx (sv_publisher.c:275)
+==521590==    by 0x114E92: SVPublisher_create (sv_publisher.c:288)
+==521590==    by 0x110FB3: thread_task (SV_Publisher.c:550)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== 8,192 bytes in 1 blocks are still reachable in loss record 142 of 143
+==521590==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x10C227: logger_init (logger.c:65)
+==521590==    by 0x10C79A: main (main.c:24)
+==521590== 
+==521590== 8,890 (240 direct, 8,650 indirect) bytes in 5 blocks are definitely lost in loss record 143 of 143
+==521590==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==521590==    by 0x118097: Memory_calloc (lib_memory.c:45)
+==521590==    by 0x114E16: SVPublisher_createEx (sv_publisher.c:270)
+==521590==    by 0x114E92: SVPublisher_create (sv_publisher.c:288)
+==521590==    by 0x110FB3: thread_task (SV_Publisher.c:550)
+==521590==    by 0x49F6AC2: start_thread (pthread_create.c:442)
+==521590==    by 0x4A87A03: clone (clone.S:100)
+==521590== 
+==521590== LEAK SUMMARY:
+==521590==    definitely lost: 617 bytes in 21 blocks
+==521590==    indirectly lost: 8,900 bytes in 50 blocks
+==521590==      possibly lost: 2,880 bytes in 10 blocks
+==521590==    still reachable: 29,546 bytes in 274 blocks
+==521590==         suppressed: 0 bytes in 0 blocks
+==521590== 
+==521590== Use --track-origins=yes to see where uninitialised values come from
+==521590== For lists of detected and suppressed errors, rerun with: -s
+==521590== ERROR SUMMARY: 77042 errors from 9 contexts (suppressed: 0 from 0)

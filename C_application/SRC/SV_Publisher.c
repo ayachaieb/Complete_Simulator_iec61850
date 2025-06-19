@@ -114,6 +114,7 @@ int phase_count = 0;
 
 uint64_t tick_208_us = 0;
 volatile sig_atomic_t running = 1;
+
 /* Number of loops incremented for each sample sent (tracking time in 256us steps) */
 static uint32_t sNbLoop208us = 0;
 /* Variables for voltages and currents */
@@ -137,6 +138,7 @@ typedef struct
     GooseSubscriber gooseSubscriber;
     timer_t timerid;
     char *goCbRef;
+
 } ThreadData;
 
 
@@ -148,6 +150,16 @@ static float fOmtStpmSimuGetVal(float veff, float freq, float phi, uint16_t harm
 // Forward declaration for the publishing thread function
 static void* sv_publishing_thread(void* arg);
 
+
+
+void sigint_handler(int sig)
+{
+    if (sig == SIGINT)
+    {
+        printf("\nReceived Ctrl+C, shutting down...\n");
+        running = 0;
+    }
+}
 void timer_handler(int signum, siginfo_t *si, void *uc)
 
 {
@@ -526,7 +538,7 @@ void *thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
 
-
+    printf("Thread started for appid 0x%04x on interface %s\n", data->parameters.appId, data->svInterface);
     printf("svInterface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
            data->svInterface, data->parameters.appId,
            data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
@@ -539,12 +551,12 @@ void *thread_task(void *arg)
     if (!data->svPublisher)
     {
         printf("Failed to create SVPublisher for appid %u\n", data->parameters.appId);
-        goto cleanup;
+        goto cleanup_on_error;
     }
     if (loadScenarioFile(data->scenarioConfigFile) != 0)
     {
         printf("Erreur loading scenario file\n");
-        goto cleanup;
+        goto cleanup_on_error;
     }
     printf("phase_count = %u\n", phase_count);
 
@@ -552,14 +564,14 @@ void *thread_task(void *arg)
     if (setupGooseSubscriber(data) != 0)
     {
         printf("Failed to setup GOOSE Subscriber\n");
-        goto cleanup;
+        goto cleanup_on_error;
     }
 
     setupSVPublisher(data);
     if (!data->svPublisher)
     {
         printf("Failed to create SVPublisher\n");
-        goto cleanup;
+        goto cleanup_on_error;
     }
 
 
@@ -573,8 +585,8 @@ void *thread_task(void *arg)
     {
         sleep(1); // Sleep to reduce CPU usage; timer_handler does the publishing
     }
-
-cleanup:
+    LOG_INFO("SV_Publisher", "Thread for appid %p gracefully shutting down.", data->parameters.appId);
+    // --- Unconditional Cleanup when thread exits its loop ---
     if (data->svPublisher)
     {
         SVPublisher_destroy(data->svPublisher);
@@ -586,7 +598,36 @@ cleanup:
         GooseReceiver_destroy(data->gooseReceiver);
         data->gooseReceiver = NULL;
     }
-    printf("Thread finished publishing\n");
+    // Free strdup'd strings within this ThreadData instance
+    // These were allocated in SVPublisher_init and are part of this thread's data
+    if (data->svInterface) free(data->svInterface);
+    if (data->goCbRef) free(data->goCbRef);
+    if (data->scenarioConfigFile) free(data->scenarioConfigFile);
+    if (data->svIDs) free(data->svIDs);
+
+    printf("Thread for appid 0x%04x finished publishing\n", data->parameters.appId);
+    return NULL;
+
+cleanup_on_error:
+    // This block handles cleanup only if an error occurred during initialization
+    if (data->svPublisher)
+    {
+        SVPublisher_destroy(data->svPublisher);
+        data->svPublisher = NULL;
+    }
+    if (data->gooseReceiver)
+    {
+        GooseReceiver_stop(data->gooseReceiver);
+        GooseReceiver_destroy(data->gooseReceiver);
+        data->gooseReceiver = NULL;
+    }
+    // Free strdup'd strings here as well if they were allocated before the error
+    if (data->svInterface) free(data->svInterface);
+    if (data->goCbRef) free(data->goCbRef);
+    if (data->scenarioConfigFile) free(data->scenarioConfigFile);
+    if (data->svIDs) free(data->svIDs);
+
+    printf("Thread for appid 0x%04x failed initialization and finished cleanup\n", data->parameters.appId);
     return NULL;
 }
 
@@ -613,7 +654,7 @@ bool SVPublisher_init(SV_SimulationConfig* instances, int number_publishers)
         if (thread_data) { 
             // Need to free internal strings within thread_data if they were strdup'd
             for (int i = 0; i < instance_count; ++i) {
-                if (thread_data[i].parameters.appId) free(thread_data[i].parameters.appId);
+
                 if (thread_data[i].svInterface) free(thread_data[i].svInterface);
                 if (thread_data[i].goCbRef) free(thread_data[i].goCbRef);
                 if (thread_data[i].scenarioConfigFile) free(thread_data[i].scenarioConfigFile);
@@ -662,6 +703,7 @@ int i=0;
           //  thread_data[i].GOOSEappId = 0x5000 + atoi(instances[i].appId); 
             // For now, GOOSEappId is also a string from JSON, so we'll assume it's handled elsewhere or convert it.
             // Let's assume GOOSEappId is derived from appId string, so it should be uint32_t
+            thread_data[i].parameters.appId = val; // Store the numeric value directly
             thread_data[i].GOOSEappId = (uint32_t)strtoul(instances[i].appId, NULL, 10); // Convert string appId to uint32_t
         } else {
             LOG_ERROR("SV_Publisher", "appId is NULL for instance %d", i);
@@ -745,46 +787,58 @@ cleanup_init_failure:
     return FAIL;
 }
 
-bool SVPublisher_start()
+bool SVPublisher_start( )
 {
     if (threads == NULL || thread_data == NULL || instance_count <= 0) {
         LOG_ERROR("SV_Publisher", "SV Publisher not initialized. Call SVPublisher_init first.");
         return FAIL;
     }
-
+    signal(SIGINT, sigint_handler);
     bool all_threads_created = SUCCESS;
 
     for (int i = 0; i < instance_count; i++) {
+
         if (pthread_create(&threads[i], NULL, thread_task, &thread_data[i]) != 0) {
             LOG_ERROR("SV_Publisher", "Failed to create thread for instance %d: %s", i, strerror(errno));
             all_threads_created = FAIL;
             // Attempt to cancel already created threads if one fails, or just log and continue
             // For simplicity, we'll just log and mark failure.
             // In a real application, you might want to join/cancel threads created so far.
+        } else {
+            // Detach the thread so its resources are automatically reclaimed upon termination
+            //pthread_detach(threads[i]);
+            LOG_INFO("SV_Publisher", "Created and detached thread for instance %d", i);
         }
         LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
     }
-
-    // Based on your original code, it seems you want to join all threads here.
-    // If you want the main thread to continue execution, you should detach threads
-    // or join them in a separate cleanup/stop function.
-    // For now, mirroring original behavior:
-    for (int i = 0; i < instance_count; i++) {
-        if (threads[i] != 0) { // Check if thread was successfully created
-            if (pthread_join(threads[i], NULL) != 0) {
-                LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
-            }
-            LOG_INFO("SV_Publisher", "Joined thread for instance %d", i);
-        }
+    printf("All threads created successfully: %d\n", all_threads_created);
+    LOG_INFO("SV_Publisher", "SV Publisher threads started and detached.");
+while (running) {
+        // Main thread can do other work or just sleep
+        usleep(100000); // Sleep for 100ms to reduce CPU usage
     }
 
-    LOG_INFO("SV_Publisher", "All %d threads completed!", instance_count);
-    // munlockall(); // This might not be needed here, depends on your system requirements
-
-    // Note: Memory cleanup (freeing threads and thread_data) should happen in SVPublisher_cleanup
-    // not here, as threads might still be running or their data might be needed.
-
     return all_threads_created;
+    // // Based on your original code, it seems you want to join all threads here.
+    // // If you want the main thread to continue execution, you should detach threads
+    // // or join them in a separate cleanup/stop function.
+    // // For now, mirroring original behavior:
+    // for (int i = 0; i < instance_count; i++) {
+    //     if (threads[i] != 0) { // Check if thread was successfully created
+    //         if (pthread_join(threads[i], NULL) != 0) {
+    //             LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
+    //         }
+    //         LOG_INFO("SV_Publisher", "Joined thread for instance %d", i);
+    //     }
+    // }
+
+    // LOG_INFO("SV_Publisher", "All %d threads completed!", instance_count);
+    // // munlockall(); // This might not be needed here, depends on your system requirements
+
+    // // Note: Memory cleanup (freeing threads and thread_data) should happen in SVPublisher_cleanup
+    // // not here, as threads might still be running or their data might be needed.
+
+    // return all_threads_created;
 }
 
 
@@ -792,25 +846,36 @@ bool SVPublisher_start()
 
 void SVPublisher_stop()
 {
-    if (thread_data != NULL) {
-        for (int i = 0; i < instance_count; ++i) {
-            // Free dynamically allocated strings within each ThreadData instance
-            if (thread_data[i].parameters.appId) free(thread_data[i].parameters.appId);
-            if (thread_data[i].svInterface) free(thread_data[i].svInterface);
-            if (thread_data[i].goCbRef) free(thread_data[i].goCbRef);
-            if (thread_data[i].scenarioConfigFile) free(thread_data[i].scenarioConfigFile);
-            if (thread_data[i].svIDs) free(thread_data[i].svIDs);
+       LOG_INFO("SV_Publisher", "Signaling SV Publisher threads to shut down...");
+
+    // Set the running flag to false to signal threads to exit their loops
+    running = 0; // Assuming 'running' is a global or accessible variable
+
+    // Wait for all threads to finish their execution and cleanup
+    if (threads != NULL) {
+        for (int i = 0; i < instance_count; i++) {
+            if (threads[i] != 0) { // Check if thread was successfully created
+                LOG_INFO("SV_Publisher", "Joining thread for instance %d...", i);
+                if (pthread_join(threads[i], NULL) != 0) {
+                    LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
+                }
+              printf("SV_Publisher  Joined thread for instance %d.\n", i);
+            }
         }
+        free(threads);
+        threads = NULL;
+    }
+    // Now that all threads have exited and performed their local cleanup,
+    // it's safe to free the shared thread_data array.
+    if (thread_data != NULL) {
+        // The strdup'd strings are now freed by each thread_task, so remove their free calls here.
+        // Only free the thread_data array itself.
         free(thread_data);
         thread_data = NULL;
     }
 
-    if (threads != NULL) {
-        free(threads);
-        threads = NULL;
-    }
     instance_count = 0;
-    LOG_INFO("SV_Publisher", "SV Publisher resources cleaned up.");
+    printf("SV_Publisher resources cleaned up.");
 }
 
 
