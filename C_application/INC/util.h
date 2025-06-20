@@ -2,6 +2,7 @@
 #define ENUM_TO_STRING_H
 #include "State_Machine.h"
 #include <stdint.h>
+#include <stdbool.h>
 typedef enum {
     VALID = 0,
     SUCCESS = 0,
@@ -9,7 +10,7 @@ typedef enum {
     ERROR_INVALID_PARAM = -2,
     ERROR_TIMEOUT = -3
 } StatusCode;
-
+extern volatile bool internal_shutdown_flag;
 const char *state_event_to_string(state_event_e event);
 const char *state_to_string(state_e state);
 const int string_to_mac(const char *mac_str, uint8_t *dstAddress);

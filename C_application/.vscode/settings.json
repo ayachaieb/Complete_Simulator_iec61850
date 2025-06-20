@@ -12,6 +12,7 @@
         "goose_receiver.h": "c",
         "parser.h": "c",
         "logger.h": "c",
-        "mms_value.h": "c"
+        "mms_value.h": "c",
+        "signal.h": "c"
     }
 }

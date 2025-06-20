@@ -10,11 +10,14 @@
 #include "SV_Publisher.h"
 #include "parser.h" 
 #include <errno.h>
+#include <signal.h>
 static state_machine_t sm_data_internal;
 static EventQueue event_queue_internal;
 static pthread_t sm_thread_internal;
 #define FAIL -1
 #define SUCCESS 0
+volatile int global_shutdown_requested = 0;
+volatile bool internal_shutdown_flag = false; // Define global variable
 // Function prototypes for state handlers
 static bool state_idle_init(void *data);
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
@@ -70,7 +73,6 @@ else{
 }
     return retval;
 }
-
 
 static int state_machine_run(state_machine_t *sm, state_event_e event, const char *requestId, cJSON *data_obj)
 {
@@ -137,6 +139,8 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
 
     if (next != current || event != STATE_EVENT_NONE) {
         state_enter(sm, next, current, event,requestId, data_obj);
+        printf("state_machine_run ::State changed from %s to %s due to event %s\n", 
+               state_to_string(current), state_to_string(next), state_event_to_string(event));
     }
     return retval;
 }
@@ -312,14 +316,20 @@ static bool state_running_enter(void *data, state_e from, state_event_e event,
             state_to_string(from), state_event_to_string(event));
 
     // Start publisher
-    if (!SVPublisher_start()) {
+    if (SVPublisher_start()) {
         LOG_ERROR("State_Machine", "Failed to start SV Publisher");
-        retval = FAIL;
+        printf("State_Machine Failed to start SV Publisher");
+        SVPublisher_stop(); // Attempt to clean up even on start failure
+        return 1;
       //  goto cleanup;
     }
 
+
+    printf("State_Machine Main thread detected shutdown request. Exiting.");
+
+
+    return 0;
     
-    return retval;
 }
 
 static bool state_stop_init(void *data)
@@ -330,7 +340,8 @@ static bool state_stop_init(void *data)
 static bool state_stop_enter(void *data , state_e from, state_event_e event, const char *requestId)
 {
       LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
-      
+      printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n", 
+             state_to_string(from), state_event_to_string(event));
       // Stop the SV Publisher module here
     SVPublisher_stop();
     LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
@@ -378,10 +389,12 @@ static void *state_machine_thread_internal(void *arg)
         return NULL;
     }
 
-    while (1) {
+    while (!internal_shutdown_flag) {
         state_event_e event;
         if (SUCCESS == event_queue_pop(&event_queue_internal, &event, &requestId, &data_obj)) {
             LOG_DEBUG("State_Machine", "popped event: %s, requestId: %s",
+                     state_event_to_string(event), requestId ? requestId : "N/A");
+            printf("state_machine_thread_internal:: State_Machine popped event: %s, requestId: %s\n",
                      state_event_to_string(event), requestId ? requestId : "N/A");
         } else {
             LOG_ERROR("State_Machine", "Failed to pop event from queue in internal thread");
@@ -450,6 +463,8 @@ int StateMachine_push_event(state_event_e event , const char *requestId, cJSON *
         int result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal, data_obj);   
 
           LOG_INFO("State_Machine", "Pushing event: %s, requestId: %s",
+                  state_event_to_string(event), requestId ? requestId : "N/A");
+         printf("StateMachine::StateMachine_push_event ::Pushing event: %s, requestId: %s\n",
                   state_event_to_string(event), requestId ? requestId : "N/A");
     } else {
         result_event_queue_push = event_queue_push(event, requestId,&event_queue_internal, data_obj);  
