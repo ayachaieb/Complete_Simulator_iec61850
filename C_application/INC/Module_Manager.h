@@ -18,6 +18,6 @@ int ModuleManager_run(shutdown_check_callback_t shutdown_check);
 int ModuleManager_shutdown(void);
 
 // Register the IPC event handler
-int ModuleManager_register_ipc_handler(void (*ipc_handler)(int, const char*));
+int ModuleManager_register_ipc_handler(void (*ipc_handler)(int, const char *));
 
 #endif

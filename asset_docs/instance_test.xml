@@ -34,4 +34,39 @@
         <scenarioConfigFile>scenario.txt</scenarioConfigFile>
         <svIDs>svid55555</svIDs>
     </instance>
+        <instance>
+        <appId>24576</appId>
+        <dstMac>01:0c:cd:02:ab:cd</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid666666</svIDs>
+    </instance>
+        <instance>
+        <appId>28672</appId>
+        <dstMac>01:0c:cd:02:ab:cd</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid7777777</svIDs>
+    </instance>
+        <instance>
+        <appId>32768</appId>
+        <dstMac>01:0c:cd:02:ab:cd</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid888888888</svIDs>
+    </instance>
+        <instance>
+        <appId>36864</appId>
+        <dstMac>01:0c:cd:02:ab:cd</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid999999999</svIDs>
+    </instance>
+            <instance>
+        <appId>37120</appId>
+        <dstMac>01:0c:cd:02:ab:cd</dstMac>
+        <svInterface>lo</svInterface>
+        <scenarioConfigFile>scenario.txt</scenarioConfigFile>
+        <svIDs>svid0000000000</svIDs>
+    </instance>
 </instances>

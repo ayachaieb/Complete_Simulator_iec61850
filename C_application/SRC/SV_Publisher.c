@@ -1,14 +1,14 @@
 #define _GNU_SOURCE
 #include "SV_Publisher.h"
-#include "hal_thread.h" // For Thread_sleep and Hal_getTimeInMs
+#include "hal_thread.h"   // For Thread_sleep and Hal_getTimeInMs
 #include "sv_publisher.h" // For SVPublisher API
 #include "logger.h"       // Your custom logger module
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>      // For threading
-#include <errno.h>        // For strerror
-#include "util.h"        // For utility functions like Hal_getTimeInMs
-#include <signal.h>       // For signal handling
+#include <pthread.h> // For threading
+#include <errno.h>   // For strerror
+#include "util.h"    // For utility functions like Hal_getTimeInMs
+#include <signal.h>  // For signal handling
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
@@ -24,7 +24,7 @@
 #include <sys/time.h>
 #include "parser.h"
 #include <unistd.h> // For sleep()
-#include "util.h" 
+#include "util.h"
 // Internal state for the SV Publisher module
 
 // CommParameters parameters = {0, 0, 0x5000, {0x01, 0x0C, 0xCD, 0x01, 0x00, 0x01}};
@@ -107,14 +107,12 @@ static uint64_t faultStartTimeNs = 0;
 static f32 angleCrs = (f32)0.;
 static f32 pasCrs = FREQ_EN_HZ * (f32)360. * COM_VDPA_CADENCE_ECH_EN_US / (f32)1000000.;
 
-
-
 PhaseSettings phases[MAX_PHASES];
 int phase_count = 0;
 
 uint64_t tick_208_us = 0;
 volatile sig_atomic_t running = 1;
-extern volatile bool internal_shutdown_flag; // Declare as extern
+extern volatile bool internal_shutdown_flag;
 /* Number of loops incremented for each sample sent (tracking time in 256us steps) */
 static uint32_t sNbLoop208us = 0;
 /* Variables for voltages and currents */
@@ -141,19 +139,16 @@ typedef struct
 
 } ThreadData;
 
-
 int instance_count = 0;
 static pthread_t *threads = NULL;
 static ThreadData *thread_data = NULL;
 
 static float fOmtStpmSimuGetVal(float veff, float freq, float phi, uint16_t harmoniques);
 // Forward declaration for the publishing thread function
-static void* sv_publishing_thread(void* arg);
+static void *sv_publishing_thread(void *arg);
 
-
-
-
-void sigint_handler(int sig) {
+void sigint_handler(int sig)
+{
     LOG_INFO("SV_Publisher", "Received Ctrl+C, shutting down...");
     running = false;
     SVPublisher_stop();
@@ -363,9 +358,9 @@ static float fOmtStpmSimuGetVal(float veff, float freq, float phi, uint16_t harm
 
 static void setupSVPublisher(ThreadData *data)
 {
-   
-     data->asdu1 = SVPublisher_addASDU(data->svPublisher, data->svIDs, NULL, 1);
-     data->asdu2 = SVPublisher_addASDU(data->svPublisher, "svtesting", NULL, 1);
+
+    data->asdu1 = SVPublisher_addASDU(data->svPublisher, data->svIDs, NULL, 1);
+    data->asdu2 = SVPublisher_addASDU(data->svPublisher, "svtesting", NULL, 1);
 
     for (uint8_t no_ech = 0U; no_ech < COM_VDPA_NB_ECH_PAR_SV; no_ech++)
     {
@@ -533,7 +528,6 @@ static int setupGooseSubscriber(ThreadData *data)
     return 0;
 }
 
-
 void *thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
@@ -544,9 +538,8 @@ void *thread_task(void *arg)
            data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
            data->parameters.dstAddress[3], data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
 
-
     data->parameters.vlanPriority = 0;
-   
+
     data->svPublisher = SVPublisher_create(&data->parameters, data->svInterface);
     if (!data->svPublisher)
     {
@@ -574,10 +567,8 @@ void *thread_task(void *arg)
         goto cleanup_on_error;
     }
 
-
     phase_start_tick = tick_208_us;
     phase_duration_ticks = phases[current_phase].duration_ms * 1000 / (unsigned int)DELAY_208US;
-   
 
     setup_timer(data); // Start periodic publishing
     // Run indefinitely until Ctrl+C
@@ -600,10 +591,14 @@ void *thread_task(void *arg)
     }
     // Free strdup'd strings within this ThreadData instance
     // These were allocated in SVPublisher_init and are part of this thread's data
-    if (data->svInterface) free(data->svInterface);
-    if (data->goCbRef) free(data->goCbRef);
-    if (data->scenarioConfigFile) free(data->scenarioConfigFile);
-    if (data->svIDs) free(data->svIDs);
+    if (data->svInterface)
+        free(data->svInterface);
+    if (data->goCbRef)
+        free(data->goCbRef);
+    if (data->scenarioConfigFile)
+        free(data->scenarioConfigFile);
+    if (data->svIDs)
+        free(data->svIDs);
 
     printf("Thread for appid 0x%04x finished publishing\n", data->parameters.appId);
     return NULL;
@@ -622,46 +617,57 @@ cleanup_on_error:
         data->gooseReceiver = NULL;
     }
     // Free strdup'd strings here as well if they were allocated before the error
-    if (data->svInterface) free(data->svInterface);
-    if (data->goCbRef) free(data->goCbRef);
-    if (data->scenarioConfigFile) free(data->scenarioConfigFile);
-    if (data->svIDs) free(data->svIDs);
+    if (data->svInterface)
+        free(data->svInterface);
+    if (data->goCbRef)
+        free(data->goCbRef);
+    if (data->scenarioConfigFile)
+        free(data->scenarioConfigFile);
+    if (data->svIDs)
+        free(data->svIDs);
 
     printf("Thread for appid 0x%04x failed initialization and finished cleanup\n", data->parameters.appId);
     return NULL;
 }
 
-
-bool SVPublisher_init(SV_SimulationConfig* instances, int number_publishers)
+bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
 {
     LOG_INFO("SV_Publisher", "Starting VDPA SV Publisher");
     LOG_INFO("SV_Publisher", "UID: %d", getuid());
 
-    if (instances == NULL || number_publishers <= 0) {
+    if (instances == NULL || number_publishers <= 0)
+    {
         LOG_ERROR("SV_Publisher", "Invalid input: instances array is NULL or number_publishers is non-positive.");
         return FAIL;
     }
-    
-    // Clean up any previous allocations if init is called multiple times without cleanup
-    if (threads != NULL || thread_data != NULL) {
-        LOG_INFO("SV_Publisher", "Previous SV Publisher instances found. Cleaning up before re-initialization.");
-        // Call a cleanup function here if one exists, otherwise free directly
-        // For now, we'll assume SVPublisher_cleanup will be called externally or handle this.
-        // For safety, we'll free here if not handled by a dedicated cleanup.
-        // SVPublisher_cleanup(); // If this function exists and handles global cleanup
-        // For this iteration, we'll just free the top-level arrays if they exist
-        if (threads) { free(threads); threads = NULL; }
-        if (thread_data) { 
-            // Need to free internal strings within thread_data if they were strdup'd
-            for (int i = 0; i < instance_count; ++i) {
 
-                if (thread_data[i].svInterface) free(thread_data[i].svInterface);
-                if (thread_data[i].goCbRef) free(thread_data[i].goCbRef);
-                if (thread_data[i].scenarioConfigFile) free(thread_data[i].scenarioConfigFile);
-                if (thread_data[i].svIDs) free(thread_data[i].svIDs);
+    // Clean up any previous allocations if init is called multiple times without cleanup
+    if (threads != NULL || thread_data != NULL)
+    {
+        LOG_INFO("SV_Publisher", "Previous SV Publisher instances found. Cleaning up before re-initialization.");
+
+        if (threads)
+        {
+            free(threads);
+            threads = NULL;
+        }
+        if (thread_data)
+        {
+            // Need to free internal strings within thread_data if they were strdup'd
+            for (int i = 0; i < instance_count; ++i)
+            {
+
+                if (thread_data[i].svInterface)
+                    free(thread_data[i].svInterface);
+                if (thread_data[i].goCbRef)
+                    free(thread_data[i].goCbRef);
+                if (thread_data[i].scenarioConfigFile)
+                    free(thread_data[i].scenarioConfigFile);
+                if (thread_data[i].svIDs)
+                    free(thread_data[i].svIDs);
             }
-            free(thread_data); 
-            thread_data = NULL; 
+            free(thread_data);
+            thread_data = NULL;
         }
         instance_count = 0;
     }
@@ -669,94 +675,118 @@ bool SVPublisher_init(SV_SimulationConfig* instances, int number_publishers)
     instance_count = number_publishers;
 
     threads = (pthread_t *)malloc(instance_count * sizeof(pthread_t));
-    if (!threads) {
+    if (!threads)
+    {
         LOG_ERROR("SV_Publisher", "Memory allocation failed for threads!");
         return FAIL;
     }
     memset(threads, 0, instance_count * sizeof(pthread_t)); // Initialize to 0
 
     thread_data = (ThreadData *)malloc(instance_count * sizeof(ThreadData));
-    if (!thread_data) {
+    if (!thread_data)
+    {
         LOG_ERROR("SV_Publisher", "Memory allocation failed for thread_data!");
         free(threads); // Clean up threads array
         threads = NULL;
         return FAIL;
     }
     memset(thread_data, 0, instance_count * sizeof(ThreadData)); // Initialize to 0
-int i=0;
-//LOG_INFO("SV_Publisher", "Initializing %d SV Publisher instances", instance_count);
-    for (i = 0; i < instance_count; i++) {
+    int i = 0;
+    // LOG_INFO("SV_Publisher", "Initializing %d SV Publisher instances", instance_count);
+    for (i = 0; i < instance_count; i++)
+    {
         // Initialize thread_data[i] to ensure all pointers are NULL before strdup
         memset(&thread_data[i], 0, sizeof(ThreadData));
 
         thread_data[i].parameters.vlanPriority = 0; // Default or get from config if available
         thread_data[i].parameters.vlanId = 0;       // Default or get from config if available
-      if (instances[i].appId) {
+        if (instances[i].appId)
+        {
             char *endptr;
             unsigned long val = strtoul(instances[i].appId, &endptr, 10); // Base 10 for numeric appId
-            if (*endptr != '\0' || val > UINT32_MAX) {
+            if (*endptr != '\0' || val > UINT32_MAX)
+            {
                 LOG_ERROR("SV_Publisher", "Invalid appId format or value for instance %d: %s", i, instances[i].appId);
                 goto cleanup_init_failure;
             }
-  
+
             // If you need to convert appId to an integer, do it here:
-          //  thread_data[i].GOOSEappId = 0x5000 + atoi(instances[i].appId); 
+            //  thread_data[i].GOOSEappId = 0x5000 + atoi(instances[i].appId);
             // For now, GOOSEappId is also a string from JSON, so we'll assume it's handled elsewhere or convert it.
             // Let's assume GOOSEappId is derived from appId string, so it should be uint32_t
-            thread_data[i].parameters.appId = val; // Store the numeric value directly
+            thread_data[i].parameters.appId = val;                                       // Store the numeric value directly
             thread_data[i].GOOSEappId = (uint32_t)strtoul(instances[i].appId, NULL, 10); // Convert string appId to uint32_t
-        } else {
+        }
+        else
+        {
             LOG_ERROR("SV_Publisher", "appId is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
 
-        if (instances[i].svInterface) {
+        if (instances[i].svInterface)
+        {
             thread_data[i].svInterface = strdup(instances[i].svInterface);
-            if (!thread_data[i].svInterface) {
+            if (!thread_data[i].svInterface)
+            {
                 LOG_ERROR("SV_Publisher", "Memory allocation failed for svInterface for instance %d", i);
                 goto cleanup_init_failure;
             }
-        } else {
+        }
+        else
+        {
             LOG_ERROR("SV_Publisher", "svInterface is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
 
         // Assuming goCbRef is a fixed string or can be derived
         thread_data[i].goCbRef = strdup("goose_subscriber"); // Example: fixed string
-        if (!thread_data[i].goCbRef) {
+        if (!thread_data[i].goCbRef)
+        {
             LOG_ERROR("SV_Publisher", "Memory allocation failed for goCbRef for instance %d", i);
             goto cleanup_init_failure;
         }
 
-        if (instances[i].scenarioConfigFile) {
+        if (instances[i].scenarioConfigFile)
+        {
             thread_data[i].scenarioConfigFile = strdup(instances[i].scenarioConfigFile);
-            if (!thread_data[i].scenarioConfigFile) {
+            if (!thread_data[i].scenarioConfigFile)
+            {
                 LOG_ERROR("SV_Publisher", "Memory allocation failed for scenarioConfigFile for instance %d", i);
                 goto cleanup_init_failure;
             }
-        } else {
+        }
+        else
+        {
             LOG_ERROR("SV_Publisher", "scenarioConfigFile is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
         LOG_INFO("SV_Publisher", "scenarioConfigFile: %s", thread_data[i].scenarioConfigFile);
-        if (instances[i].svIDs) {
+        if (instances[i].svIDs)
+        {
             thread_data[i].svIDs = strdup(instances[i].svIDs);
-            if (!thread_data[i].svIDs) {
+            if (!thread_data[i].svIDs)
+            {
                 LOG_ERROR("SV_Publisher", "Memory allocation failed for svIDs for instance %d", i);
                 goto cleanup_init_failure;
             }
-        } else {
+        }
+        else
+        {
             LOG_ERROR("SV_Publisher", "svIDs is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
         LOG_INFO("SV_Publisher", "svIDs: %s", thread_data[i].svIDs);
         // Parse and copy MAC address
-        if (instances[i].dstMac) {
-            if (!parse_mac_address(instances[i].dstMac, thread_data[i].parameters.dstAddress)) {
+        if (instances[i].dstMac)
+        {
+            if (!parse_mac_address(instances[i].dstMac, thread_data[i].parameters.dstAddress))
+            {
                 LOG_ERROR("SV_Publisher", "Failed to parse MAC address for instance %d: %s", i, instances[i].dstMac);
                 goto cleanup_init_failure;
             }
-        } else {
+        }
+        else
+        {
             LOG_ERROR("SV_Publisher", "dstMac is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
@@ -765,68 +795,85 @@ int i=0;
                  thread_data[i].parameters.dstAddress[2], thread_data[i].parameters.dstAddress[3],
                  thread_data[i].parameters.dstAddress[4], thread_data[i].parameters.dstAddress[5]);
     }
-LOG_INFO("SV_Publisher","outtaa");
+    LOG_INFO("SV_Publisher", "outtaa");
     return SUCCESS;
-LOG_INFO("SV_Publisher","cleanup happening");
+    LOG_INFO("SV_Publisher", "cleanup happening");
 cleanup_init_failure:
     // Free all memory allocated so far for thread_data and threads
-    for (int j = 0; j <= i; ++j) { // Free up to the current failed instance
-        if (thread_data[j].parameters.appId) free(thread_data[j].parameters.appId);
-        if (thread_data[j].svInterface) free(thread_data[j].svInterface);
-        if (thread_data[j].goCbRef) free(thread_data[j].goCbRef);
-        if (thread_data[j].scenarioConfigFile) free(thread_data[j].scenarioConfigFile);
-        if (thread_data[j].svIDs) free(thread_data[j].svIDs);
+    for (int j = 0; j <= i; ++j)
+    { // Free up to the current failed instance
+        if (thread_data[j].parameters.appId)
+            free(thread_data[j].parameters.appId);
+        if (thread_data[j].svInterface)
+            free(thread_data[j].svInterface);
+        if (thread_data[j].goCbRef)
+            free(thread_data[j].goCbRef);
+        if (thread_data[j].scenarioConfigFile)
+            free(thread_data[j].scenarioConfigFile);
+        if (thread_data[j].svIDs)
+            free(thread_data[j].svIDs);
     }
-    if (thread_data) 
+    if (thread_data)
     {
-        free(thread_data); 
+        free(thread_data);
         thread_data = NULL; // Set to NULL to avoid dangling pointer
-     }
-    if (threads) { free(threads); threads = NULL; }
+    }
+    if (threads)
+    {
+        free(threads);
+        threads = NULL;
+    }
     instance_count = 0;
     return FAIL;
 }
 
-
-bool SVPublisher_start(void) {
-    if (threads == NULL || thread_data == NULL || instance_count <= 0) {
+bool SVPublisher_start(void)
+{
+    if (threads == NULL || thread_data == NULL || instance_count <= 0)
+    {
         LOG_ERROR("SV_Publisher", "SV Publisher not initialized. Call SVPublisher_init first.");
         return FAIL;
     }
     signal(SIGINT, sigint_handler);
     bool all_threads_created = SUCCESS;
 
-    for (int i = 0; i < instance_count; i++) {
-        if (pthread_create(&threads[i], NULL, thread_task, &thread_data[i]) != 0) {
+    for (int i = 0; i < instance_count; i++)
+    {
+        if (pthread_create(&threads[i], NULL, thread_task, &thread_data[i]) != 0)
+        {
             LOG_ERROR("SV_Publisher", "Failed to create thread for instance %d: %s", i, strerror(errno));
             all_threads_created = FAIL;
-        } else {
+        }
+        else
+        {
             LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
         }
     }
-    printf("All threads created successfully: %d\n", all_threads_created);
+    // printf("All threads created successfully: %d\n", all_threads_created);
     LOG_INFO("SV_Publisher", "SV Publisher threads started.");
 
     return all_threads_created;
 }
 
-
 void SVPublisher_stop()
 {
-       LOG_INFO("SV_Publisher", "Signaling SV Publisher threads to shut down...");
+    LOG_INFO("SV_Publisher", "Signaling SV Publisher threads to shut down...");
 
     // Set the running flag to false to signal threads to exit their loops
-    running = 0; // Assuming 'running' is a global or accessible variable
-
+    running = 0;
     // Wait for all threads to finish their execution and cleanup
-    if (threads != NULL) {
-        for (int i = 0; i < instance_count; i++) {
-            if (threads[i] != 0) { // Check if thread was successfully created
+    if (threads != NULL)
+    {
+        for (int i = 0; i < instance_count; i++)
+        {
+            if (threads[i] != 0)
+            { // Check if thread was successfully created
                 LOG_INFO("SV_Publisher", "Joining thread for instance %d...", i);
-                if (pthread_join(threads[i], NULL) != 0) {
+                if (pthread_join(threads[i], NULL) != 0)
+                {
                     LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
                 }
-              printf("SV_Publisher  Joined thread for instance %d.\n", i);
+                printf("SV_Publisher  Joined thread for instance %d.\n", i);
             }
         }
         free(threads);
@@ -834,7 +881,8 @@ void SVPublisher_stop()
     }
     // Now that all threads have exited and performed their local cleanup,
     // it's safe to free the shared thread_data array.
-    if (thread_data != NULL) {
+    if (thread_data != NULL)
+    {
         // The strdup'd strings are now freed by each thread_task, so remove their free calls here.
         // Only free the thread_data array itself.
         free(thread_data);
@@ -845,8 +893,7 @@ void SVPublisher_stop()
     printf("SV_Publisher resources cleaned up.");
 }
 
-
- void setup_timer(ThreadData *data)
+void setup_timer(ThreadData *data)
 {
     struct sigevent sev;
     struct itimerspec ts;
@@ -896,5 +943,3 @@ void SVPublisher_stop()
     data->timerid = timerid;
     printf("Timer started for appid %u with signal %d\n", data->parameters.appId, signal_num);
 }
-
-
