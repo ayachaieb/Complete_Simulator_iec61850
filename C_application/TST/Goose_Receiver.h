@@ -2,6 +2,7 @@
 #define GOOSE_RECEIVER_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 // Configuration structure for GOOSE receiver
 typedef struct {
@@ -11,16 +12,10 @@ typedef struct {
     int max_retries;             // Maximum retransmission attempts
 } GooseReceiverConfig;
 
-// Initialize GOOSE receiver
+// Function prototypes
 int goose_receiver_init(const GooseReceiverConfig* config);
-
-// Start GOOSE receiver in a separate thread
 void goose_receiver_start(void);
-
-// Clean up resources
 void goose_receiver_cleanup(void);
-
-// Get current status
 bool goose_receiver_is_running(void);
 
 #endif // GOOSE_RECEIVER_H

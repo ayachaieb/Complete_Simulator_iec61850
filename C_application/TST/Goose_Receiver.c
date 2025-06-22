@@ -1,5 +1,4 @@
 #include "goose_receiver.h"
-#include "logging.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,36 +12,20 @@ static GooseReceiver globalGooseReceiver = NULL;
 static GoosePublisher globalGoosePublisher = NULL;
 static bool isRunning = false;
 
+static void log_message(const char* message) {
+    printf("[GOOSE] %s\n", message);
+}
+
 static void goose_message_received(GooseSubscriber subscriber, void* parameter) {
     char logMsg[512];
-    GooseReceiver receiver = (GooseReceiver)parameter;
-
-    // Get message details
-    uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
     const char* goID = GooseSubscriber_getGoId(subscriber);
     int stNum = GooseSubscriber_getStNum(subscriber);
     int sqNum = GooseSubscriber_getSqNum(subscriber);
 
     snprintf(logMsg, sizeof(logMsg), 
-             "GOOSE received - ID: %s, ST: %d, SQ: %d, Time: %llu",
-             goID, stNum, sqNum, timestamp);
+             "GOOSE received - ID: %s, ST: %d, SQ: %d",
+             goID, stNum, sqNum);
     log_message(logMsg);
-
-    // Process data values (example)
-    MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
-    if (values) {
-        // Process data values here
-        log_message("GOOSE data values available");
-    }
-
-    // Retransmission logic if enabled
-    if (globalGoosePublisher != NULL) {
-        // In real implementation, you would:
-        // 1. Create new dataset values
-        // 2. Configure publisher parameters
-        // 3. Publish the message
-        log_message("GOOSE retransmission capability available");
-    }
 }
 
 int goose_receiver_init(const GooseReceiverConfig* config) {
@@ -53,18 +36,16 @@ int goose_receiver_init(const GooseReceiverConfig* config) {
 
     char msg[256];
     snprintf(msg, sizeof(msg), 
-             "Initializing GOOSE receiver on %s for GOOSE ID %s", 
+             "Initializing on %s for GOOSE ID %s", 
              config->interface, config->goose_id);
     log_message(msg);
 
-    // Create receiver
     globalGooseReceiver = GooseReceiver_create(config->interface);
     if (!globalGooseReceiver) {
         log_message("Failed to create GooseReceiver");
         return -1;
     }
 
-    // Create subscriber
     GooseSubscriber subscriber = GooseSubscriber_create(config->goose_id, NULL);
     if (!subscriber) {
         log_message("Failed to create GooseSubscriber");
@@ -73,18 +54,8 @@ int goose_receiver_init(const GooseReceiverConfig* config) {
         return -1;
     }
 
-    // Add subscriber to receiver
     GooseReceiver_addSubscriber(globalGooseReceiver, subscriber);
     GooseSubscriber_setListener(subscriber, goose_message_received, globalGooseReceiver);
-
-    // Initialize publisher if needed
-    if (config->enable_retransmission) {
-        // Note: In real implementation, you need proper SCL configuration
-        globalGoosePublisher = GoosePublisher_create(NULL); // NULL for simple demo
-        if (!globalGoosePublisher) {
-            log_message("Warning: Failed to create GoosePublisher");
-        }
-    }
 
     return 0;
 }
@@ -106,7 +77,7 @@ void goose_receiver_start(void) {
 }
 
 void goose_receiver_cleanup(void) {
-    log_message("Cleaning up GOOSE receiver");
+    log_message("Cleaning up");
 
     if (globalGooseReceiver) {
         if (isRunning) {
@@ -115,11 +86,6 @@ void goose_receiver_cleanup(void) {
         }
         GooseReceiver_destroy(globalGooseReceiver);
         globalGooseReceiver = NULL;
-    }
-
-    if (globalGoosePublisher) {
-        GoosePublisher_destroy(globalGoosePublisher);
-        globalGoosePublisher = NULL;
     }
 }
 

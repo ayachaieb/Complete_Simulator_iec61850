@@ -1,1 +1,1 @@
-{"type":"stop_simulation","data":{"requestId":"1750434131105"}}
+{"type":"send_goose_message","data":{"config":{"gocbRef":"ControlBlock1","datSet":"DataSet1","goID":"0x1000","macAddress":"01:0C:CD:01:00:00","appID":"AppID_123","interface":"eth0"},"requestId":"1750623924247"}}
