@@ -13,6 +13,7 @@
         "parser.h": "c",
         "logger.h": "c",
         "mms_value.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "goose_listener.h": "c"
     }
 }

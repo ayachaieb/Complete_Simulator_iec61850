@@ -1,9 +1,10 @@
-#ifndef GOOSE_RECEIVER_H
-#define GOOSE_RECEIVER_H
+#ifndef GOOSE_LISTENER_H
+#define GOOSE_LISTENER_H
 
 #include <stdbool.h>
 #include <stdint.h>
 #include "parser.h"
+
 // Configuration structure for GOOSE receiver
 typedef struct {
     const char* interface;       // Network interface (e.g., "eth0")
@@ -18,8 +19,8 @@ typedef struct {
 
 // Function prototypes
 //int goose_receiver_init(const GooseReceiverConfig* config);
-int Goose_receiver_start(GOOSE_SimulationConfig* config);
+void goose_receiver_start(GOOSE_SimulationConfig* config);
 bool goose_receiver_cleanup(void);
 bool goose_receiver_is_running(void);
 
-#endif // GOOSE_RECEIVER_H
+#endif // GOOSE_LISTENER_H

@@ -27,7 +27,7 @@ IEC_SRV_INC_MOD = \
 
 CFLAGS += $(IEC_SRV_INC_MOD) -I/usr/include/libxml2
 
-LDFLAGS = -lm -lcjson -lrt -lpthread -lxml2 -lssl -lcrypto $(LIB_IEC)
+LDFLAGS = -lm -lcjson -lrt -lpthread -lxml2 -lssl -lcrypto
 # Directory structure
 SRC_DIR = ../SRC
 INC_DIR = ../INC
@@ -35,8 +35,8 @@ OBJ_DIR = ../OBJ
 BIN_DIR = ../BIN
 
 # Exclusion list
-EXCLUDE_SRC = Goose_Publisher.c Goose_Receiver.c
-EXCLUDE_HDR = Goose_Publisher.h Goose_Receiver.h 
+EXCLUDE_SRC = Goose_Publisher.c 
+EXCLUDE_HDR = Goose_Publisher.h 
 
 # Source files
 SRC = $(filter-out $(addprefix $(SRC_DIR)/,$(EXCLUDE_SRC)), $(wildcard $(SRC_DIR)/*.c))
@@ -63,7 +63,7 @@ release: $(BIN_DIR)/sv_simulator
 # Depends on all object files and the libiec61850 static library
 $(BIN_DIR)/sv_simulator: $(OBJ) $(LIB_IEC)
 	@echo "Linking $@"
-	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(LIB_IEC) -o $@
 
 # Object files rule
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)
