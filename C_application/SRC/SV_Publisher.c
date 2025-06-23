@@ -552,13 +552,17 @@ void *thread_task(void *arg)
         goto cleanup_on_error;
     }
     printf("phase_count = %u\n", phase_count);
-
+// uncomment  if you want to use GOOSE
+/// i  will be receiving GOOSE messages once i start the simulation the vdpa  will send GOOSE messages
+//once i send a phase change command to the vdpa it will send GOOSE messages then i will calculate the latency
+//so i need to setup GOOSE subscriber to listen for GOOSE messages with personalized parameters
+// for every svinstance i will have a GOOSE subscriber
     // Optional: Comment out GOOSE if not needed, or fix with correct interface
-    if (setupGooseSubscriber(data) != 0)
-    {
-        printf("Failed to setup GOOSE Subscriber\n");
-        goto cleanup_on_error;
-    }
+    // if (setupGooseSubscriber(data) != 0)
+    // {
+    //     printf("Failed to setup GOOSE Subscriber\n");
+    //     goto cleanup_on_error;
+    // }
 
     setupSVPublisher(data);
     if (!data->svPublisher)

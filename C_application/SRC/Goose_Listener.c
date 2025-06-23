@@ -1,10 +1,10 @@
 #include "util.h"
-#include "goose_receiver.h"
-#include "goose_subscriber.h"
 #include "hal_thread.h"
 #include "linked_list.h"
 #include "State_Machine.h"
 #include "Goose_Listener.h"
+#include "goose_receiver.h"
+#include "goose_subscriber.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
@@ -88,16 +88,18 @@ int Goose_receiver_start(GOOSE_SimulationConfig* config)
     
   
     GooseReceiver_setInterfaceId(receiver, receiverConfig.interface);
-    GooseReceiver_setGooseId(receiver, receiverConfig.goose_id);
-    GooseReceiver_setGoCBRef(receiver, receiverConfig.GoCBRef);
-    GooseReceiver_setDatSet(receiver, receiverConfig.DatSet);
-    GooseReceiver_setDstMac(receiver, receiverConfig.MACAddress);
-    GooseReceiver_setAppId(receiver, receiverConfig.AppID);
+    // GooseReceiver_setGooseId(receiver, receiverConfig.goose_id);
+    // GooseReceiver_setGoCBRef(receiver, receiverConfig.GoCBRef);
+    // GooseReceiver_setDatSet(receiver, receiverConfig.DatSet);
+    // GooseReceiver_setDstMac(receiver, receiverConfig.MACAddress);
+    // GooseReceiver_setAppId(receiver, receiverConfig.AppID);
     GooseSubscriber subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", NULL);
-   
-    uint8_t dstMac[6] = {0x01,0x0c,0xcd,0x01,0x00,0x01};
-    GooseSubscriber_setDstMac(subscriber, dstMac);
-    GooseSubscriber_setAppId(subscriber, 1000);
+     uint16_t appid = (uint32_t)strtoul(receiverConfig.AppID, NULL, 10);
+    uint8_t dstMac[6] ;
+    parse_mac_address(config->MACAddress, dstMac);
+    GooseSubscriber_setDstMac(subscriber,dstMac);
+
+    GooseSubscriber_setAppId(subscriber,appid );
 
     GooseSubscriber_setListener(subscriber, gooseListener, NULL);
 

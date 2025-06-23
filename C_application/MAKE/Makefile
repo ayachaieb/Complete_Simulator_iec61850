@@ -35,8 +35,8 @@ OBJ_DIR = ../OBJ
 BIN_DIR = ../BIN
 
 # Exclusion list
-EXCLUDE_SRC = Goose_Publisher.c 
-EXCLUDE_HDR = Goose_Publisher.h 
+EXCLUDE_SRC = Goose_Pub.c 
+EXCLUDE_HDR = Goose_Pub.h 
 
 # Source files
 SRC = $(filter-out $(addprefix $(SRC_DIR)/,$(EXCLUDE_SRC)), $(wildcard $(SRC_DIR)/*.c))

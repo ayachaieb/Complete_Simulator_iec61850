@@ -18,6 +18,9 @@ typedef enum {
     STATE_EVENT_stop_simulation,
     STATE_EVENT_pause_simulation,
     STATE_EVENT_shutdown,
+    STATE_EVENT_start_listening,
+    STATE_EVENT_stop_listening,
+    STATE_EVENT_send_goose,
     STATE_EVENT_NONE
 } state_event_e;
 

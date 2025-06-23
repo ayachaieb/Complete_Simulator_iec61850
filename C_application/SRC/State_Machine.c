@@ -113,6 +113,16 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
         {
             next = STATE_STOP;
         }
+        else if (STATE_EVENT_start_listening == event)
+        {
+            LOG_ERROR("State_Machine", "start_listening event received in IDLE state, but not handled");
+          
+        }
+        else if (STATE_EVENT_send_goose == event)
+        {
+            LOG_ERROR("State_Machine", "send_goose event received in IDLE state, but not handled");
+         
+        }
         break;
     case STATE_INIT:
         if (STATE_EVENT_init_success == event)

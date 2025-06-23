@@ -14,6 +14,12 @@
         "logger.h": "c",
         "mms_value.h": "c",
         "signal.h": "c",
-        "goose_listener.h": "c"
+        "goose_listener.h": "c",
+        "hal_ethernet.h": "c",
+        "ber_decode.h": "c",
+        "mms_value_internal.h": "c",
+        "stdio.h": "c",
+        "goose_publisher.h": "c",
+        "stdbool.h": "c"
     }
 }
