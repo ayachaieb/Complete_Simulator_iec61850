@@ -24,10 +24,15 @@ void sigint_handler(int signalId)
     running = 0;
 }
 
+
 void
 gooseListener(GooseSubscriber subscriber, void* parameter)
 {
     printf("\n--- GOOSE Event Received ---\n");
+    fflush(stdout);
+     printf(" Message validity: %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+    
+     // Rest of the existing code
     printf("  vlanTag: %s\n", GooseSubscriber_isVlanSet(subscriber) ? "found" : "NOT found");
     if (GooseSubscriber_isVlanSet(subscriber))
     {
@@ -68,56 +73,53 @@ gooseListener(GooseSubscriber subscriber, void* parameter)
     printf("--------------------------\n");
 }
 
-int
-main(int argc, char** argv)
+
+
+int main(int argc, char** argv)
 {
-    GooseReceiver receiver = GooseReceiver_create();
+ GooseReceiver receiver = GooseReceiver_create();
 
-    char *interfaceId;
-    if (argc > 1) {
-        interfaceId = argv[1];
-    } else {
-        interfaceId = "enp0s31f6"; // Default interface
-    }
-    printf("Using interface %s\n", interfaceId);
-    GooseReceiver_setInterfaceId(receiver, interfaceId);
+ char *interfaceId;
+ if (argc > 1) {
+ interfaceId = argv[1];
+ } else {
+ interfaceId = "lo";
+ }
+ printf("Using interface %s\n", interfaceId);
+ GooseReceiver_setInterfaceId(receiver, interfaceId);
 
-    // --- REVERTED TO SIMPLER SUBSCRIBER CREATION ---
-    // The goID MUST EXACTLY MATCH what the publisher is sending
-    const char* PUBLISHER_GO_ID = "simpleIOGenericIO/LLN0$GO$gcbAnalogValues";
-    GooseSubscriber subscriber = GooseSubscriber_create(PUBLISHER_GO_ID, NULL); // NULL for user data parameter
+ const char* PUBLISHER_GO_ID = "simpleIOGenericIO/LLN0$GO$gcbAnalogValues";
+ GooseSubscriber subscriber = GooseSubscriber_create(PUBLISHER_GO_ID, NULL);
 
-    printf("Observer trying to subscribe to goID: %s\n", PUBLISHER_GO_ID);
+ if (subscriber == NULL) {
+ printf("Failed to create GOOSE subscriber.\n");
+ GooseReceiver_destroy(receiver);
+ return -1;
+ }
 
-    if (subscriber == NULL) {
-        printf("Failed to create GOOSE subscriber. This is unexpected. Check libiec61850 documentation or install.\n");
-        GooseReceiver_destroy(receiver);
-        return -1;
-    }
+ // Explicitly set parameters to match publisher
+ uint8_t dstMac[6] = {0x01, 0x0C, 0xCD, 0x01, 0x00, 0x01};
+ GooseSubscriber_setDstMac(subscriber, dstMac);
+ GooseSubscriber_setAppId(subscriber, 1000);
 
-    GooseSubscriber_setListener(subscriber, gooseListener, NULL);
 
-    GooseReceiver_addSubscriber(receiver, subscriber);
+ GooseSubscriber_setListener(subscriber, gooseListener, NULL);
+ GooseReceiver_addSubscriber(receiver, subscriber);
 
-    GooseReceiver_start(receiver);
+ GooseReceiver_start(receiver);
 
-    if (GooseReceiver_isRunning(receiver)) {
-        signal(SIGINT, sigint_handler);
+ if (GooseReceiver_isRunning(receiver)) {
+ signal(SIGINT, sigint_handler);
+ printf("GOOSE observer started. Listening for messages with goID '%s'...\n", PUBLISHER_GO_ID);
+ while (running) {
+ Thread_sleep(100);
+ }
+ } else {
+ printf("Failed to start GOOSE receiver. Check interface '%s' and root permissions.\n", interfaceId);
+ }
 
-        printf("GOOSE observer started. Listening for messages. Press Ctrl+C to stop.\n");
-        printf("Waiting for GOOSE messages matching goID '%s'...\n", PUBLISHER_GO_ID);
-
-        while (running) {
-            Thread_sleep(100);
-        }
-    }
-    else {
-        printf("Failed to start GOOSE receiver. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
-        printf("Please ensure '%s' is a valid and active network interface, and run as root (sudo).\n", interfaceId);
-    }
-
-    printf("Stopping GOOSE observer...\n");
-    GooseReceiver_stop(receiver);
-    GooseReceiver_destroy(receiver);
-    return 0;
+ printf("Stopping GOOSE observer...\n");
+ GooseReceiver_stop(receiver);
+ GooseReceiver_destroy(receiver);
+ return 0;
 }

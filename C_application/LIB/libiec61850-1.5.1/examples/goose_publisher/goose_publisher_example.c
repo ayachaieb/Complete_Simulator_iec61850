@@ -33,7 +33,7 @@ main(int argc, char **argv)
     if (argc > 1)
         interface = argv[1];
     else
-        interface = "enp0s31f6"; // Default interface if not provided as argument
+        interface = "lo"; // Default interface if not provided as argument
 
     printf("Using interface %s\n", interface);
 
