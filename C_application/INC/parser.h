@@ -12,6 +12,13 @@ typedef struct {
     char *svInterface;
     char *scenarioConfigFile;
     char *svIDs;
+    
+    char* GoCBRef; // Reference to the GOOSE Control Block
+    char* DatSet;  // Data Set reference
+    char* GoID;    // GOOSE ID
+    char* MACAddress; // MAC address for GOOSE communication
+    char* AppID;  // Application ID for GOOSE
+    char* Interface; // Network interface for GOOSE communication
 } SV_SimulationConfig;
 
 

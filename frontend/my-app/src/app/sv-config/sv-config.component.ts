@@ -195,7 +195,20 @@ startSimulation() {
               dstMac: instanceElement.querySelector('dstMac')?.textContent || '',
               svInterface: instanceElement.querySelector('svInterface')?.textContent || '',
               scenarioConfigFile: instanceElement.querySelector('scenarioConfigFile')?.textContent || '',
-              svIDs: instanceElement.querySelector('svIDs')?.textContent || ''
+              svIDs: instanceElement.querySelector('svIDs')?.textContent || '',
+                // --- MODIFIED GOOSE FIELD NAMES TO MATCH BACKEND EXPECTATIONS ---
+                // Original: GoCBRef from XML, but backend expects 'GoCBRef'
+              GoCBRef: instanceElement.querySelector('GoCBRef')?.textContent || '',
+                // Original: DatSet from XML, but backend expects 'DatSet'
+              DatSet: instanceElement.querySelector('DatSet')?.textContent || '',
+                // Original: GoID from XML, but backend expects 'GoID'
+              GoID: instanceElement.querySelector('GoID')?.textContent || '',
+                // Original: MACAddress from XML, but backend expects 'MACAddress'
+              MACAddress: instanceElement.querySelector('MACAddress')?.textContent || '',
+                // Original: AppID from XML, but backend expects 'AppID'
+              AppID: instanceElement.querySelector('AppID')?.textContent || '',
+                // Original: Interface from XML, but backend expects 'Interface'
+              Interface: instanceElement.querySelector('Interface')?.textContent || ''
             });
           });
           this.configStatus = 'XML config loaded successfully';

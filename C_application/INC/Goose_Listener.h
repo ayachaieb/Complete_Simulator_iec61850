@@ -19,7 +19,8 @@ typedef struct {
 
 // Function prototypes
 //int goose_receiver_init(const GooseReceiverConfig* config);
-void goose_receiver_start(GOOSE_SimulationConfig* config);
+int Goose_receiver_init(SV_SimulationConfig config);
+void goose_receiver_start();
 bool goose_receiver_cleanup(void);
 bool goose_receiver_is_running(void);
 

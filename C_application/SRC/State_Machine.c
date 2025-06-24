@@ -11,6 +11,7 @@
 #include "parser.h"
 #include <errno.h>
 #include <signal.h>
+#include "Goose_Listener.h"
 static state_machine_t sm_data_internal;
 static EventQueue event_queue_internal;
 static pthread_t sm_thread_internal;
@@ -112,11 +113,6 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
         else if (STATE_EVENT_shutdown == event)
         {
             next = STATE_STOP;
-        }
-        else if (STATE_EVENT_start_listening == event)
-        {
-            LOG_ERROR("State_Machine", "start_listening event received in IDLE state, but not handled");
-          
         }
         else if (STATE_EVENT_send_goose == event)
         {
@@ -281,7 +277,13 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
                 LOG_INFO("State_Machine", "SV Publisher initialized successfully ");
                 // If SVPublisher_init succeeds, it is now responsible for managing svconfig_tab memory
                 // So, we set svconfig_tab to NULL to prevent double freeing in cleanup
+            
+                if( SUCCESS ==  Goose_receiver_init(*svconfig_tab)  ) 
+                {
+                    LOG_INFO("State_Machine", "Goose receiver initialized successfully");
+                }
                 svconfig_tab = NULL;
+               
             }
         }
     }
@@ -379,16 +381,19 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
              state_to_string(from), state_event_to_string(event));
 
     // Start publisher
-    if (SVPublisher_start())
+    if (FAIL==SVPublisher_start())
     {
         LOG_ERROR("State_Machine", "Failed to start SV Publisher");
         printf("State_Machine Failed to start SV Publisher");
         SVPublisher_stop(); // Attempt to clean up even on start failure
         retval = FAIL;
     }
-
-    printf("state_running_init :: State_Machine Main thread detected shutdown request. Exiting.");
-
+else {
+    LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
+    Goose_receiver_start();
+    LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+    // printf("state_running_enter :: State_Machine Main thread detected shutdown request. Exiting.");
+}
     return retval;
 }
 

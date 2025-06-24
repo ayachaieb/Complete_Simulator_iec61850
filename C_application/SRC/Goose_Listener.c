@@ -15,6 +15,8 @@ GooseReceiver receiver = NULL;
 bool goose_receiver_cleanup(void);
 bool goose_receiver_is_running(void);
 
+GooseReceiverConfig receiverConfig = {0};
+ GooseSubscriber subscriber = NULL;
 static void
 sigint_handler(int signalId)
 {
@@ -63,29 +65,30 @@ bool goose_receiver_cleanup(void)
 }
 
 bool goose_receiver_is_running_Goose(void) {
-    // Implement this based on your GooseReceiver API if needed
-    // For now, returning true if receiver is not NULL
+  
     return receiver != NULL;
 }
 
-int Goose_receiver_start(GOOSE_SimulationConfig* config)
+
+int Goose_receiver_init(SV_SimulationConfig config)
 {
-   
-    if (receiver == NULL) {
+    int retval = SUCCESS;
+   if (receiver == NULL) 
+   {
         receiver = GooseReceiver_create();
     }
 
-    GooseReceiverConfig receiverConfig = {
-        .interface = config->Interface,
-        .goose_id = config->GoID,
-        .GoCBRef = config->GoCBRef,
-        .DatSet = config->DatSet,
-        .MACAddress = config->MACAddress,
-        .AppID = config->AppID,
-        .enable_retransmission = true,
-        .max_retries = 3
-    };
-    
+
+   
+    receiverConfig.interface = config.Interface;
+    receiverConfig.goose_id = config.GoID;
+    receiverConfig.GoCBRef = config.GoCBRef;
+    receiverConfig.DatSet = config.DatSet;
+    receiverConfig.MACAddress = config.MACAddress;
+    receiverConfig.AppID = config.AppID;
+    receiverConfig.enable_retransmission = true;
+    receiverConfig.max_retries = 3;
+    printf("DEBUG: receiverConfig.interface: %s\n", receiverConfig.interface);
   
     GooseReceiver_setInterfaceId(receiver, receiverConfig.interface);
     // GooseReceiver_setGooseId(receiver, receiverConfig.goose_id);
@@ -93,18 +96,24 @@ int Goose_receiver_start(GOOSE_SimulationConfig* config)
     // GooseReceiver_setDatSet(receiver, receiverConfig.DatSet);
     // GooseReceiver_setDstMac(receiver, receiverConfig.MACAddress);
     // GooseReceiver_setAppId(receiver, receiverConfig.AppID);
-    GooseSubscriber subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", NULL);
-     uint16_t appid = (uint32_t)strtoul(receiverConfig.AppID, NULL, 10);
+
+    subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", NULL);
+
+    uint16_t appid = (uint32_t)strtoul(receiverConfig.AppID, NULL, 10);
     uint8_t dstMac[6] ;
-    parse_mac_address(config->MACAddress, dstMac);
+    parse_mac_address(config.MACAddress, dstMac);
     GooseSubscriber_setDstMac(subscriber,dstMac);
 
     GooseSubscriber_setAppId(subscriber,appid );
 
     GooseSubscriber_setListener(subscriber, gooseListener, NULL);
-
     GooseReceiver_addSubscriber(receiver, subscriber);
-    
+
+    return (retval);
+}
+
+int Goose_receiver_start()
+{
     GooseReceiver_start(receiver);
 
     signal(SIGINT, sigint_handler);

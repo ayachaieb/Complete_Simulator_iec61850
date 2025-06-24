@@ -1,5 +1,7 @@
 /*
  * goose_publisher_example.c
+ *
+ * Modified to send GOOSE messages continuously.
  */
 
 #include <stdint.h>
@@ -7,10 +9,20 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <signal.h> // Required for signal handling
 
 #include "mms_value.h"
 #include "goose_publisher.h"
-#include "hal_thread.h"
+#include "hal_thread.h" // For Thread_sleep
+
+/* Global flag to control the main loop */
+static volatile sig_atomic_t running = 1;
+
+/* Signal handler for Ctrl+C */
+void
+sigint_handler(int dummy) {
+    running = 0;
+}
 
 /* has to be executed as root! */
 int
@@ -21,14 +33,18 @@ main(int argc, char **argv)
     if (argc > 1)
         interface = argv[1];
     else
-        interface = "eth0";
+        interface = "enp0s31f6"; // Default interface if not provided as argument
 
     printf("Using interface %s\n", interface);
 
+    // Register the signal handler for SIGINT (Ctrl+C)
+    signal(SIGINT, sigint_handler);
+
     LinkedList dataSetValues = LinkedList_create();
 
+    // Initial dataset values
     LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(1234));
-    LinkedList_add(dataSetValues, MmsValue_newBinaryTime(false));
+    LinkedList_add(dataSetValues, MmsValue_newBinaryTime(false)); // Represents a timestamp, usually current time
     LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(5678));
 
     CommParameters gooseCommParameters;
@@ -40,14 +56,11 @@ main(int argc, char **argv)
     gooseCommParameters.dstAddress[3] = 0x01;
     gooseCommParameters.dstAddress[4] = 0x00;
     gooseCommParameters.dstAddress[5] = 0x01;
-    gooseCommParameters.vlanId = 0;
-    gooseCommParameters.vlanPriority = 4;
+    gooseCommParameters.vlanId = 0;        // Set to 0 if no VLAN is used
+    gooseCommParameters.vlanPriority = 4; // Default priority
 
     /*
-     * Create a new GOOSE publisher instance. As the second parameter the interface
-     * name can be provided (e.g. "eth0" on a Linux system). If the second parameter
-     * is NULL the interface name as defined with CONFIG_ETHERNET_INTERFACE_ID in
-     * stack_config.h is used.
+     * Create a new GOOSE publisher instance.
      */
     GoosePublisher publisher = GoosePublisher_create(&gooseCommParameters, interface);
 
@@ -55,36 +68,35 @@ main(int argc, char **argv)
         GoosePublisher_setGoCbRef(publisher, "simpleIOGenericIO/LLN0$GO$gcbAnalogValues");
         GoosePublisher_setConfRev(publisher, 1);
         GoosePublisher_setDataSetRef(publisher, "simpleIOGenericIO/LLN0$AnalogValues");
-        GoosePublisher_setTimeAllowedToLive(publisher, 500);
+        GoosePublisher_setTimeAllowedToLive(publisher, 500); // Time in ms after which a message is considered stale
 
-        int i = 0;
+        printf("Starting GOOSE publishing. Press Ctrl+C to stop.\n");
 
-        for (i = 0; i < 4; i++) {
-            Thread_sleep(1000);
+        while (running) { // Loop indefinitely until 'running' flag is cleared by signal handler
+            // You can update dataSetValues here if you want to send changing data
+            // For example, to simulate changing analog values:
+            // MmsValue_setIntegerFromInt32(LinkedList_get(dataSetValues, 0), (int32_t) (rand() % 10000));
+            // MmsValue_setBinaryTime(LinkedList_get(dataSetValues, 1), false); // Update timestamp if needed
 
-            if (i == 3) {
-                /* now change dataset to send an invalid GOOSE message */
-                LinkedList_add(dataSetValues, MmsValue_newBoolean(true));
-                GoosePublisher_publish(publisher, dataSetValues);
+            if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
+                printf("Error sending GOOSE message!\n");
+            } else {
+                // printf("GOOSE message sent.\n"); // Uncomment for verbose output
             }
-            else {
-                if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
-                    printf("Error sending message!\n");
-                }
-            }
+
+            Thread_sleep(100); // Publish every 100 milliseconds (adjust as needed)
+                               // GOOSE messages often have a specific retransmission rate
         }
 
+        printf("Stopping GOOSE publishing...\n");
         GoosePublisher_destroy(publisher);
     }
     else {
-        printf("Failed to create GOOSE publisher. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
+        printf("Failed to create GOOSE publisher. Reason: Ethernet interface doesn't exist or root permissions are required.\n");
+        printf("Please ensure '%s' is a valid and active network interface, and run as root (sudo).\n", interface);
     }
 
     LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction) MmsValue_delete);
 
     return 0;
 }
-
-
-
-

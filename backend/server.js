@@ -68,7 +68,28 @@ configs.forEach((config, index) => {
     if (!config.svIDs || !/^[A-Za-z0-9]+$/.test(config.svIDs)) {
       errors.push(`Instance ${index}: svIDs  must be alphanumeric(e.g., sv2004)`);
     }
-
+        // Validation rules for the newly added GOOSE configuration fields
+    if (!config.GoCBRef || !/^[A-Za-z0-9\/$]+$/.test(config.GoCBRef)) {
+      errors.push(`Instance ${index}: GoCBRef must be alphanumeric and can contain '/' or '$' (e.g., "IEDName/LLN0$GO$gcbName")`);
+    }
+    if (!config.DatSet || !/^[A-Za-z0-9\/$]+$/.test(config.DatSet)) {
+      errors.push(`Instance ${index}: DatSet must be alphanumeric and can contain '/' or '$' (e.g., "IEDName/LLN0$DS$AnalogValues")`);
+    }
+    if (!config.GoID || !/^[A-Za-z0-9_]+$/.test(config.GoID)) {
+      errors.push(`Instance ${index}: GoID must be alphanumeric and can contain '_' (e.g., "MyGooseID")`);
+    }
+    // Re-using the MAC address validation from dstMac, as it's the same format
+    if (!config.MACAddress || !/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(config.MACAddress)) {
+      errors.push(`Instance ${index}: MACAddress must be in format XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX`);
+    }
+    // Similar to appId, AppID should be a number
+    const gooseAppIdNum = parseInt(config.AppID, 10);
+    if (isNaN(gooseAppIdNum) || gooseAppIdNum < 1 || gooseAppIdNum > 65535) { // AppID for GOOSE is typically a 16-bit unsigned integer (0-65535)
+      errors.push(`Instance ${index}: AppID must be a number between 1 and 65535`);
+    }
+    if (!config.Interface || !/^[A-Za-z0-9]+$/.test(config.Interface)) {
+      errors.push(`Instance ${index}: Interface must be alphanumeric (e.g., enp0s31f6)`);
+    }
     if (errors.length > 0) {
       allErrors.push(...errors);
     }

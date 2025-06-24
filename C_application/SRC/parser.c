@@ -279,6 +279,12 @@ int parseSVconfig(cJSON *instance_json_obj, SV_SimulationConfig *config_out)
     PARSE_STRING_FIELD(svInterface, "svInterface");
     PARSE_STRING_FIELD(scenarioConfigFile, "scenarioConfigFile");
     PARSE_STRING_FIELD(svIDs, "svIDs");
+    PARSE_STRING_FIELD(GoCBRef, "GoCBRef");
+    PARSE_STRING_FIELD(DatSet, "DatSet");
+    PARSE_STRING_FIELD(GoID, "GoID");
+    PARSE_STRING_FIELD(MACAddress, "MACAddress");
+    PARSE_STRING_FIELD(AppID, "AppID");
+    PARSE_STRING_FIELD(Interface, "Interface");
 
 #undef PARSE_STRING_FIELD
 
@@ -292,6 +298,13 @@ cleanup:
     free(config_out->svInterface);
     free(config_out->scenarioConfigFile);
     free(config_out->svIDs);
+    free(config_out->GoCBRef);  
+    free(config_out->DatSet);
+    free(config_out->GoID);
+    free(config_out->MACAddress);
+    free(config_out->AppID);
+    free(config_out->Interface);
+    
     memset(config_out, 0, sizeof(SV_SimulationConfig)); // Clear the struct
     return FAIL;
 }

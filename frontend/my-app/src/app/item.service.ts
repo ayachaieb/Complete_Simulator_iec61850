@@ -13,6 +13,12 @@ export interface SVConfig {
   interface: string;
   svid: string;
   scenariofile: string;
+  gocbRef: string,
+  datSet: string,
+  goID: string,
+  MAC: string,
+  APPID: string,
+  interface_Goose: string
 }
 
 export interface GooseConfig {
