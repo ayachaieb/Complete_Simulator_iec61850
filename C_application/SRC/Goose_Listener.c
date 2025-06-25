@@ -34,24 +34,49 @@ sigint_handler(int signalId)
 
 static void
 gooseListener(GooseSubscriber subscriber, void *parameter)
-{
-    printf("GOOSE event:\n");
+{ printf("\n--- GOOSE Event Received ---\n");
+    fflush(stdout);
+     printf(" Message validity: %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+    
+     // Rest of the existing code
+    printf("  vlanTag: %s\n", GooseSubscriber_isVlanSet(subscriber) ? "found" : "NOT found");
+    if (GooseSubscriber_isVlanSet(subscriber))
+    {
+        printf("    vlanId: %u\n", GooseSubscriber_getVlanId(subscriber));
+        printf("    vlanPrio: %u\n", GooseSubscriber_getVlanPrio(subscriber));
+    }
+    printf("  appId: %d\n", GooseSubscriber_getAppId(subscriber));
+    uint8_t macBuf[6];
+    GooseSubscriber_getSrcMac(subscriber,macBuf);
+    printf("  srcMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
+    GooseSubscriber_getDstMac(subscriber,macBuf);
+    printf("  dstMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
+    printf("  goId: %s\n", GooseSubscriber_getGoId(subscriber));
+    printf("  goCbRef: %s\n", GooseSubscriber_getGoCbRef(subscriber));
+    printf("  dataSet: %s\n", GooseSubscriber_getDataSet(subscriber));
+    printf("  confRev: %u\n", GooseSubscriber_getConfRev(subscriber));
+    printf("  ndsCom: %s\n", GooseSubscriber_needsCommission(subscriber) ? "true" : "false");
+    printf("  simul: %s\n", GooseSubscriber_isTest(subscriber) ? "true" : "false");
     printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-           GooseSubscriber_getSqNum(subscriber));
+             GooseSubscriber_getSqNum(subscriber));
     printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
 
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
 
-    printf("  timestamp: %u.%u\n", (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
+    printf("  timestamp: %llu ms (approx %u.%03u seconds)\n",
+           (long long unsigned int)timestamp,
+           (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
+
     printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
 
-    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
+    MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
 
     char buffer[1024];
 
     MmsValue_printToBuffer(values, buffer, 1024);
 
-    printf("  allData: %s\n", buffer);
+    printf("  AllData: %s\n", buffer);
+    printf("--------------------------\n");
 }
 
 bool goose_receiver_cleanup(void)
@@ -77,25 +102,35 @@ void *goose_thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
 
-    printf("Thread started for appid 0x%04x on interface %s\n", data->AppID, data->interface);
-    printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           data->interface, data->AppID,
-           data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
-           data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+    // printf("goose_thread_task ::Thread started for appid 0x%d on interface %s\n", data->AppID, data->interface);
+    // printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    //        data->interface, data->AppID,
+    //        data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
+    //        data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+    if (data->receiver == NULL)
+    {
+        data->receiver = GooseReceiver_create();
+    }
+    data->subscriber = GooseSubscriber_create("IED1/LLN0$GO$gcbGoose1","IED1/LLN0$DS$GooseDataSet1");
 
+    GooseSubscriber_setAppId(data->subscriber, 0x1000);
+
+    uint8_t mac[] = {0x01, 0x0c, 0xcd, 0x02, 0x00, 0x00};
+    GooseSubscriber_setDstMac(data->subscriber, mac);
     GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
     GooseReceiver_addSubscriber(data->receiver, data->subscriber);
     GooseReceiver_start(data->receiver);
 
-    if (GooseReceiver_isRunning(data->receiver)== false)
+    if (GooseReceiver_isRunning(data->receiver) == false)
     {
         signal(SIGINT, sigint_handler);
 
         while (running_Goose)
         {
             Thread_sleep(100);
+            // printf("Waiting for GOOSE messages on interface %s with appid 0x%d...\n", data->interface, data->AppID);
         }
-        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%04x is shutting down.", data->AppID);
+        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%d is shutting down.", data->AppID);
     }
     else
     {
@@ -106,7 +141,7 @@ void *goose_thread_task(void *arg)
     GooseReceiver_stop(data->receiver);
     GooseReceiver_destroy(data->receiver);
 
-    LOG_INFO("Goose_Listener", "Thread for appid %p gracefully shutting down.", data->AppID);
+    LOG_INFO("Goose_Listener", "Thread for appid %d gracefully shutting down.", data->AppID);
 
     return NULL;
 }
@@ -147,8 +182,6 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
                     free(thread_data[i].DatSet);
                 if (thread_data[i].MACAddress)
                     free(thread_data[i].MACAddress);
-                if (thread_data[i].AppID)
-                    free(thread_data[i].AppID);
             }
             free(thread_data);
             thread_data = NULL;
@@ -206,7 +239,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             goto cleanup_init_failure;
         }
 
-       if (config[i].Interface)
+        if (config[i].Interface)
         {
             thread_data[i].interface = strdup(config[i].Interface); // Example: fixed string
 
@@ -278,14 +311,12 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
                  thread_data[i].MACAddress[4], thread_data[i].MACAddress[5]);
 
         LOG_INFO("Goose_Listener", "All thread_data initialized successfully");
-        if (thread_data[i].receiver == NULL)
-        {
-            thread_data[i].receiver = GooseReceiver_create();
-        }
-        thread_data[i].subscriber = GooseSubscriber_create(thread_data[i].GoCBRef, NULL);
-        GooseSubscriber_setDstMac(thread_data[i].subscriber, thread_data[i].MACAddress);
 
-        GooseSubscriber_setAppId(thread_data[i].subscriber, thread_data[i].AppID);
+        //  thread_data[i].subscriber = GooseSubscriber_create("", NULL);
+        // thread_data[i].subscriber = GooseSubscriber_create(thread_data[i].GoCBRef, NULL);
+        // GooseSubscriber_setDstMac(thread_data[i].subscriber, thread_data[i].MACAddress);
+
+        //  GooseSubscriber_setAppId(thread_data[i].subscriber, thread_data[i].AppID);
         // for Goose_receiver_start
         //  GooseSubscriber_setListener(subscriber, gooseListener, NULL);
         //  GooseReceiver_addSubscriber(receiver, subscriber);
