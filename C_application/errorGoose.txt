@@ -1,244 +1,61 @@
-goose observer ::
-/*
- * goose_observer.c
- *
- * This is an example for a GOOSE observer that tries to precisely
- * match the publisher's configuration, assuming a libiec61850
- * version without GooseFilterConfig.
- *
- * Has to be started as root in Linux.
- */
-
-#include "goose_receiver.h"
-#include "goose_subscriber.h"
-#include "hal_thread.h" // For Thread_sleep
-
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h> // For memcpy (though not strictly needed here anymore, good practice)
-
-static int running = 1;
-
-void sigint_handler(int signalId)
+static void
+gooseListener(GooseSubscriber subscriber, void *parameter)
 {
-    running = 0;
-}
-
-void
-gooseListener(GooseSubscriber subscriber, void* parameter)
-{
-    printf("\n--- GOOSE Event Received ---\n");
-    printf("  vlanTag: %s\n", GooseSubscriber_isVlanSet(subscriber) ? "found" : "NOT found");
-    if (GooseSubscriber_isVlanSet(subscriber))
-    {
-        printf("    vlanId: %u\n", GooseSubscriber_getVlanId(subscriber));
-        printf("    vlanPrio: %u\n", GooseSubscriber_getVlanPrio(subscriber));
-    }
-    printf("  appId: %d\n", GooseSubscriber_getAppId(subscriber));
-    uint8_t macBuf[6];
-    GooseSubscriber_getSrcMac(subscriber,macBuf);
-    printf("  srcMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
-    GooseSubscriber_getDstMac(subscriber,macBuf);
-    printf("  dstMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
-    printf("  goId: %s\n", GooseSubscriber_getGoId(subscriber));
-    printf("  goCbRef: %s\n", GooseSubscriber_getGoCbRef(subscriber));
-    printf("  dataSet: %s\n", GooseSubscriber_getDataSet(subscriber));
-    printf("  confRev: %u\n", GooseSubscriber_getConfRev(subscriber));
-    printf("  ndsCom: %s\n", GooseSubscriber_needsCommission(subscriber) ? "true" : "false");
-    printf("  simul: %s\n", GooseSubscriber_isTest(subscriber) ? "true" : "false");
+    printf("GOOSE event:\n");
     printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-             GooseSubscriber_getSqNum(subscriber));
+           GooseSubscriber_getSqNum(subscriber));
     printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
 
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
 
-    printf("  timestamp: %llu ms (approx %u.%03u seconds)\n",
-           (long long unsigned int)timestamp,
-           (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
-
+    printf("  timestamp: %u.%u\n", (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
     printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
 
-    MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
+    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
 
     char buffer[1024];
 
     MmsValue_printToBuffer(values, buffer, 1024);
 
-    printf("  AllData: %s\n", buffer);
-    printf("--------------------------\n");
+    printf("  allData: %s\n", buffer);
 }
 
-int
-main(int argc, char** argv)
+
+
+void *goose_thread_task(void *arg)
 {
-    GooseReceiver receiver = GooseReceiver_create();
+    ThreadData *data = (ThreadData *)arg;
 
-    char *interfaceId;
-    if (argc > 1) {
-        interfaceId = argv[1];
-    } else {
-        interfaceId = "enp0s31f6"; // Default interface
-    }
-    printf("Using interface %s\n", interfaceId);
-    GooseReceiver_setInterfaceId(receiver, interfaceId);
+    printf("Thread started for appid 0x%04x on interface %s\n", data->AppID, data->interface);
+    printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           data->interface, data->AppID,
+           data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
+           data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
 
-    // --- REVERTED TO SIMPLER SUBSCRIBER CREATION ---
-    // The goID MUST EXACTLY MATCH what the publisher is sending
-    const char* PUBLISHER_GO_ID = "simpleIOGenericIO/LLN0$GO$gcbAnalogValues";
-    GooseSubscriber subscriber = GooseSubscriber_create(PUBLISHER_GO_ID, NULL); // NULL for user data parameter
+    GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
+    GooseReceiver_addSubscriber(data->receiver, data->subscriber);
+    GooseReceiver_start(data->receiver);
 
-    printf("Observer trying to subscribe to goID: %s\n", PUBLISHER_GO_ID);
-
-    if (subscriber == NULL) {
-        printf("Failed to create GOOSE subscriber. This is unexpected. Check libiec61850 documentation or install.\n");
-        GooseReceiver_destroy(receiver);
-        return -1;
-    }
-
-    GooseSubscriber_setListener(subscriber, gooseListener, NULL);
-
-    GooseReceiver_addSubscriber(receiver, subscriber);
-
-    GooseReceiver_start(receiver);
-
-    if (GooseReceiver_isRunning(receiver)) {
+    if (GooseReceiver_isRunning(data->receiver)== false)
+    {
         signal(SIGINT, sigint_handler);
 
-        printf("GOOSE observer started. Listening for messages. Press Ctrl+C to stop.\n");
-        printf("Waiting for GOOSE messages matching goID '%s'...\n", PUBLISHER_GO_ID);
-
-        while (running) {
+        while (running_Goose)
+        {
             Thread_sleep(100);
         }
+        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%04x is shutting down.", data->AppID);
     }
-    else {
-        printf("Failed to start GOOSE receiver. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
-        printf("Please ensure '%s' is a valid and active network interface, and run as root (sudo).\n", interfaceId);
-    }
-
-    printf("Stopping GOOSE observer...\n");
-    GooseReceiver_stop(receiver);
-    GooseReceiver_destroy(receiver);
-    return 0;
-}
-
-
-goose publisher::
-/*
- * goose_publisher_example.c
- *
- * Modified to send GOOSE messages continuously.
- */
-
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <signal.h> // Required for signal handling
-
-#include "mms_value.h"
-#include "goose_publisher.h"
-#include "hal_thread.h" // For Thread_sleep
-
-/* Global flag to control the main loop */
-static volatile sig_atomic_t running = 1;
-
-/* Signal handler for Ctrl+C */
-void
-sigint_handler(int dummy) {
-    running = 0;
-}
-
-/* has to be executed as root! */
-int
-main(int argc, char **argv)
-{
-    char *interface;
-
-    if (argc > 1)
-        interface = argv[1];
     else
-        interface = "enp0s31f6"; // Default interface if not provided as argument
-
-    printf("Using interface %s\n", interface);
-
-    // Register the signal handler for SIGINT (Ctrl+C)
-    signal(SIGINT, sigint_handler);
-
-    LinkedList dataSetValues = LinkedList_create();
-
-    // Initial dataset values
-    LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(1234));
-    LinkedList_add(dataSetValues, MmsValue_newBinaryTime(false)); // Represents a timestamp, usually current time
-    LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(5678));
-
-    CommParameters gooseCommParameters;
-
-    gooseCommParameters.appId = 1000;
-    gooseCommParameters.dstAddress[0] = 0x01;
-    gooseCommParameters.dstAddress[1] = 0x0c;
-    gooseCommParameters.dstAddress[2] = 0xcd;
-    gooseCommParameters.dstAddress[3] = 0x01;
-    gooseCommParameters.dstAddress[4] = 0x00;
-    gooseCommParameters.dstAddress[5] = 0x01;
-    gooseCommParameters.vlanId = 0;        // Set to 0 if no VLAN is used
-    gooseCommParameters.vlanPriority = 4; // Default priority
-
-    /*
-     * Create a new GOOSE publisher instance.
-     */
-    GoosePublisher publisher = GoosePublisher_create(&gooseCommParameters, interface);
-
-    if (publisher) {
-        GoosePublisher_setGoCbRef(publisher, "simpleIOGenericIO/LLN0$GO$gcbAnalogValues");
-        GoosePublisher_setConfRev(publisher, 1);
-        GoosePublisher_setDataSetRef(publisher, "simpleIOGenericIO/LLN0$AnalogValues");
-        GoosePublisher_setTimeAllowedToLive(publisher, 500); // Time in ms after which a message is considered stale
-
-        printf("Starting GOOSE publishing. Press Ctrl+C to stop.\n");
-
-        while (running) { // Loop indefinitely until 'running' flag is cleared by signal handler
-            // You can update dataSetValues here if you want to send changing data
-            // For example, to simulate changing analog values:
-            // MmsValue_setIntegerFromInt32(LinkedList_get(dataSetValues, 0), (int32_t) (rand() % 10000));
-            // MmsValue_setBinaryTime(LinkedList_get(dataSetValues, 1), false); // Update timestamp if needed
-
-            if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
-                printf("Error sending GOOSE message!\n");
-            } else {
-                // printf("GOOSE message sent.\n"); // Uncomment for verbose output
-            }
-
-            Thread_sleep(100); // Publish every 100 milliseconds (adjust as needed)
-                               // GOOSE messages often have a specific retransmission rate
-        }
-
-        printf("Stopping GOOSE publishing...\n");
-        GoosePublisher_destroy(publisher);
-    }
-    else {
-        printf("Failed to create GOOSE publisher. Reason: Ethernet interface doesn't exist or root permissions are required.\n");
-        printf("Please ensure '%s' is a valid and active network interface, and run as root (sudo).\n", interface);
+    {
+        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
+        printf("Please check the interface %s .\n", data->interface);
     }
 
-    LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction) MmsValue_delete);
+    GooseReceiver_stop(data->receiver);
+    GooseReceiver_destroy(data->receiver);
 
-    return 0;
+    LOG_INFO("Goose_Listener", "Thread for appid %p gracefully shutting down.", data->AppID);
+
+    return NULL;
 }
- i runned them  both at the same time 
-output publisher :::
-$ sudo ./goose_publisher_example 
-[sudo] password for eya: 
-Using interface enp0s31f6
-Starting GOOSE publishing. Press Ctrl+C to stop.
-
-output observer
-$ sudo ./goose_observer 
-Using interface enp0s31f6
-Observer trying to subscribe to goID: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
-GOOSE observer started. Listening for messages. Press Ctrl+C to stop.
-Waiting for GOOSE messages matching goID 'simpleIOGenericIO/LLN0$GO$gcbAnalogValues'...
-when i listen to the interface with wireshark i receive goose message s
-but i dont see messages when i run the observer

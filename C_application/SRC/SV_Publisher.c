@@ -505,25 +505,25 @@ static int setupGooseSubscriber(ThreadData *data)
         GooseReceiver_destroy(data->gooseReceiver);
         return -1;
     }
-    printf("dstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
-           data->parameters.dstAddress[3], data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
+    // printf("dstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    //        data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
+    //        data->parameters.dstAddress[3], data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
     //  uint8_t dstMac[6] = {0x01, 0x0c, 0xcd, 0x01, 0x10, 0x08};
-    GooseSubscriber_setDstMac(data->gooseSubscriber, data->parameters.dstAddress);
+    // GooseSubscriber_setDstMac(data->gooseSubscriber, data->parameters.dstAddress);
 
-    printf("GOOSE appid 0x%04x\n", data->GOOSEappId);
-    GooseSubscriber_setAppId(data->gooseSubscriber, data->GOOSEappId);
-    GooseSubscriber_setListener(data->gooseSubscriber, gooseListener, NULL);
-    GooseReceiver_addSubscriber(data->gooseReceiver, data->gooseSubscriber);
+    // printf("GOOSE appid 0x%04x\n", data->GOOSEappId);
+    // GooseSubscriber_setAppId(data->gooseSubscriber, data->GOOSEappId);
+    // GooseSubscriber_setListener(data->gooseSubscriber, gooseListener, NULL);
+    // GooseReceiver_addSubscriber(data->gooseReceiver, data->gooseSubscriber);
 
-    GooseReceiver_start(data->gooseReceiver);
+    // GooseReceiver_start(data->gooseReceiver);
 
-    if (!GooseReceiver_isRunning(data->gooseReceiver))
-    {
-        printf("Failed to start GOOSE subscriber. Root permission or correct interface required.\n");
-        GooseReceiver_destroy(data->gooseReceiver);
-        return -1;
-    }
+    // if (!GooseReceiver_isRunning(data->gooseReceiver))
+    // {
+    //     printf("Failed to start GOOSE subscriber. Root permission or correct interface required.\n");
+    //     GooseReceiver_destroy(data->gooseReceiver);
+    //     return -1;
+    // }
 
     return 0;
 }
@@ -532,12 +532,12 @@ void *thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
 
-    printf("Thread started for appid 0x%04x on interface %s\n", data->parameters.appId, data->svInterface);
-    printf("svInterface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+  //  printf("Thread started for appid 0x%04x on interface %s\n", data->parameters.appId, data->svInterface);
+   /* printf("svInterface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
            data->svInterface, data->parameters.appId,
            data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
            data->parameters.dstAddress[3], data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
-
+*/
     data->parameters.vlanPriority = 0;
 
     data->svPublisher = SVPublisher_create(&data->parameters, data->svInterface);
@@ -604,7 +604,7 @@ void *thread_task(void *arg)
     if (data->svIDs)
         free(data->svIDs);
 
-    printf("Thread for appid 0x%04x finished publishing\n", data->parameters.appId);
+   // printf("SV_Publisher Thread for appid 0x%04x finished publishing\n", data->parameters.appId);
     return NULL;
 
 cleanup_on_error:

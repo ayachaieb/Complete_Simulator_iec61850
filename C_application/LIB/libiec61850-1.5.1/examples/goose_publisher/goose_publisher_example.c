@@ -28,7 +28,8 @@ sigint_handler(int dummy) {
 int
 main(int argc, char **argv)
 {
-    char *interface;
+    const char *interface = NULL;
+
 
     if (argc > 1)
         interface = argv[1];

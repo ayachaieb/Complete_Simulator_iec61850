@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 {
  GooseReceiver receiver = GooseReceiver_create();
 
- char *interfaceId;
+ const char *interfaceId = NULL;
  if (argc > 1) {
  interfaceId = argv[1];
  } else {

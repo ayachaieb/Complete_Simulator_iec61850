@@ -7,16 +7,19 @@
 #include "goose_subscriber.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h> // For strerror
 #include <signal.h>
 #include "parser.h"
+#include <pthread.h>
+#include "logger.h"
 volatile sig_atomic_t running_Goose = 1;
 extern volatile bool internal_shutdown_flag;
 GooseReceiver receiver = NULL;
 bool goose_receiver_cleanup(void);
 bool goose_receiver_is_running(void);
-
-GooseReceiverConfig receiverConfig = {0};
- GooseSubscriber subscriber = NULL;
+static pthread_t *threads = NULL;
+static ThreadData *thread_data = NULL;
+int goose_instance_count = 0;
 static void
 sigint_handler(int signalId)
 {
@@ -30,19 +33,19 @@ sigint_handler(int signalId)
 }
 
 static void
-gooseListener(GooseSubscriber subscriber, void* parameter)
+gooseListener(GooseSubscriber subscriber, void *parameter)
 {
     printf("GOOSE event:\n");
     printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-            GooseSubscriber_getSqNum(subscriber));
+           GooseSubscriber_getSqNum(subscriber));
     printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
 
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
 
-    printf("  timestamp: %u.%u\n", (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
+    printf("  timestamp: %u.%u\n", (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
     printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
 
-    MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
+    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
 
     char buffer[1024];
 
@@ -51,11 +54,11 @@ gooseListener(GooseSubscriber subscriber, void* parameter)
     printf("  allData: %s\n", buffer);
 }
 
-
 bool goose_receiver_cleanup(void)
 {
     // Clean up GOOSE receiver resources
-    if (receiver != NULL) {
+    if (receiver != NULL)
+    {
         GooseReceiver_stop(receiver);
         GooseReceiver_destroy(receiver);
         receiver = NULL; // Set to NULL after destruction
@@ -64,71 +67,285 @@ bool goose_receiver_cleanup(void)
     return SUCCESS;
 }
 
-bool goose_receiver_is_running_Goose(void) {
-  
+bool goose_receiver_is_running_Goose(void)
+{
+
     return receiver != NULL;
 }
 
-
-int Goose_receiver_init(SV_SimulationConfig config)
+void *goose_thread_task(void *arg)
 {
-    int retval = SUCCESS;
-   if (receiver == NULL) 
-   {
-        receiver = GooseReceiver_create();
+    ThreadData *data = (ThreadData *)arg;
+
+    printf("Thread started for appid 0x%04x on interface %s\n", data->AppID, data->interface);
+    printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           data->interface, data->AppID,
+           data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
+           data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+
+    GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
+    GooseReceiver_addSubscriber(data->receiver, data->subscriber);
+    GooseReceiver_start(data->receiver);
+
+    if (GooseReceiver_isRunning(data->receiver)== false)
+    {
+        signal(SIGINT, sigint_handler);
+
+        while (running_Goose)
+        {
+            Thread_sleep(100);
+        }
+        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%04x is shutting down.", data->AppID);
+    }
+    else
+    {
+        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
+        printf("Please check the interface %s .\n", data->interface);
     }
 
+    GooseReceiver_stop(data->receiver);
+    GooseReceiver_destroy(data->receiver);
 
-   
-    receiverConfig.interface = config.Interface;
-    receiverConfig.goose_id = config.GoID;
-    receiverConfig.GoCBRef = config.GoCBRef;
-    receiverConfig.DatSet = config.DatSet;
-    receiverConfig.MACAddress = config.MACAddress;
-    receiverConfig.AppID = config.AppID;
-    receiverConfig.enable_retransmission = true;
-    receiverConfig.max_retries = 3;
-    printf("DEBUG: receiverConfig.interface: %s\n", receiverConfig.interface);
-  
-    GooseReceiver_setInterfaceId(receiver, receiverConfig.interface);
-    // GooseReceiver_setGooseId(receiver, receiverConfig.goose_id);
-    // GooseReceiver_setGoCBRef(receiver, receiverConfig.GoCBRef);
-    // GooseReceiver_setDatSet(receiver, receiverConfig.DatSet);
-    // GooseReceiver_setDstMac(receiver, receiverConfig.MACAddress);
-    // GooseReceiver_setAppId(receiver, receiverConfig.AppID);
+    LOG_INFO("Goose_Listener", "Thread for appid %p gracefully shutting down.", data->AppID);
 
-    subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", NULL);
+    return NULL;
+}
 
-    uint16_t appid = (uint32_t)strtoul(receiverConfig.AppID, NULL, 10);
-    uint8_t dstMac[6] ;
-    parse_mac_address(config.MACAddress, dstMac);
-    GooseSubscriber_setDstMac(subscriber,dstMac);
+int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
+{
+    LOG_INFO("Goose_Listener", "Starting Goose_Listener");
+    int retval = SUCCESS;
+    if (config == NULL || number_of_subscribers <= 0)
+    {
+        LOG_ERROR("Goose_Listener", "Invalid input: instances array is NULL or number_publishers is non-positive.");
+        return FAIL;
+    }
 
-    GooseSubscriber_setAppId(subscriber,appid );
+    // Clean up any previous allocations if init is called multiple times without cleanup
+    if (threads != NULL || thread_data != NULL)
+    {
+        LOG_INFO("Goose_Listener", "Previous SV Publisher instances found. Cleaning up before re-initialization.");
 
-    GooseSubscriber_setListener(subscriber, gooseListener, NULL);
-    GooseReceiver_addSubscriber(receiver, subscriber);
+        if (threads)
+        {
+            free(threads);
+            threads = NULL;
+        }
+        if (thread_data)
+        {
+            // Need to free internal strings within thread_data if they were strdup'd
+            for (int i = 0; i < number_of_subscribers; ++i)
+            {
 
-    return (retval);
+                if (thread_data[i].interface)
+                    free(thread_data[i].interface);
+                if (thread_data[i].goose_id)
+                    free(thread_data[i].goose_id);
+                if (thread_data[i].GoCBRef)
+                    free(thread_data[i].GoCBRef);
+                if (thread_data[i].DatSet)
+                    free(thread_data[i].DatSet);
+                if (thread_data[i].MACAddress)
+                    free(thread_data[i].MACAddress);
+                if (thread_data[i].AppID)
+                    free(thread_data[i].AppID);
+            }
+            free(thread_data);
+            thread_data = NULL;
+        }
+        goose_instance_count = 0;
+    }
+
+    goose_instance_count = number_of_subscribers;
+
+    threads = (pthread_t *)malloc(goose_instance_count * sizeof(pthread_t));
+    if (!threads)
+    {
+        LOG_ERROR("Goose_Listener", "Memory allocation failed for threads!");
+        return FAIL;
+    }
+    memset(threads, 0, goose_instance_count * sizeof(pthread_t)); // Initialize to 0
+
+    thread_data = (ThreadData *)malloc(goose_instance_count * sizeof(ThreadData));
+    if (!thread_data)
+    {
+        LOG_ERROR("Goose_Listener", "Memory allocation failed for thread_data!");
+        free(threads); // Clean up threads array
+        threads = NULL;
+        return FAIL;
+    }
+    memset(thread_data, 0, goose_instance_count * sizeof(ThreadData)); // Initialize to 0
+    int i = 0;
+    // LOG_INFO("Goose_Listener", "Initializing %d SV Publisher instances", goose_instance_count);
+    for (i = 0; i < goose_instance_count; i++)
+    {
+        // Initialize thread_data[i] to ensure all pointers are NULL before strdup
+        memset(&thread_data[i], 0, sizeof(ThreadData));
+        thread_data[i].receiver = NULL;   // or create if necessary
+        thread_data[i].subscriber = NULL; // or create if necessary
+        if (config[i].appId)
+        {
+            char *endptr;
+            unsigned long val = strtoul(config[i].appId, &endptr, 10); // Base 10 for numeric appId
+            if (*endptr != '\0' || val > UINT32_MAX)
+            {
+                LOG_ERROR("Goose_Listener", "Invalid appId format or value for instance %d: %s", i, config[i].appId);
+                goto cleanup_init_failure;
+            }
+
+            // If you need to convert appId to an integer, do it here:
+            //  thread_data[i].GOOSEappId = 0x5000 + atoi(instances[i].appId);
+            // For now, GOOSEappId is also a string from JSON, so we'll assume it's handled elsewhere or convert it.
+            // Let's assume GOOSEappId is derived from appId string, so it should be uint32_t
+            thread_data[i].AppID = (uint32_t)val;                                   // Store the numeric value directly
+            thread_data[i].goose_id = (uint32_t)strtoul(config[i].appId, NULL, 10); // Convert string appId to uint32_t
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "appId is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+
+       if (config[i].Interface)
+        {
+            thread_data[i].interface = strdup(config[i].Interface); // Example: fixed string
+
+            if (!thread_data[i].interface)
+            {
+                LOG_ERROR("Goose_Listener", "Memory allocation failed for interface for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "interface is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        printf("gooose interface: %s\n", thread_data[i].interface);
+
+        if (config[i].GoCBRef)
+        {
+            thread_data[i].GoCBRef = strdup(config[i].GoCBRef); // Example: fixed string
+
+            if (!thread_data[i].GoCBRef)
+            {
+                LOG_ERROR("Goose_Listener", "Memory allocation failed for goCbRef for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "GoCBRef is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        printf("GoCBRef: %s\n", thread_data[i].GoCBRef);
+
+        if (config[i].DatSet)
+        {
+            thread_data[i].DatSet = strdup(config[i].DatSet);
+            if (!thread_data[i].DatSet)
+            {
+                LOG_ERROR("Goose_Listener", "Memory allocation failed for DatSet for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "DatSet is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        LOG_INFO("Goose_Listener", "DatSet: %s", thread_data[i].DatSet);
+
+        // Parse and copy MAC address
+        // Parse and copy MAC address
+        thread_data[i].MACAddress = (uint8_t *)malloc(6 * sizeof(uint8_t));
+        if (NULL != thread_data[i].MACAddress)
+        {
+            if (!parse_mac_address(config[i].MACAddress, thread_data[i].MACAddress))
+            {
+                LOG_ERROR("Goose_Listener", "Failed to parse MAC address for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "dstMac is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        LOG_INFO("Goose_Listener", "dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
+                 thread_data[i].MACAddress[0], thread_data[i].MACAddress[1],
+                 thread_data[i].MACAddress[2], thread_data[i].MACAddress[3],
+                 thread_data[i].MACAddress[4], thread_data[i].MACAddress[5]);
+
+        LOG_INFO("Goose_Listener", "All thread_data initialized successfully");
+        if (thread_data[i].receiver == NULL)
+        {
+            thread_data[i].receiver = GooseReceiver_create();
+        }
+        thread_data[i].subscriber = GooseSubscriber_create(thread_data[i].GoCBRef, NULL);
+        GooseSubscriber_setDstMac(thread_data[i].subscriber, thread_data[i].MACAddress);
+
+        GooseSubscriber_setAppId(thread_data[i].subscriber, thread_data[i].AppID);
+        // for Goose_receiver_start
+        //  GooseSubscriber_setListener(subscriber, gooseListener, NULL);
+        //  GooseReceiver_addSubscriber(receiver, subscriber);
+    }
+    return SUCCESS;
+
+cleanup_init_failure:
+    LOG_INFO("Goose_Listener", "cleanup happening");
+    // Free all memory allocated so far for thread_data and threads
+    for (int j = 0; j <= i; ++j)
+    { // Free up to the current failed instance
+
+        if (thread_data[j].interface)
+            free(thread_data[j].interface);
+        if (thread_data[j].GoCBRef)
+            free(thread_data[j].GoCBRef);
+        if (thread_data[j].DatSet)
+            free(thread_data[j].DatSet);
+        if (thread_data[j].MACAddress)
+            free(thread_data[j].MACAddress);
+    }
+    if (thread_data)
+    {
+        free(thread_data);
+        thread_data = NULL; // Set to NULL to avoid dangling pointer
+    }
+    if (threads)
+    {
+        free(threads);
+        threads = NULL;
+    }
+    goose_instance_count = 0;
+    return FAIL;
 }
 
 int Goose_receiver_start()
 {
-    GooseReceiver_start(receiver);
-
+    if (threads == NULL || thread_data == NULL || goose_instance_count <= 0)
+    {
+        LOG_ERROR("Goose_Listener", "SV Publisher not initialized. Call SVPublisher_init first.");
+        return FAIL;
+    }
     signal(SIGINT, sigint_handler);
-
-   if (GooseReceiver_isRunning(receiver)) {
-        signal(SIGINT, sigint_handler);
-
-        while (running_Goose) {
-            Thread_sleep(100);
+    bool all_threads_created = SUCCESS;
+    for (int i = 0; i < goose_instance_count; i++)
+    {
+        if (pthread_create(&threads[i], NULL, goose_thread_task, &thread_data[i]) != 0)
+        {
+            LOG_ERROR("Goose_Listener", "Failed to create thread for instance %d: %s", i, strerror(errno));
+            all_threads_created = FAIL;
+        }
+        else
+        {
+            printf("Created a goooooose   thread for instance %d\n", i);
+            LOG_INFO("Goose_Listener", "Created thread for instance %d", i);
         }
     }
-    else {
-        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
-    }
+    // printf("All threads created successfully: %d\n", all_threads_created);
+    LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
 
-    goose_receiver_cleanup();
+    return all_threads_created;
     return 0;
 }

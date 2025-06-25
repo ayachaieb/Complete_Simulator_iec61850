@@ -20,6 +20,8 @@
         "mms_value_internal.h": "c",
         "stdio.h": "c",
         "goose_publisher.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "stdint.h": "c",
+        "util.h": "c"
     }
 }
