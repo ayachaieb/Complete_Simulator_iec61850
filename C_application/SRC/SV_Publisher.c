@@ -878,6 +878,7 @@ void SVPublisher_stop()
                     LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
                 }
                 printf("SV_Publisher  Joined thread for instance %d.\n", i);
+                fflush(stdout);
             }
         }
         free(threads);
@@ -893,7 +894,7 @@ void SVPublisher_stop()
         thread_data = NULL;
     }
 
-    instance_count = 0;
+   
     printf("SV_Publisher resources cleaned up.");
 }
 

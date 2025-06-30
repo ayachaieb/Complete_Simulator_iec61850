@@ -764,3 +764,103 @@ state_machine_run ::State changed from RUNNING to STOP due to event stop_simulat
 [2025-06-30 15:25:18.385] [INFO] [State_Machine] StateMachine module shutdown complete. (../SRC/State_Machine.c:632)
 [2025-06-30 15:25:18.385] [INFO] [ModuleManager] All modules shut down successfully (../SRC/Module_Manager.c:61)
 [2025-06-30 15:25:18.385] [INFO] [Main] Application shutdown complete. Goodbye! (../SRC/main.c:74)
+
+
+E$ sudo ../BIN/sv_simulator
+StateMachine::StateMachine_push_event ::Pushing event: start_simulation, requestId: 1751299533340
+state_machine_thread_internal:: State_Machine popped event: start_simulation, requestId: 1751299533340
+gooose interface: enp0s31f6
+GoCBRef: IED1/LLN0$GO$gcbGoose1
+gooose interface: enp0s31f6
+GoCBRef: IED2/LLN0$GO$gcbGoose2
+gooose interface: enp0s31f6
+GoCBRef: IED3/LLN0$GO$gcbGoose3
+gooose interface: enp0s31f6
+GoCBRef: IED4/LLN0$GO$gcbGoose4
+gooose interface: enp0s31f6
+GoCBRef: IED5/LLN0$GO$gcbGoose5
+gooose interface: enp0s31f6
+GoCBRef: IED6/LLN0$GO$gcbGoose6
+gooose interface: enp0s31f6
+GoCBRef: IED7/LLN0$GO$gcbGoose7
+gooose interface: enp0s31f6
+GoCBRef: IED8/LLN0$GO$gcbGoose8
+gooose interface: enp0s31f6
+GoCBRef: IED9/LLN0$GO$gcbGoose9
+gooose interface: enp0s31f6
+GoCBRef: IED10/LLN0$GO$gcbGoose10
+StateMachine::StateMachine_push_event ::Pushing event: init_success, requestId: 1751299533340
+state_machine_run ::State changed from IDLE to INIT due to event start_simulation
+state_machine_thread_internal:: State_Machine popped event: init_success, requestId: 1751299533340
+phase_count = 3
+Timer started for appid 4096 with signal 40
+phase_count = 3
+Timer started for appid 8192 with signal 36
+phase_count = 3
+Timer started for appid 12288 with signal 42
+phase_count = 3
+Timer started for appid 16384 with signal 38
+phase_count = 3
+Timer started for appid 20480 with signal 34
+phase_count = 3
+Timer started for appid 24576 with signal 40
+phase_count = 3
+Timer started for appid 28672 with signal 36
+phase_count = 3
+Timer started for appid 36864 with signal 38
+Created a goooooose   thread for instance 0
+phase_count = 3
+phase_count = 3
+Timer started for appid 37120 with signal 34
+Created a goooooose   thread for instance 1
+Timer started for appid 32768 with signal 42
+Created a goooooose   thread for instance 2
+Created a goooooose   thread for instance 3
+Created a goooooose   thread for instance 4
+Created a goooooose   thread for instance 5
+Created a goooooose   thread for instance 6
+Created a goooooose   thread for instance 7
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+Created a goooooose   thread for instance 8
+Created a goooooose   thread for instance 9
+state_machine_run ::State changed from INIT to RUNNING due to event init_success
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+^CReceived SIGINT, shutting down...
+STOPing GOOSE receiver and subscriber resources...
+state_machine_thread_internal:: State_Machine popped event: shutdown, requestId: N/A
+GOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingGOOSE thread exitingThread 5 failed to join, detaching
+Thread 6 failed to join, detaching
+Thread 7 failed to join, detaching
+Thread 8 failed to join, detaching
+Segmentation fault
+
+when stop pressed
+state_machine_run ::State changed from INIT to RUNNING due to event init_success
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+StateMachine::StateMachine_push_event ::Pushing event: stop_simulation, requestId: 1751299726607
+state_machine_thread_internal:: State_Machine popped event: stop_simulation, requestId: 1751299726607

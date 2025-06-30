@@ -357,7 +357,14 @@ cleanup:
             free(svconfig_tab[i].svInterface);
             free(svconfig_tab[i].scenarioConfigFile);
             free(svconfig_tab[i].svIDs);
+            free(svconfig_tab[i].GoCBRef); // Free goCbRef if it was allocated  
+            free(svconfig_tab[i].DatSet);  // Free DatSet if it was allocated
+            free(svconfig_tab[i].GoID);    // Free GoID if it was allocated
+            free(svconfig_tab[i].MACAddress); // Free MACAddress if it was allocated
+            free(svconfig_tab[i].AppID);  // Free AppID if it was allocated
+            free(svconfig_tab[i].Interface); // Free Interface if it was allocated
         }
+
         free(svconfig_tab);
     }
 
@@ -389,9 +396,18 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
     else
     {
         LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
-        Goose_receiver_start();
-        LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+        //Goose_receiver_start();
 
+         if (FAIL == Goose_receiver_start())
+    {
+        LOG_ERROR("State_Machine", "Failed to start GOOSE receiver");
+        printf("State_Machine Failed to start GOOSE receiver");
+        goose_receiver_cleanup(); // Attempt to clean up even on start failure
+        retval = FAIL;
+    }
+    else {
+        LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+    }
         cJSON *json_response = cJSON_CreateObject();
         if (!json_response)
         {
@@ -437,8 +453,14 @@ static bool state_stop_enter(void *data, state_e from, state_event_e event, cons
     LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
     printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n",
            state_to_string(from), state_event_to_string(event));
+    fflush(stdout);
     // Stop the SV Publisher module here
     SVPublisher_stop();
+
+ goose_receiver_cleanup(); // Clean up Goose receiver resources
+
+    printf("state_stop_enter ::State_Machine goose receiver stopped\n");
+    fflush(stdout);
     LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
 
     cJSON *json_response = cJSON_CreateObject();

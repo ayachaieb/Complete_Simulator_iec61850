@@ -17,7 +17,7 @@
 #define MAX_JSON_SIZE 65536 // Maximum expected JSON message size
 static int sock_fd = FAIL;
 static struct sockaddr_un server_addr;
-
+extern volatile bool internal_shutdown_flag;
 int is_complete_json(const char *buffer)
 {
     int brace_count = 0;
@@ -324,7 +324,7 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
             {
                 LOG_ERROR("IPC", "Failed to open received_json.txt for writing");
             }
-            printf("ipc :: Received: %s\n", full_json_buffer); // For debugging purposes
+          //  printf("ipc :: Received: %s\n", full_json_buffer); // For debugging purposes
             LOG_INFO("IPC", "Received: %s", full_json_buffer);
             // Process the received JSON message
             state_event_e event = STATE_EVENT_NONE;
