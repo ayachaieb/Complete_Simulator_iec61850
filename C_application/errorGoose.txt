@@ -1,61 +1,766 @@
+sigint_handler(int signalId)
+{
+    running_Goose = 0;
+    StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
+    internal_shutdown_flag = true; // Signal ipc_run_loop to exit
+    printf("Received SIGINT, shutting down...\n");
+    goose_receiver_cleanup(); // Clean up GOOSE receiver resources
+    printf("GOOSE receiver  cleaned up.\n");
+    exit(0); // Exit the program
+}
+
 static void
 gooseListener(GooseSubscriber subscriber, void *parameter)
-{
-    printf("GOOSE event:\n");
-    printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-           GooseSubscriber_getSqNum(subscriber));
-    printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
-
+{ printf("\n--- GOOSE Event Received ---\n");
+    fflush(stdout);
+   //  printf(" Message validity: %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+    LOG_INFO("Goose_Listener", "Message validity: %s",
+             GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+     // Rest of the existing code
+  //  printf("  vlanTag: %s\n", GooseSubscriber_isVlanSet(subscriber) ? "found" : "NOT found");
+    if (GooseSubscriber_isVlanSet(subscriber))
+    {
+      //  printf("    vlanId: %u\n", GooseSubscriber_getVlanId(subscriber));
+       // printf("    vlanPrio: %u\n", GooseSubscriber_getVlanPrio(subscriber));
+    }
+  //  printf("  appId: %d\n", GooseSubscriber_getAppId(subscriber));
+    uint8_t macBuf[6];
+    GooseSubscriber_getSrcMac(subscriber,macBuf);
+   // printf("  srcMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
+    GooseSubscriber_getDstMac(subscriber,macBuf);
+    fflush(stdout);
+//   //  printf("  dstMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
+//     printf("  goId: %s\n", GooseSubscriber_getGoId(subscriber));
+//     printf("  goCbRef: %s\n", GooseSubscriber_getGoCbRef(subscriber));
+//     printf("  dataSet: %s\n", GooseSubscriber_getDataSet(subscriber));
+//     printf("  confRev: %u\n", GooseSubscriber_getConfRev(subscriber));
+//     printf("  ndsCom: %s\n", GooseSubscriber_needsCommission(subscriber) ? "true" : "false");
+//     printf("  simul: %s\n", GooseSubscriber_isTest(subscriber) ? "true" : "false");
+//     printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
+//              GooseSubscriber_getSqNum(subscriber));
+//     printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
+// fflush(stdout);
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
 
-    printf("  timestamp: %u.%u\n", (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
-    printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+    // printf("  timestamp: %llu ms (approx %u.%03u seconds)\n",
+    //        (long long unsigned int)timestamp,
+    //        (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
 
-    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
+    // printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+
+    MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
 
     char buffer[1024];
 
     MmsValue_printToBuffer(values, buffer, 1024);
 
-    printf("  allData: %s\n", buffer);
+    printf("  AllData: %s\n", buffer);
+    printf("--------------------------\n");
+    fflush(stdout);
 }
 
+bool goose_receiver_cleanup(void)
+{
+    // Clean up GOOSE receiver resources
+    running_Goose = false; // Stop the receiver loop
+    for (int i = 0; i < goose_instance_count; ++i) 
+    {
+    GooseReceiver_stop(thread_data[i].receiver);
+    GooseReceiver_destroy(thread_data[i].receiver);
+    thread_data[i].receiver = NULL;
+    thread_data[i].subscriber = NULL;
+    }
 
+    if (threads != NULL) {
+        for (int i = 0; i < goose_instance_count; ++i) {
+            if (threads[i] != 0) {
+                pthread_join(threads[i], NULL); // Wait for all threads to finish
+            }
+        }
+        free(threads);
+        threads = NULL;
+    }
+    for (int j = 0; j <= goose_instance_count; ++j)
+    { // Free up to the current failed instance
+
+        if (thread_data[j].interface)
+            free(thread_data[j].interface);
+        if (thread_data[j].GoCBRef)
+            free(thread_data[j].GoCBRef);
+        if (thread_data[j].DatSet)
+            free(thread_data[j].DatSet);
+        if (thread_data[j].MACAddress)
+            free(thread_data[j].MACAddress);
+    }
+    if (thread_data)
+    {
+        free(thread_data);
+        thread_data = NULL; // Set to NULL to avoid dangling pointer
+    }
+
+    printf("GOOSE receiver and subscriber cleaned up.\n");
+    return SUCCESS;
+}
 
 void *goose_thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
+    LOG_INFO("Goose_Listener", "Thread started for appid 0x%d on interface %s", data->AppID, data->interface);
+LOG_INFO("Goose_Listener", "Thread started for appid 0x%d on interface %s", data->AppID, data->interface);
+    LOG_INFO("Goose_Listener", "GoCBRef: %s, DatSet: %s, dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
+             data->GoCBRef, data->DatSet,
+             data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
+             data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+    if (data->receiver == NULL) {
+        data->receiver = GooseReceiver_create();
+        if (data->receiver == NULL) {
+            LOG_ERROR("Goose_Listener", "Failed to create GooseReceiver for appid 0x%d", data->AppID);
+            return NULL;
+        }
+    }
 
-    printf("Thread started for appid 0x%04x on interface %s\n", data->AppID, data->interface);
-    printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           data->interface, data->AppID,
-           data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
-           data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+    // Explicitly set the interface
+    GooseReceiver_setInterfaceId(data->receiver, data->interface);
+    LOG_INFO("Goose_Listener", "Set interface %s for appid 0x%d", data->interface, data->AppID);
+   data->subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", 
+                                         "simpleIOGenericIO/LLN0$AnalogValues");
+GooseSubscriber_setAppId(data->subscriber, 1000);
+uint8_t mac[] = {0x01, 0x0c, 0xcd, 0x01, 0x00, 0x01};
+GooseSubscriber_setDstMac(data->subscriber, mac);
+   
+  //  data->subscriber = GooseSubscriber_create("IED1/LLN0$GO$gcbGoose1", "IED1/LLN0$DS$GooseDataSet1");
+   // data->subscriber = GooseSubscriber_create(data->GoCBRef, data->DatSet);
+    if (data->subscriber == NULL) {
+        LOG_ERROR("Goose_Listener", "Failed to create GooseSubscriber for appid 0x%d", data->AppID);
+        GooseReceiver_destroy(data->receiver);
+        data->receiver = NULL;
+        return NULL;
+    }
 
+    //GooseSubscriber_setAppId(data->subscriber, data->AppID);
+   
+
+   // GooseSubscriber_setDstMac(data->subscriber, data->MACAddress);
     GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
     GooseReceiver_addSubscriber(data->receiver, data->subscriber);
+
     GooseReceiver_start(data->receiver);
-
-    if (GooseReceiver_isRunning(data->receiver)== false)
-    {
-        signal(SIGINT, sigint_handler);
-
-        while (running_Goose)
-        {
-            Thread_sleep(100);
-        }
-        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%04x is shutting down.", data->AppID);
-    }
-    else
-    {
-        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
-        printf("Please check the interface %s .\n", data->interface);
+    if (!GooseReceiver_isRunning(data->receiver)) {
+        LOG_ERROR("Goose_Listener", "Failed to start GooseReceiver for appid 0x%d on interface %s", 
+                  data->AppID, data->interface);
+        printf("Failed to start GOOSE subscriber on interface %s for appid 0x%d.\n", 
+               data->interface, data->AppID);
+        GooseReceiver_destroy(data->receiver);
+        data->receiver = NULL;
+        data->subscriber = NULL;
+        return NULL;
     }
 
-    GooseReceiver_stop(data->receiver);
-    GooseReceiver_destroy(data->receiver);
+    while ((running_Goose) && (!internal_shutdown_flag)){
+        Thread_sleep(100);
+    }
 
-    LOG_INFO("Goose_Listener", "Thread for appid %p gracefully shutting down.", data->AppID);
+    LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%d shutting down.", data->AppID);
+    // GooseReceiver_stop(data->receiver);
+    // GooseReceiver_destroy(data->receiver);
+    // data->receiver = NULL;
+    // data->subscriber = NULL;
 
     return NULL;
 }
+
+int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
+{
+    LOG_INFO("Goose_Listener", "Starting Goose_Listener");
+    int retval = SUCCESS;
+    if (config == NULL || number_of_subscribers <= 0)
+    {
+        LOG_ERROR("Goose_Listener", "Invalid input: instances array is NULL or number_publishers is non-positive.");
+        return FAIL;
+    }
+
+    // Clean up any previous allocations if init is called multiple times without cleanup
+    if (threads != NULL || thread_data != NULL)
+    {
+        LOG_INFO("Goose_Listener", "Previous SV Publisher instances found. Cleaning up before re-initialization.");
+
+        if (threads)
+        {
+            free(threads);
+            threads = NULL;
+        }
+        if (thread_data)
+        {
+            // Need to free internal strings within thread_data if they were strdup'd
+            for (int i = 0; i < number_of_subscribers; ++i)
+            {
+
+                if (thread_data[i].interface)
+                    free(thread_data[i].interface);
+                if (thread_data[i].goose_id)
+                    free(thread_data[i].goose_id);
+                if (thread_data[i].GoCBRef)
+                    free(thread_data[i].GoCBRef);
+                if (thread_data[i].DatSet)
+                    free(thread_data[i].DatSet);
+                if (thread_data[i].MACAddress)
+                    free(thread_data[i].MACAddress);
+            }
+            free(thread_data);
+            thread_data = NULL;
+        }
+        goose_instance_count = 0;
+    }
+
+    goose_instance_count = number_of_subscribers;
+
+    threads = (pthread_t *)malloc(goose_instance_count * sizeof(pthread_t));
+    if (!threads)
+    {
+        LOG_ERROR("Goose_Listener", "Memory allocation failed for threads!");
+        return FAIL;
+    }
+    memset(threads, 0, goose_instance_count * sizeof(pthread_t)); // Initialize to 0
+
+    thread_data = (ThreadData *)malloc(goose_instance_count * sizeof(ThreadData));
+    if (!thread_data)
+    {
+        LOG_ERROR("Goose_Listener", "Memory allocation failed for thread_data!");
+        free(threads); // Clean up threads array
+        threads = NULL;
+        return FAIL;
+    }
+    memset(thread_data, 0, goose_instance_count * sizeof(ThreadData)); // Initialize to 0
+    int i = 0;
+    // LOG_INFO("Goose_Listener", "Initializing %d SV Publisher instances", goose_instance_count);
+    for (i = 0; i < goose_instance_count; i++)
+    {
+        // Initialize thread_data[i] to ensure all pointers are NULL before strdup
+        memset(&thread_data[i], 0, sizeof(ThreadData));
+        thread_data[i].receiver = NULL;   // or create if necessary
+        thread_data[i].subscriber = NULL; // or create if necessary
+        if (config[i].appId)
+        {
+            char *endptr;
+            unsigned long val = strtoul(config[i].appId, &endptr, 10); // Base 10 for numeric appId
+            if (*endptr != '\0' || val > UINT32_MAX)
+            {
+                LOG_ERROR("Goose_Listener", "Invalid appId format or value for instance %d: %s", i, config[i].appId);
+                goto cleanup_init_failure;
+            }
+
+            // If you need to convert appId to an integer, do it here:
+            //  thread_data[i].GOOSEappId = 0x5000 + atoi(instances[i].appId);
+            // For now, GOOSEappId is also a string from JSON, so we'll assume it's handled elsewhere or convert it.
+            // Let's assume GOOSEappId is derived from appId string, so it should be uint32_t
+            thread_data[i].AppID = (uint32_t)val;                                   // Store the numeric value directly
+            thread_data[i].goose_id = (uint32_t)strtoul(config[i].appId, NULL, 10); // Convert string appId to uint32_t
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "appId is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+
+        if (config[i].Interface)
+        {
+            thread_data[i].interface = strdup(config[i].Interface); // Example: fixed string
+
+            if (!thread_data[i].interface)
+            {
+                LOG_ERROR("Goose_Listener", "Memory allocation failed for interface for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "interface is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        printf("gooose interface: %s\n", thread_data[i].interface);
+
+        if (config[i].GoCBRef)
+        {
+            thread_data[i].GoCBRef = strdup(config[i].GoCBRef); // Example: fixed string
+
+            if (!thread_data[i].GoCBRef)
+            {
+                LOG_ERROR("Goose_Listener", "Memory allocation failed for goCbRef for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "GoCBRef is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        printf("GoCBRef: %s\n", thread_data[i].GoCBRef);
+
+        if (config[i].DatSet)
+        {
+            thread_data[i].DatSet = strdup(config[i].DatSet);
+            if (!thread_data[i].DatSet)
+            {
+                LOG_ERROR("Goose_Listener", "Memory allocation failed for DatSet for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "DatSet is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        LOG_INFO("Goose_Listener", "DatSet: %s", thread_data[i].DatSet);
+
+        // Parse and copy MAC address
+        // Parse and copy MAC address
+        thread_data[i].MACAddress = (uint8_t *)malloc(6 * sizeof(uint8_t));
+        if (NULL != thread_data[i].MACAddress)
+        {
+            if (!parse_mac_address(config[i].MACAddress, thread_data[i].MACAddress))
+            {
+                LOG_ERROR("Goose_Listener", "Failed to parse MAC address for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("Goose_Listener", "dstMac is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
+        LOG_INFO("Goose_Listener", "dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
+                 thread_data[i].MACAddress[0], thread_data[i].MACAddress[1],
+                 thread_data[i].MACAddress[2], thread_data[i].MACAddress[3],
+                 thread_data[i].MACAddress[4], thread_data[i].MACAddress[5]);
+
+        LOG_INFO("Goose_Listener", "All thread_data initialized successfully");
+
+        //  thread_data[i].subscriber = GooseSubscriber_create("", NULL);
+        // thread_data[i].subscriber = GooseSubscriber_create(thread_data[i].GoCBRef, NULL);
+        // GooseSubscriber_setDstMac(thread_data[i].subscriber, thread_data[i].MACAddress);
+
+        //  GooseSubscriber_setAppId(thread_data[i].subscriber, thread_data[i].AppID);
+        // for Goose_receiver_start
+        //  GooseSubscriber_setListener(subscriber, gooseListener, NULL);
+        //  GooseReceiver_addSubscriber(receiver, subscriber);
+    }
+    return SUCCESS;
+
+cleanup_init_failure:
+    LOG_INFO("Goose_Listener", "cleanup happening");
+    // Free all memory allocated so far for thread_data and threads
+    for (int j = 0; j <= i; ++j)
+    { // Free up to the current failed instance
+
+        if (thread_data[j].interface)
+            free(thread_data[j].interface);
+        if (thread_data[j].GoCBRef)
+            free(thread_data[j].GoCBRef);
+        if (thread_data[j].DatSet)
+            free(thread_data[j].DatSet);
+        if (thread_data[j].MACAddress)
+            free(thread_data[j].MACAddress);
+    }
+    if (thread_data)
+    {
+        free(thread_data);
+        thread_data = NULL; // Set to NULL to avoid dangling pointer
+    }
+    if (threads)
+    {
+        free(threads);
+        threads = NULL;
+    }
+    goose_instance_count = 0;
+    return FAIL;
+}
+
+int Goose_receiver_start()
+{
+    if (threads == NULL || thread_data == NULL || goose_instance_count <= 0)
+    {
+        LOG_ERROR("Goose_Listener", "SV Publisher not initialized. Call SVPublisher_init first.");
+        return FAIL;
+    }
+    signal(SIGINT, sigint_handler);
+    bool all_threads_created = SUCCESS;
+    for (int i = 0; i < goose_instance_count; i++)
+    {
+        if (pthread_create(&threads[i], NULL, goose_thread_task, &thread_data[i]) != 0)
+        {
+            LOG_ERROR("Goose_Listener", "Failed to create thread for instance %d: %s", i, strerror(errno));
+            all_threads_created = FAIL;
+        }
+        else
+        {
+            printf("Created a goooooose   thread for instance %d\n", i);
+            LOG_INFO("Goose_Listener", "Created thread for instance %d", i);
+        }
+    }
+    // printf("All threads created successfully: %d\n", all_threads_created);
+    LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
+
+    return all_threads_created;
+  
+}
+
+from State_Machine::
+
+static bool state_running_enter(void *data, state_e from, state_event_e event, const char *requestId, cJSON *data_obj)
+{
+    // SV_SimulationConfig config;  // Use stack allocation instead of pointer
+    bool retval = SUCCESS;
+
+    LOG_INFO("State_Machine", "Entered RUNNING state from %s due to %s",
+             state_to_string(from), state_event_to_string(event));
+
+    // Start publisher
+    if (FAIL == SVPublisher_start())
+    {
+        LOG_ERROR("State_Machine", "Failed to start SV Publisher");
+        printf("State_Machine Failed to start SV Publisher");
+        SVPublisher_stop(); // Attempt to clean up even on start failure
+        retval = FAIL;
+    }
+    else
+    {
+        LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
+        //Goose_receiver_start();
+
+         if (FAIL == Goose_receiver_start())
+    {
+        LOG_ERROR("State_Machine", "Failed to start GOOSE receiver");
+        printf("State_Machine Failed to start GOOSE receiver");
+        goose_receiver_cleanup(); // Attempt to clean up even on start failure
+        retval = FAIL;
+    }
+    else {
+        LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+    }
+        cJSON *json_response = cJSON_CreateObject();
+        if (!json_response)
+        {
+            LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler state_running_enter.");
+            retval = FAIL;
+        }
+        const char *status_msg = "state running currently executing ...";
+        cJSON_AddStringToObject(json_response, "status", status_msg);
+        if (requestId)
+        {
+            cJSON_AddStringToObject(json_response, "requestId", requestId);
+        }
+
+        char *response_str = cJSON_PrintUnformatted(json_response);
+        if (response_str)
+        {
+            if (ipc_send_response(response_str) == FAIL)
+            {
+                LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
+            }
+            else
+            {
+                LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
+            }
+            free(response_str); // Free the string allocated by cJSON_PrintUnformatted
+        }
+        else
+        {
+            LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
+        }
+        cJSON_Delete(json_response); // Free the cJSON object
+    }
+
+return retval;
+}
+static bool state_stop_init(void *data)
+{
+    return true;
+}
+
+static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
+{
+    LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n",
+           state_to_string(from), state_event_to_string(event));
+    fflush(stdout);
+    // Stop the SV Publisher module here
+    SVPublisher_stop();
+
+ goose_receiver_cleanup(); // Clean up Goose receiver resources
+
+    printf("state_stop_enter ::State_Machine goose receiver stopped\n");
+    fflush(stdout);
+    LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
+
+    cJSON *json_response = cJSON_CreateObject();
+    if (!json_response)
+    {
+        LOG_ERROR("State_Machine", "Failed to create JSON response object for event handler.");
+        return FAIL;
+    }
+    const char *status_msg = "state STOP currently executing ...";
+    cJSON_AddStringToObject(json_response, "status", status_msg);
+    if (requestId)
+    {
+        cJSON_AddStringToObject(json_response, "requestId", requestId);
+    }
+
+    char *response_str = cJSON_PrintUnformatted(json_response);
+    if (response_str)
+    {
+        if (ipc_send_response(response_str) == FAIL)
+        {
+            LOG_ERROR("State_Machine", "Failed to send response: %s", response_str);
+        }
+        else
+        {
+            LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
+        }
+        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
+    }
+    else
+    {
+        LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
+    }
+
+    cJSON_Delete(json_response); // Free the cJSON object
+}
+
+the problem  when i click stop simulation it does not send the json response to backend it slike the process is blocked  in goose cleanup or start  and no control c will exit the program
+output::
+StateMachine::StateMachine_push_event ::Pushing event: init_success, requestId: 1751293036354
+state_machine_run ::State changed from IDLE to INIT due to event start_simulation
+state_machine_thread_internal:: State_Machine popped event: init_success, requestId: 1751293036354
+phase_count = 3
+Timer started for appid 4096 with signal 40
+phase_count = 3
+phase_count = 3
+Timer started for appid 8192 with signal 36
+Timer started for appid 12288 with signal 42
+phase_count = 3
+Timer started for appid 16384 with signal 38
+phase_count = 3
+Timer started for appid 24576 with signal 40
+phase_count = 3
+Timer started for appid 28672 with signal 36
+phase_count = 3
+Timer started for appid 32768 with signal 42
+phase_count = 3
+Timer started for appid 20480 with signal 34
+phase_count = 3
+Timer started for appid 36864 with signal 38
+phase_count = 3
+Timer started for appid 37120 with signal 34
+Created a goooooose   thread for instance 0
+Created a goooooose   thread for instance 1
+Created a goooooose   thread for instance 2
+Created a goooooose   thread for instance 3
+Created a goooooose   thread for instance 4
+Created a goooooose   thread for instance 5
+Created a goooooose   thread for instance 6
+Created a goooooose   thread for instance 7
+Created a goooooose   thread for instance 8
+Created a goooooose   thread for instance 9
+state_machine_run ::State changed from INIT to RUNNING due to event init_success
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+
+--- GOOSE Event Received ---
+  AllData: unknown type
+--------------------------
+ipc :: Received: {"type":"stop_simulation","data":{"requestId":"1751293046219"}}
+StateMachine::StateMachine_push_event ::Pushing event: stop_simulation, requestId: 1751293046219
+state_machine_thread_internal:: State_Machine popped event: stop_simulation, requestId: 1751293046219
+state_stop_enter ::State_Machine Entered STOP state from RUNNING due to stop_simulation
+ when i, comment  thisn   
+ if (FAIL == Goose_receiver_start())
+    // {
+    //     LOG_ERROR("State_Machine", "Failed to start GOOSE receiver");
+    //     printf("State_Machine Failed to start GOOSE receiver");
+    //     goose_receiver_cleanup(); // Attempt to clean up even on start failure
+    //     retval = FAIL;
+    // }
+    // else {
+    //     LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+    // }
+    and  this ::
+     //goose_receiver_cleanup(); // Clean up Goose receiver resources
+ io bteain this out put and control+c works::
+
+
+S
+phase_count = 3
+Timer started for appid 36864 with signal 38
+state_machine_run ::State changed from INIT to RUNNING due to event init_success
+phase_count = 3
+Timer started for appid 32768 with signal 42
+phase_count = 3
+Timer started for appid 37120 with signal 34
+ipc :: Received: {"type":"stop_simulation","data":{"requestId":"1751293514504"}}
+StateMachine::StateMachine_push_event ::Pushing event: stop_simulation, requestId: 1751293514504
+state_machine_thread_internal:: State_Machine popped event: stop_simulation, requestId: 1751293514504
+state_stop_enter ::State_Machine Entered STOP state from RUNNING due to stop_simulation
+SV_Publisher  Joined thread for instance 0.
+SV_Publisher  Joined thread for instance 1.
+SV_Publisher  Joined thread for instance 2.
+SV_Publisher  Joined thread for instance 3.
+SV_Publisher  Joined thread for instance 4.
+SV_Publisher  Joined thread for instance 5.
+SV_Publisher  Joined thread for instance 6.
+SV_Publisher  Joined thread for instance 7.
+SV_Publisher  Joined thread for instance 8.
+SV_Publisher  Joined thread for instance 9.
+SV_Publisher resources cleaned up.state_stop_enter ::State_Machine goose receiver stopped
+state_machine_run ::State changed from RUNNING to STOP due to event stop_simulation
+^CSV_Publisher resources cleaned up.state_machine_thread_internal:: State_Machine popped event: shutdown, requestId: N/A
+[2025-06-30 15:25:08.711] [INFO] [ModuleManager] Initializing modules... (../SRC/Module_Manager.c:10)
+[2025-06-30 15:25:08.711] [INFO] [State_Machine] Created state machine thread in module (../SRC/State_Machine.c:584)
+[2025-06-30 15:25:08.711] [INFO] [IPC] Connected to Node.js IPC server (or connection in progress) (../SRC/ipc.c:76)
+[2025-06-30 15:25:08.711] [INFO] [ModuleManager] All modules initialized successfully (../SRC/Module_Manager.c:27)
+[2025-06-30 15:25:08.711] [INFO] [Main] All modules initialized. Press Ctrl+C to shut down. (../SRC/main.c:45)
+[2025-06-30 15:25:08.711] [INFO] [ModuleManager] Starting main application loop (../SRC/Module_Manager.c:40)
+[2025-06-30 15:25:08.712] [INFO] [State_Machine] Entered IDLE state from IDLE due to NONE (../SRC/State_Machine.c:200)
+[2025-06-30 15:25:12.768] [INFO] [IPC] Full JSON message written to received_json.txt (../SRC/ipc.c:321)
+[2025-06-30 15:25:12.768] [INFO] [IPC] Received: {"type":"start_simulation","data":{"config":[{"appId":"4096","dstMac":"01:0c:cd:02:00:00","svInterface":"lo","scenarioConfigFile":"scenario_DPA.txt","svIDs":"svid1","GoCBRef":"IED1/LLN0$GO$gcbGoose1","DatSet":"IED1/LLN0$DS$GooseDataSet1","GoID":"GooseID_Instance1","MACAddress":"01:0C:CD:01:00:01","AppID":"1000","Interface":"enp0s31f6"},{"appId":"8192","dstMac":"01:0c:cd:02:10:08","svInterface":"lo","scenarioConfigFile":"scenario_DPA.txt","svIDs":"svid22","GoCBRef":"IED2/LLN0$GO$gcbGoose2","DatSet (../SRC/ipc.c:328)
+[2025-06-30 15:25:12.768] [INFO] [IPC] Event: start_simulation (../SRC/ipc.c:347)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Pushing event: start_simulation, requestId: 1751293512767 (../SRC/State_Machine.c:609)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Entered INITIATION state from IDLE due to start_simulation (../SRC/State_Machine.c:213)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Received 10 configuration instances. (../SRC/State_Machine.c:222)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 0: appId=4096, dstMac=01:0c:cd:02:00:00, svInterface=lo, scenarioConfigFile=scenario_DPA.txt, svIDs=svid1 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 1: appId=8192, dstMac=01:0c:cd:02:10:08, svInterface=lo, scenarioConfigFile=scenario_DPA.txt, svIDs=svid22 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 2: appId=12288, dstMac=01:0c:cd:02:ff:ff, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid333 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 3: appId=16384, dstMac=01:0c:cd:02:01:01, svInterface=lo, scenarioConfigFile=scenario_DPA.txt, svIDs=svid4444 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 4: appId=20480, dstMac=01:0c:cd:02:ab:cd, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid55555 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 5: appId=24576, dstMac=01:0c:cd:02:ab:cd, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid666666 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 6: appId=28672, dstMac=01:0c:cd:02:ab:cd, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid7777777 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 7: appId=32768, dstMac=01:0c:cd:02:ab:cd, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid888888888 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 8: appId=36864, dstMac=01:0c:cd:02:ab:cd, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid999999999 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [State_Machine] Successfully parsed instance 9: appId=37120, dstMac=01:0c:cd:02:ab:cd, svInterface=lo, scenarioConfigFile=scenario.txt, svIDs=svid0000000000 (../SRC/State_Machine.c:246)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] Starting VDPA SV Publisher (../SRC/SV_Publisher.c:639)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] UID: 0 (../SRC/SV_Publisher.c:640)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario_DPA.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid1 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:00:00 (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario_DPA.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid22 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:10:08 (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid333 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ff:ff (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario_DPA.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid4444 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:01:01 (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid55555 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ab:cd (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid666666 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ab:cd (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid7777777 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ab:cd (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid888888888 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ab:cd (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.768] [INFO] [SV_Publisher] svIDs: svid999999999 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ab:cd (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] scenarioConfigFile: scenario.txt (../SRC/SV_Publisher.c:767)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] svIDs: svid0000000000 (../SRC/SV_Publisher.c:782)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] dstMac: 01:0c:cd:02:ab:cd (../SRC/SV_Publisher.c:797)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] outtaa (../SRC/SV_Publisher.c:802)
+[2025-06-30 15:25:12.769] [INFO] [State_Machine] SV Publisher initialized successfully  (../SRC/State_Machine.c:276)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] Starting Goose_Listener (../SRC/Goose_Listener.c:196)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED1/LLN0$DS$GooseDataSet1 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:01 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED2/LLN0$DS$GooseDataSet2 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:02 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED3/LLN0$DS$GooseDataSet3 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:03 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED4/LLN0$DS$GooseDataSet4 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:04 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED5/LLN0$DS$GooseDataSet5 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:05 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED6/LLN0$DS$GooseDataSet6 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:06 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED7/LLN0$DS$GooseDataSet7 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:07 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED8/LLN0$DS$GooseDataSet8 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:08 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED9/LLN0$DS$GooseDataSet9 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:09 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] DatSet: IED10/LLN0$DS$GooseDataSet10 (../SRC/Goose_Listener.c:335)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] dstMac: 01:0c:cd:01:00:10 (../SRC/Goose_Listener.c:353)
+[2025-06-30 15:25:12.769] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:358)
+[2025-06-30 15:25:12.769] [INFO] [State_Machine] Goose receiver initialized successfully (../SRC/State_Machine.c:282)
+[2025-06-30 15:25:12.769] [INFO] [State_Machine] Pushing event: init_success, requestId: 1751293512767 (../SRC/State_Machine.c:609)
+[2025-06-30 15:25:12.769] [INFO] [State_Machine] Init success event pushed to state machine (../SRC/State_Machine.c:304)
+[2025-06-30 15:25:12.769] [INFO] [State_Machine] Response sent successfully: {"status":"state init currently executing ...","requestId":"1751293512767"} (../SRC/State_Machine.c:327)
+[2025-06-30 15:25:12.769] [INFO] [State_Machine] Entered RUNNING state from INIT due to init_success (../SRC/State_Machine.c:385)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] Created thread for instance 0 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.769] [INFO] [SV_Publisher] Created thread for instance 1 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.770] [INFO] [SV_Publisher] Created thread for instance 2 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.770] [INFO] [SV_Publisher] Created thread for instance 3 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.770] [INFO] [SV_Publisher] Created thread for instance 4 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.770] [INFO] [SV_Publisher] Created thread for instance 5 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.770] [INFO] [SV_Publisher] Created thread for instance 6 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.771] [INFO] [SV_Publisher] Created thread for instance 7 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.974] [INFO] [SV_Publisher] Created thread for instance 8 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.975] [INFO] [SV_Publisher] Created thread for instance 9 (../SRC/SV_Publisher.c:853)
+[2025-06-30 15:25:12.975] [INFO] [SV_Publisher] SV Publisher threads started. (../SRC/SV_Publisher.c:857)
+[2025-06-30 15:25:12.975] [INFO] [State_Machine] SV Publisher started successfully in RUNNING state (../SRC/State_Machine.c:398)
+[2025-06-30 15:25:12.975] [INFO] [State_Machine] Response sent successfully: {"status":"state running currently executing ...","requestId":"1751293512767"} (../SRC/State_Machine.c:433)
+[2025-06-30 15:25:14.505] [INFO] [IPC] Full JSON message written to received_json.txt (../SRC/ipc.c:321)
+[2025-06-30 15:25:14.506] [INFO] [IPC] Received: {"type":"stop_simulation","data":{"requestId":"1751293514504"}} (../SRC/ipc.c:328)
+[2025-06-30 15:25:14.506] [INFO] [IPC] Event: stop_simulation (../SRC/ipc.c:357)
+[2025-06-30 15:25:14.507] [INFO] [State_Machine] Pushing event: stop_simulation, requestId: 1751293514504 (../SRC/State_Machine.c:609)
+[2025-06-30 15:25:14.507] [INFO] [State_Machine] state_stop_enter Entered STOP state from RUNNING due to stop_simulation (../SRC/State_Machine.c:453)
+[2025-06-30 15:25:14.507] [INFO] [SV_Publisher] Signaling SV Publisher threads to shut down... (../SRC/SV_Publisher.c:864)
+[2025-06-30 15:25:14.507] [INFO] [SV_Publisher] Joining thread for instance 0... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.507] [INFO] [SV_Publisher] Thread for appid 0x4000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.507] [INFO] [SV_Publisher] Thread for appid 0x5000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.511] [INFO] [SV_Publisher] Thread for appid 0x6000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.513] [INFO] [SV_Publisher] Thread for appid 0x7000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.514] [INFO] [SV_Publisher] Thread for appid 0x9000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.515] [INFO] [SV_Publisher] Thread for appid 0x3000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.515] [INFO] [SV_Publisher] Thread for appid 0x8000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.516] [INFO] [SV_Publisher] Thread for appid 0x2000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.516] [INFO] [SV_Publisher] Thread for appid 0x9100 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.517] [INFO] [SV_Publisher] Thread for appid 0x1000 gracefully shutting down. (../SRC/SV_Publisher.c:583)
+[2025-06-30 15:25:14.526] [INFO] [SV_Publisher] Joining thread for instance 1... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.526] [INFO] [SV_Publisher] Joining thread for instance 2... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.527] [INFO] [SV_Publisher] Joining thread for instance 3... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.527] [INFO] [SV_Publisher] Joining thread for instance 4... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.527] [INFO] [SV_Publisher] Joining thread for instance 5... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.527] [INFO] [SV_Publisher] Joining thread for instance 6... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.527] [INFO] [SV_Publisher] Joining thread for instance 7... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.528] [INFO] [SV_Publisher] Joining thread for instance 8... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.528] [INFO] [SV_Publisher] Joining thread for instance 9... (../SRC/SV_Publisher.c:875)
+[2025-06-30 15:25:14.530] [INFO] [State_Machine] SV Publisher stopped in STOP state. (../SRC/State_Machine.c:464)
+[2025-06-30 15:25:14.530] [INFO] [State_Machine] Response sent successfully: {"status":"state STOP currently executing ...","requestId":"1751293514504"} (../SRC/State_Machine.c:488)
+[2025-06-30 15:25:18.384] [INFO] [SV_Publisher] Received Ctrl+C, shutting down... (../SRC/SV_Publisher.c:152)
+[2025-06-30 15:25:18.384] [INFO] [SV_Publisher] Signaling SV Publisher threads to shut down... (../SRC/SV_Publisher.c:864)
+[2025-06-30 15:25:18.384] [INFO] [State_Machine]  Pushing event without data: shutdown, requestId: N/A (../SRC/State_Machine.c:617)
+[2025-06-30 15:25:18.384] [INFO] [Main] Initiating application shutdown... (../SRC/main.c:51)
+[2025-06-30 15:25:18.384] [ERROR] [Main] Error Code -1: Application terminated with an error. (../SRC/main.c:59)
+[2025-06-30 15:25:18.384] [INFO] [ModuleManager] Shutting down all modules... (../SRC/Module_Manager.c:47)
+[2025-06-30 15:25:18.384] [INFO] [IPC] Shutting down... (../SRC/ipc.c:397)
+[2025-06-30 15:25:18.384] [INFO] [State_Machine] Shutting down StateMachine module... (../SRC/State_Machine.c:626)
+[2025-06-30 15:25:18.385] [INFO] [State_Machine] StateMachine module shutdown complete. (../SRC/State_Machine.c:632)
+[2025-06-30 15:25:18.385] [INFO] [ModuleManager] All modules shut down successfully (../SRC/Module_Manager.c:61)
+[2025-06-30 15:25:18.385] [INFO] [Main] Application shutdown complete. Goodbye! (../SRC/main.c:74)
