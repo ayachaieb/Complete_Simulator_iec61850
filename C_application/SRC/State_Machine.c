@@ -450,18 +450,24 @@ static bool state_stop_init(void *data)
 
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
-    LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
     printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n",
            state_to_string(from), state_event_to_string(event));
     fflush(stdout);
-    // Stop the SV Publisher module here
-    SVPublisher_stop();
 
- goose_receiver_cleanup(); // Clean up Goose receiver resources
+    LOG_INFO("State_Machine", "Stopping SV Publisher...");
+    SVPublisher_stop() ;
+    
+    LOG_INFO("State_Machine", "SV Publisher stopped successfully");
 
+    LOG_INFO("State_Machine", "Stopping GOOSE receiver...");
+    if (goose_receiver_cleanup() == FAIL)
+    {
+        LOG_ERROR("State_Machine", "Failed to clean up GOOSE receiver");
+        return FAIL;
+    }
     printf("state_stop_enter ::State_Machine goose receiver stopped\n");
     fflush(stdout);
-    LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
 
     cJSON *json_response = cJSON_CreateObject();
     if (!json_response)
@@ -487,14 +493,15 @@ static bool state_stop_enter(void *data, state_e from, state_event_e event, cons
         {
             LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
         }
-        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
+        free(response_str);
     }
     else
     {
         LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
     }
 
-    cJSON_Delete(json_response); // Free the cJSON object
+    cJSON_Delete(json_response);
+    return SUCCESS;
 }
 
 static void *state_machine_thread_internal(void *arg)

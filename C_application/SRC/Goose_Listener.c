@@ -31,112 +31,142 @@ sigint_handler(int signalId)
     printf("GOOSE receiver  cleaned up.\n");
     exit(0); // Exit the program
 }
-
-static void
-gooseListener(GooseSubscriber subscriber, void *parameter)
+static void gooseListener(GooseSubscriber subscriber, void *parameter)
 {
     printf("\n--- GOOSE Event Received ---\n");
     fflush(stdout);
-    //  printf(" Message validity: %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
     LOG_INFO("Goose_Listener", "Message validity: %s",
              GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
-    // Rest of the existing code
-    //  printf("  vlanTag: %s\n", GooseSubscriber_isVlanSet(subscriber) ? "found" : "NOT found");
-    if (GooseSubscriber_isVlanSet(subscriber))
+
+    if (!GooseSubscriber_isValid(subscriber))
     {
-        //  printf("    vlanId: %u\n", GooseSubscriber_getVlanId(subscriber));
-        // printf("    vlanPrio: %u\n", GooseSubscriber_getVlanPrio(subscriber));
+        LOG_ERROR("Goose_Listener", "Received invalid GOOSE message");
+        return;
     }
-    //  printf("  appId: %d\n", GooseSubscriber_getAppId(subscriber));
-    uint8_t macBuf[6];
-    GooseSubscriber_getSrcMac(subscriber, macBuf);
-    // printf("  srcMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
-    GooseSubscriber_getDstMac(subscriber, macBuf);
-    fflush(stdout);
-    //   //  printf("  dstMac: %02X:%02X:%02X:%02X:%02X:%02X\n", macBuf[0],macBuf[1],macBuf[2],macBuf[3],macBuf[4],macBuf[5]);
-    //     printf("  goId: %s\n", GooseSubscriber_getGoId(subscriber));
-    //     printf("  goCbRef: %s\n", GooseSubscriber_getGoCbRef(subscriber));
-    //     printf("  dataSet: %s\n", GooseSubscriber_getDataSet(subscriber));
-    //     printf("  confRev: %u\n", GooseSubscriber_getConfRev(subscriber));
-    //     printf("  ndsCom: %s\n", GooseSubscriber_needsCommission(subscriber) ? "true" : "false");
-    //     printf("  simul: %s\n", GooseSubscriber_isTest(subscriber) ? "true" : "false");
-    //     printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-    //              GooseSubscriber_getSqNum(subscriber));
-    //     printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
-    // fflush(stdout);
+
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
-
-    // printf("  timestamp: %llu ms (approx %u.%03u seconds)\n",
-    //        (long long unsigned int)timestamp,
-    //        (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
-
-    // printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+    LOG_INFO("Goose_Listener", "Timestamp: %llu ms", (long long unsigned int)timestamp);
 
     MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
+    if (values == NULL)
+    {
+        LOG_ERROR("Goose_Listener", "Failed to get DataSet values");
+        printf("  AllData: NULL\n");
+        printf("--------------------------\n");
+        fflush(stdout);
+        return;
+    }
 
     char buffer[1024];
-
-    MmsValue_printToBuffer(values, buffer, 1024);
-
-    printf("  AllData: %s\n", buffer);
+    if (MmsValue_printToBuffer(values, buffer, 1024))
+    {
+        printf("  AllData: %s\n", buffer);
+    }
+    else
+    {
+        LOG_ERROR("Goose_Listener", "Failed to print DataSet values (unknown type)");
+        printf("  AllData: unknown type\n");
+    }
     printf("--------------------------\n");
     fflush(stdout);
 }
-
 bool goose_receiver_cleanup(void)
 {
-    // Clean up GOOSE receiver resources
     printf("STOPing GOOSE receiver and subscriber resources...\n");
+    LOG_INFO("Goose_Listener", "Initiating GOOSE receiver cleanup");
     running_Goose = false; // Stop the receiver loop
+    internal_shutdown_flag = true; // Ensure threads check both flags
 
-    sleep(1);
+    // Stop all receivers first
     for (int i = 0; i < goose_instance_count; ++i)
     {
-        GooseReceiver_stop(thread_data[i].receiver);
-        GooseReceiver_destroy(thread_data[i].receiver);
-        thread_data[i].receiver = NULL;
-        thread_data[i].subscriber = NULL;
+        if (thread_data[i].receiver != NULL)
+        {
+            LOG_INFO("Goose_Listener", "Stopping GooseReceiver for instance %d", i);
+            GooseReceiver_stop(thread_data[i].receiver);
+            for (int retries = 0; retries < 5; retries++)
+            {
+                if (!GooseReceiver_isRunning(thread_data[i].receiver))
+                {
+                    LOG_INFO("Goose_Listener", "GooseReceiver for instance %d stopped successfully", i);
+                    break;
+                }
+                LOG_WARN("Goose_Listener", "GooseReceiver for instance %d still running, retry %d", i, retries + 1);
+                Thread_sleep(100);
+            }
+            if (GooseReceiver_isRunning(thread_data[i].receiver))
+            {
+                LOG_ERROR("Goose_Listener", "Failed to stop GooseReceiver for instance %d after retries", i);
+            }
+            GooseReceiver_destroy(thread_data[i].receiver);
+            thread_data[i].receiver = NULL;
+            thread_data[i].subscriber = NULL;
+        }
     }
 
+    // Wait for threads to terminate
     if (threads != NULL)
     {
-       
         for (int i = 0; i < goose_instance_count; ++i)
         {
             if (threads[i] != 0)
             {
+                LOG_INFO("Goose_Listener", "Joining thread %d", i);
                 struct timespec timeout;
                 clock_gettime(CLOCK_REALTIME, &timeout);
-                timeout.tv_sec += 2; // 2-second timeout
+                timeout.tv_sec += 10; // Increase timeout to 10 seconds
                 if (pthread_timedjoin_np(threads[i], NULL, &timeout) != 0)
                 {
-                    printf("Thread %d failed to join, detaching\n", i);
-                    pthread_detach(threads[i]); // Detach if it doesn’t terminate
+                    LOG_ERROR("Goose_Listener", "Thread %d failed to join, detaching", i);
+                    pthread_detach(threads[i]);
                 }
+                else
+                {
+                    LOG_INFO("Goose_Listener", "Thread %d joined successfully", i);
+                }
+                threads[i] = 0; // Mark as joined/detached
             }
         }
+        LOG_INFO("Goose_Listener", "Freeing threads array");
         free(threads);
         threads = NULL;
     }
-    for (int j = 0; j <= goose_instance_count; ++j)
-    { // Free up to the current failed instance
 
+    // Free thread_data resources
+    for (int j = 0; j < goose_instance_count; ++j)
+    {
+        LOG_INFO("Goose_Listener", "Freeing resources for thread_data[%d]", j);
         if (thread_data[j].interface)
+        {
             free(thread_data[j].interface);
+            thread_data[j].interface = NULL;
+        }
         if (thread_data[j].GoCBRef)
+        {
             free(thread_data[j].GoCBRef);
+            thread_data[j].GoCBRef = NULL;
+        }
         if (thread_data[j].DatSet)
+        {
             free(thread_data[j].DatSet);
+            thread_data[j].DatSet = NULL;
+        }
         if (thread_data[j].MACAddress)
+        {
             free(thread_data[j].MACAddress);
+            thread_data[j].MACAddress = NULL;
+        }
     }
+
     if (thread_data)
     {
+        LOG_INFO("Goose_Listener", "Freeing thread_data");
         free(thread_data);
-        thread_data = NULL; // Set to NULL to avoid dangling pointer
+        thread_data = NULL;
     }
 
     printf("GOOSE receiver and subscriber cleaned up.\n");
+    LOG_INFO("Goose_Listener", "GOOSE receiver cleanup completed");
     return SUCCESS;
 }
 
