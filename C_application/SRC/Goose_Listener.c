@@ -27,9 +27,10 @@ sigint_handler(int signalId)
     StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
     internal_shutdown_flag = true; // Signal ipc_run_loop to exit
     printf("Received SIGINT, shutting down...\n");
+    fflush(stdout);
     goose_receiver_cleanup(); // Clean up GOOSE receiver resources
     printf("GOOSE receiver  cleaned up.\n");
-    exit(0); // Exit the program
+    fflush(stdout);
 }
 static void gooseListener(GooseSubscriber subscriber, void *parameter)
 {
@@ -51,8 +52,9 @@ static void gooseListener(GooseSubscriber subscriber, void *parameter)
     if (values == NULL)
     {
         LOG_ERROR("Goose_Listener", "Failed to get DataSet values");
-        printf("  AllData: NULL\n");
-        printf("--------------------------\n");
+        //printf("  AllData: NULL\n");
+        fflush(stdout);
+      //  printf("--------------------------\n");
         fflush(stdout);
         return;
     }
@@ -60,49 +62,24 @@ static void gooseListener(GooseSubscriber subscriber, void *parameter)
     char buffer[1024];
     if (MmsValue_printToBuffer(values, buffer, 1024))
     {
-        printf("  AllData: %s\n", buffer);
+     //   printf("  AllData: %s\n", buffer);
     }
     else
     {
         LOG_ERROR("Goose_Listener", "Failed to print DataSet values (unknown type)");
-        printf("  AllData: unknown type\n");
+      //  printf("  AllData: unknown type\n");
     }
-    printf("--------------------------\n");
+   //printf("--------------------------\n");
     fflush(stdout);
 }
 bool goose_receiver_cleanup(void)
 {
     printf("STOPing GOOSE receiver and subscriber resources...\n");
+    fflush(stdout);
     LOG_INFO("Goose_Listener", "Initiating GOOSE receiver cleanup");
     running_Goose = false; // Stop the receiver loop
     internal_shutdown_flag = true; // Ensure threads check both flags
 
-    // Stop all receivers first
-    for (int i = 0; i < goose_instance_count; ++i)
-    {
-        if (thread_data[i].receiver != NULL)
-        {
-            LOG_INFO("Goose_Listener", "Stopping GooseReceiver for instance %d", i);
-            GooseReceiver_stop(thread_data[i].receiver);
-            for (int retries = 0; retries < 5; retries++)
-            {
-                if (!GooseReceiver_isRunning(thread_data[i].receiver))
-                {
-                    LOG_INFO("Goose_Listener", "GooseReceiver for instance %d stopped successfully", i);
-                    break;
-                }
-                LOG_WARN("Goose_Listener", "GooseReceiver for instance %d still running, retry %d", i, retries + 1);
-                Thread_sleep(100);
-            }
-            if (GooseReceiver_isRunning(thread_data[i].receiver))
-            {
-                LOG_ERROR("Goose_Listener", "Failed to stop GooseReceiver for instance %d after retries", i);
-            }
-            GooseReceiver_destroy(thread_data[i].receiver);
-            thread_data[i].receiver = NULL;
-            thread_data[i].subscriber = NULL;
-        }
-    }
 
     // Wait for threads to terminate
     if (threads != NULL)
@@ -114,7 +91,7 @@ bool goose_receiver_cleanup(void)
                 LOG_INFO("Goose_Listener", "Joining thread %d", i);
                 struct timespec timeout;
                 clock_gettime(CLOCK_REALTIME, &timeout);
-                timeout.tv_sec += 10; // Increase timeout to 10 seconds
+                timeout.tv_sec += 20; // Increase timeout to 10 seconds
                 if (pthread_timedjoin_np(threads[i], NULL, &timeout) != 0)
                 {
                     LOG_ERROR("Goose_Listener", "Thread %d failed to join, detaching", i);
@@ -122,12 +99,40 @@ bool goose_receiver_cleanup(void)
                 }
                 else
                 {
-                    LOG_INFO("Goose_Listener", "Thread %d joined successfully", i);
+                    printf("Goose_Listener Thread %d joined successfully", i);
+                    fflush(stdout);
                 }
                 threads[i] = 0; // Mark as joined/detached
             }
         }
-        LOG_INFO("Goose_Listener", "Freeing threads array");
+                    // Stop all receivers first
+    for (int i = 0; i < goose_instance_count; ++i)
+    {
+        if (thread_data[i].receiver != NULL)
+        {
+       //     printf("Goose_Listener", "Stopping GooseReceiver for instance %d", i);
+            GooseReceiver_stop(thread_data[i].receiver);
+            for (int retries = 0; retries < 5; retries++)
+            {
+                if (!GooseReceiver_isRunning(thread_data[i].receiver))
+                {
+                //    printf("Goose_Listener", "GooseReceiver for instance %d stopped successfully", i);
+                    break;
+                }
+                LOG_WARN("Goose_Listener", "GooseReceiver for instance %d still running, retry %d", i, retries + 1);
+                Thread_sleep(100);
+            }
+            if (GooseReceiver_isRunning(thread_data[i].receiver))
+            {
+             //   printf("Goose_Listener", "Failed to stop GooseReceiver for instance %d after retries", i);
+            }
+            GooseReceiver_destroy(thread_data[i].receiver);
+            thread_data[i].receiver = NULL;
+            thread_data[i].subscriber = NULL;
+        }
+    }
+
+       // printf("Goose_Listener", "Freeing threads array");
         free(threads);
         threads = NULL;
     }
@@ -156,6 +161,7 @@ bool goose_receiver_cleanup(void)
             free(thread_data[j].MACAddress);
             thread_data[j].MACAddress = NULL;
         }
+        
     }
 
     if (thread_data)
@@ -165,7 +171,7 @@ bool goose_receiver_cleanup(void)
         thread_data = NULL;
     }
 
-    printf("GOOSE receiver and subscriber cleaned up.\n");
+    //printf("GOOSE receiver and subscriber cleaned up.\n");
     LOG_INFO("Goose_Listener", "GOOSE receiver cleanup completed");
     return SUCCESS;
 }
@@ -179,6 +185,7 @@ void *goose_thread_task(void *arg)
              data->GoCBRef, data->DatSet,
              data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
              data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+    signal(SIGINT, sigint_handler);
     if (data->receiver == NULL)
     {
         data->receiver = GooseReceiver_create();
@@ -219,8 +226,8 @@ void *goose_thread_task(void *arg)
     {
         LOG_ERROR("Goose_Listener", "Failed to start GooseReceiver for appid 0x%d on interface %s",
                   data->AppID, data->interface);
-        printf("Failed to start GOOSE subscriber on interface %s for appid 0x%d.\n",
-               data->interface, data->AppID);
+        // printf("Failed to start GOOSE subscriber on interface %s for appid 0x%d.\n",
+        //        data->interface, data->AppID);
         GooseReceiver_destroy(data->receiver);
         data->receiver = NULL;
         data->subscriber = NULL;
@@ -231,7 +238,7 @@ void *goose_thread_task(void *arg)
     {
         Thread_sleep(100);
     }
-    printf("GOOSE thread exiting");
+  //  printf("GOOSE thread exiting");
     LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%d shutting down.", data->AppID);
     // GooseReceiver_stop(data->receiver);
     // GooseReceiver_destroy(data->receiver);
@@ -269,8 +276,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
 
                 if (thread_data[i].interface)
                     free(thread_data[i].interface);
-                if (thread_data[i].goose_id)
-                    free(thread_data[i].goose_id);
+        
                 if (thread_data[i].GoCBRef)
                     free(thread_data[i].GoCBRef);
                 if (thread_data[i].DatSet)
@@ -349,7 +355,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             LOG_ERROR("Goose_Listener", "interface is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        printf("gooose interface: %s\n", thread_data[i].interface);
+     //   printf("gooose interface: %s\n", thread_data[i].interface);
 
         if (config[i].GoCBRef)
         {
@@ -366,7 +372,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             LOG_ERROR("Goose_Listener", "GoCBRef is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        printf("GoCBRef: %s\n", thread_data[i].GoCBRef);
+       // printf("GoCBRef: %s\n", thread_data[i].GoCBRef);
 
         if (config[i].DatSet)
         {
@@ -465,7 +471,7 @@ int Goose_receiver_start()
         }
         else
         {
-            printf("Created a goooooose   thread for instance %d\n", i);
+         //   printf("Created a goooooose   thread for instance %d\n", i);
             LOG_INFO("Goose_Listener", "Created thread for instance %d", i);
         }
     }

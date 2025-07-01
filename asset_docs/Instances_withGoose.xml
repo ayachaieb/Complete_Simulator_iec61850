@@ -10,7 +10,7 @@
         <GoID>GooseID_Instance1</GoID>
         <MACAddress>01:0C:CD:01:00:01</MACAddress>
         <AppID>1000</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>8192</appId>
@@ -23,7 +23,7 @@
         <GoID>GooseID_Instance2</GoID>
         <MACAddress>01:0C:CD:01:00:02</MACAddress>
         <AppID>1001</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>12288</appId>
@@ -36,7 +36,7 @@
         <GoID>GooseID_Instance3</GoID>
         <MACAddress>01:0C:CD:01:00:03</MACAddress>
         <AppID>1002</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>16384</appId>
@@ -49,7 +49,7 @@
         <GoID>GooseID_Instance4</GoID>
         <MACAddress>01:0C:CD:01:00:04</MACAddress>
         <AppID>1003</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>20480</appId>
@@ -62,7 +62,7 @@
         <GoID>GooseID_Instance5</GoID>
         <MACAddress>01:0C:CD:01:00:05</MACAddress>
         <AppID>1004</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>24576</appId>
@@ -75,7 +75,7 @@
         <GoID>GooseID_Instance6</GoID>
         <MACAddress>01:0C:CD:01:00:06</MACAddress>
         <AppID>1005</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>28672</appId>
@@ -88,7 +88,7 @@
         <GoID>GooseID_Instance7</GoID>
         <MACAddress>01:0C:CD:01:00:07</MACAddress>
         <AppID>1006</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>32768</appId>
@@ -101,7 +101,7 @@
         <GoID>GooseID_Instance8</GoID>
         <MACAddress>01:0C:CD:01:00:08</MACAddress>
         <AppID>1007</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>36864</appId>
@@ -114,7 +114,7 @@
         <GoID>GooseID_Instance9</GoID>
         <MACAddress>01:0C:CD:01:00:09</MACAddress>
         <AppID>1008</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>37120</appId>
@@ -127,6 +127,6 @@
         <GoID>GooseID_Instance10</GoID>
         <MACAddress>01:0C:CD:01:00:10</MACAddress>
         <AppID>1009</AppID>
-        <Interface>eth0</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
 </instances>

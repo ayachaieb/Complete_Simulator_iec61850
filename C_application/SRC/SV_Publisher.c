@@ -551,7 +551,7 @@ void *thread_task(void *arg)
         printf("Erreur loading scenario file\n");
         goto cleanup_on_error;
     }
-    printf("phase_count = %u\n", phase_count);
+   // printf("phase_count = %u\n", phase_count);
 // uncomment  if you want to use GOOSE
 /// i  will be receiving GOOSE messages once i start the simulation the vdpa  will send GOOSE messages
 //once i send a phase change command to the vdpa it will send GOOSE messages then i will calculate the latency
@@ -630,7 +630,7 @@ cleanup_on_error:
     if (data->svIDs)
         free(data->svIDs);
 
-    printf("Thread for appid 0x%04x failed initialization and finished cleanup\n", data->parameters.appId);
+  //  printf("Thread for appid 0x%04x failed initialization and finished cleanup\n", data->parameters.appId);
     return NULL;
 }
 
@@ -877,8 +877,8 @@ void SVPublisher_stop()
                 {
                     LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
                 }
-                printf("SV_Publisher  Joined thread for instance %d.\n", i);
-                fflush(stdout);
+                // printf("SV_Publisher  Joined thread for instance %d.\n", i);
+                // fflush(stdout);
             }
         }
         free(threads);
@@ -947,4 +947,5 @@ void setup_timer(ThreadData *data)
 
     data->timerid = timerid;
     printf("Timer started for appid %u with signal %d\n", data->parameters.appId, signal_num);
+    fflush(stdout);
 }
