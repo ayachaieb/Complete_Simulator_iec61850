@@ -19,6 +19,7 @@ static pthread_t sm_thread_internal;
 #define SUCCESS 0
 volatile int global_shutdown_requested = 0;
 volatile bool internal_shutdown_flag = false; // Define global variable
+extern volatile sig_atomic_t running_Goose;
 // Function prototypes for state handlers
 static bool state_idle_init(void *data);
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
@@ -450,25 +451,23 @@ static bool state_stop_init(void *data)
 
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
-    LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+        LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
     printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n",
            state_to_string(from), state_event_to_string(event));
     fflush(stdout);
 
     LOG_INFO("State_Machine", "Stopping SV Publisher...");
     SVPublisher_stop() ;
-    
+
     LOG_INFO("State_Machine", "SV Publisher stopped successfully");
+    
 
     LOG_INFO("State_Machine", "Stopping GOOSE receiver...");
-    if (goose_receiver_cleanup() == FAIL)
-    {
+    if (goose_receiver_cleanup() == FAIL) {
         LOG_ERROR("State_Machine", "Failed to clean up GOOSE receiver");
-        return FAIL;
+    } else {
+        LOG_INFO("State_Machine", "GOOSE receiver stopped successfully");
     }
-    printf("state_stop_enter ::State_Machine goose receiver stopped\n");
-    fflush(stdout);
-
     cJSON *json_response = cJSON_CreateObject();
     if (!json_response)
     {
@@ -568,31 +567,33 @@ static void *state_machine_thread_internal(void *arg)
     state_machine_free(sm);
     return NULL;
 }
+static void sigint_handler(int signalId) {
+    running_Goose = 0;
+    internal_shutdown_flag = true;
+    StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
+    LOG_INFO("Goose_Listener", "Received SIGINT, pushing shutdown event...");
+}
 
-int StateMachine_Launch(void)
-{
+int StateMachine_Launch(void) {
     int retval = SUCCESS;
     sm_data_internal.current_state = STATE_IDLE;
     sm_data_internal.handlers = NULL;
-    // to be modified
-    if (SUCCESS != event_queue_init(&event_queue_internal))
-    {
 
+    signal(SIGINT, sigint_handler); 
+
+    if (SUCCESS != event_queue_init(&event_queue_internal)) {
         LOG_ERROR("State_Machine", "Failed to initialize event queue in module");
         retval = FAIL;
-    }
-    else
-    {
-        if (pthread_create(&sm_thread_internal, NULL, state_machine_thread_internal, &sm_data_internal) != 0)
-        {
+    } else {
+        if (pthread_create(&sm_thread_internal, NULL, state_machine_thread_internal, &sm_data_internal) != 0) {
             LOG_ERROR("State_Machine", "Failed to create state machine thread in module: %s", strerror(errno));
-            retval = FAIL; // Indicate failure
+            retval = FAIL;
+        } else {
+            LOG_INFO("State_Machine", "Created state machine thread in module");
         }
-        LOG_INFO("State_Machine", "Created state machine thread in module");
-        return retval;
     }
+    return retval;
 }
-
 int StateMachine_push_event(state_event_e event, const char *requestId, cJSON *data_obj)
 {
     int result_event_queue_push = SUCCESS;
