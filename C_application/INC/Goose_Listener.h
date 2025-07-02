@@ -27,5 +27,4 @@ int Goose_receiver_init(SV_SimulationConfig* config,int number_of_subscribers);
 void goose_receiver_start();
 bool goose_receiver_cleanup(void);
 bool goose_receiver_is_running(void);
-
 #endif // GOOSE_LISTENER_H

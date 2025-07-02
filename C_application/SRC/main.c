@@ -31,7 +31,7 @@ int main(void) {
     signal(SIGINT, handle_sigint);
     
     // Initialize all modules through the module manager
-    if (SUCCESS != ModuleManager_init()) {
+    if (SUCCESS != ModuleManager_init(check_app_shutdown_status)) {
         error_info_t err = {
             .code = FAIL,
             .description = "Module initialization failed. Exiting."

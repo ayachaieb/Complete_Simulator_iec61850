@@ -19,7 +19,6 @@ static pthread_t sm_thread_internal;
 #define SUCCESS 0
 volatile int global_shutdown_requested = 0;
 volatile bool internal_shutdown_flag = false; // Define global variable
-extern volatile sig_atomic_t running_Goose;
 // Function prototypes for state handlers
 static bool state_idle_init(void *data);
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
@@ -358,14 +357,7 @@ cleanup:
             free(svconfig_tab[i].svInterface);
             free(svconfig_tab[i].scenarioConfigFile);
             free(svconfig_tab[i].svIDs);
-            free(svconfig_tab[i].GoCBRef); // Free goCbRef if it was allocated  
-            free(svconfig_tab[i].DatSet);  // Free DatSet if it was allocated
-            free(svconfig_tab[i].GoID);    // Free GoID if it was allocated
-            free(svconfig_tab[i].MACAddress); // Free MACAddress if it was allocated
-            free(svconfig_tab[i].AppID);  // Free AppID if it was allocated
-            free(svconfig_tab[i].Interface); // Free Interface if it was allocated
         }
-
         free(svconfig_tab);
     }
 
@@ -397,18 +389,9 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
     else
     {
         LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
-        //Goose_receiver_start();
-
-         if (FAIL == Goose_receiver_start())
-    {
-        LOG_ERROR("State_Machine", "Failed to start GOOSE receiver");
-        printf("State_Machine Failed to start GOOSE receiver");
-        goose_receiver_cleanup(); // Attempt to clean up even on start failure
-        retval = FAIL;
-    }
-    else {
+        Goose_receiver_start();
         LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
-    }
+
         cJSON *json_response = cJSON_CreateObject();
         if (!json_response)
         {
@@ -451,23 +434,13 @@ static bool state_stop_init(void *data)
 
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
-        LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+    LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
     printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n",
            state_to_string(from), state_event_to_string(event));
-    fflush(stdout);
+    // Stop the SV Publisher module here
+    SVPublisher_stop();
+    LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
 
-    LOG_INFO("State_Machine", "Stopping SV Publisher...");
-    SVPublisher_stop() ;
-
-    LOG_INFO("State_Machine", "SV Publisher stopped successfully");
-    
-
-    LOG_INFO("State_Machine", "Stopping GOOSE receiver...");
-    if (goose_receiver_cleanup() == FAIL) {
-        LOG_ERROR("State_Machine", "Failed to clean up GOOSE receiver");
-    } else {
-        LOG_INFO("State_Machine", "GOOSE receiver stopped successfully");
-    }
     cJSON *json_response = cJSON_CreateObject();
     if (!json_response)
     {
@@ -492,16 +465,16 @@ static bool state_stop_enter(void *data, state_e from, state_event_e event, cons
         {
             LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
         }
-        free(response_str);
+        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
     }
     else
     {
         LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
     }
 
-    cJSON_Delete(json_response);
-    return SUCCESS;
+    cJSON_Delete(json_response); // Free the cJSON object
 }
+
 
 static void *state_machine_thread_internal(void *arg)
 {
@@ -524,7 +497,12 @@ static void *state_machine_thread_internal(void *arg)
 
     while (!internal_shutdown_flag)
     {
+
         state_event_e event;
+        if (sm->shutdown_check_func && sm->shutdown_check_func()) {
+            LOG_INFO("State_Machine", "Shutdown signal received from ModuleManager. Exiting thread.");
+            break; // Exit the loop
+        }
         if (SUCCESS == event_queue_pop(&event_queue_internal, &event, &requestId, &data_obj))
         {
             LOG_DEBUG("State_Machine", "popped event: %s, requestId: %s",
@@ -563,37 +541,42 @@ static void *state_machine_thread_internal(void *arg)
             data_obj = NULL;
         }
     }
-
+printf("state_machine_thread_internal:: State machine thread exiting\n");
     state_machine_free(sm);
     return NULL;
 }
-static void sigint_handler(int signalId) {
-    running_Goose = 0;
-    internal_shutdown_flag = true;
-    StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
-    LOG_INFO("Goose_Listener", "Received SIGINT, pushing shutdown event...");
-}
 
-int StateMachine_Launch(void) {
+int StateMachine_Launch(int (*shutdown_check_func)(void))
+{
     int retval = SUCCESS;
     sm_data_internal.current_state = STATE_IDLE;
     sm_data_internal.handlers = NULL;
+    
+   // *** Store the callback function pointer ***
+    if (shutdown_check_func == NULL) {
+        LOG_ERROR("State_Machine", "Shutdown check function cannot be null.");
+        return FAIL;
+    }
+    sm_data_internal.shutdown_check_func = shutdown_check_func;
+    // to be modified
+    if (SUCCESS != event_queue_init(&event_queue_internal))
+    {
 
-    signal(SIGINT, sigint_handler); 
-
-    if (SUCCESS != event_queue_init(&event_queue_internal)) {
         LOG_ERROR("State_Machine", "Failed to initialize event queue in module");
         retval = FAIL;
-    } else {
-        if (pthread_create(&sm_thread_internal, NULL, state_machine_thread_internal, &sm_data_internal) != 0) {
-            LOG_ERROR("State_Machine", "Failed to create state machine thread in module: %s", strerror(errno));
-            retval = FAIL;
-        } else {
-            LOG_INFO("State_Machine", "Created state machine thread in module");
-        }
     }
-    return retval;
+    else
+    {
+        if (pthread_create(&sm_thread_internal, NULL, state_machine_thread_internal, &sm_data_internal) != 0)
+        {
+            LOG_ERROR("State_Machine", "Failed to create state machine thread in module: %s", strerror(errno));
+            retval = FAIL; // Indicate failure
+        }
+        LOG_INFO("State_Machine", "Created state machine thread in module");
+        return retval;
+    }
 }
+
 int StateMachine_push_event(state_event_e event, const char *requestId, cJSON *data_obj)
 {
     int result_event_queue_push = SUCCESS;

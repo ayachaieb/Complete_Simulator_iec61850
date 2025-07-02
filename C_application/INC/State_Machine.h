@@ -32,10 +32,11 @@ typedef struct state_handler {
 typedef struct state_machine {
     state_e current_state;
     state_handler_t *handlers;
+    int (*shutdown_check_func)(void);
 } state_machine_t;
 
 // Function to initialize the state machine module and start its thread
-int StateMachine_Launch(void);
+int StateMachine_Launch(int (*shutdown_check_func)(void));
 
 // Function to push events to the state machine (if event_queue is managed internally)
 int StateMachine_push_event(state_event_e event, const char *requestId,cJSON *data_obj);

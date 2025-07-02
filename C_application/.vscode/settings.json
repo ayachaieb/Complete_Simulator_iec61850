@@ -23,6 +23,7 @@
         "stdbool.h": "c",
         "stdint.h": "c",
         "util.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "linked_list.h": "c"
     }
 }

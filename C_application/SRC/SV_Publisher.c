@@ -947,5 +947,4 @@ void setup_timer(ThreadData *data)
 
     data->timerid = timerid;
     printf("Timer started for appid %u with signal %d\n", data->parameters.appId, signal_num);
-    fflush(stdout);
 }

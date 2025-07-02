@@ -9,7 +9,7 @@
 typedef int (*shutdown_check_callback_t)(void);
 
 // Initialize the module manager and all required modules
-int ModuleManager_init(void);
+int ModuleManager_init(shutdown_check_callback_t shutdown_check);
 
 // Run the main application loop
 int ModuleManager_run(shutdown_check_callback_t shutdown_check);

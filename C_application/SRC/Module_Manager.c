@@ -5,11 +5,15 @@
 #include "util.h"
 #include "logger.h"
 
-int ModuleManager_init(void)
+int ModuleManager_init(shutdown_check_callback_t shutdown_check)
 {
     LOG_INFO("ModuleManager", "Initializing modules...");
-
-    if (SUCCESS != StateMachine_Launch())
+   if (!shutdown_check)
+    {
+        LOG_ERROR("ModuleManager", "Invalid shutdown check callback provided");
+        return FAIL;
+    }
+    if (SUCCESS != StateMachine_Launch( shutdown_check))
     {
         LOG_ERROR("ModuleManager", "Failed to initialize StateMachineModule");
         return FAIL;
