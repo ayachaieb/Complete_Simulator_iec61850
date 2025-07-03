@@ -19,6 +19,7 @@ static pthread_t sm_thread_internal;
 #define SUCCESS 0
 volatile int global_shutdown_requested = 0;
 volatile bool internal_shutdown_flag = false; // Define global variable
+extern volatile sig_atomic_t running_Goose;
 // Function prototypes for state handlers
 static bool state_idle_init(void *data);
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId);
@@ -357,7 +358,14 @@ cleanup:
             free(svconfig_tab[i].svInterface);
             free(svconfig_tab[i].scenarioConfigFile);
             free(svconfig_tab[i].svIDs);
+            free(svconfig_tab[i].GoCBRef); // Free goCbRef if it was allocated  
+            free(svconfig_tab[i].DatSet);  // Free DatSet if it was allocated
+            free(svconfig_tab[i].GoID);    // Free GoID if it was allocated
+            free(svconfig_tab[i].MACAddress); // Free MACAddress if it was allocated
+            free(svconfig_tab[i].AppID);  // Free AppID if it was allocated
+            free(svconfig_tab[i].Interface); // Free Interface if it was allocated
         }
+
         free(svconfig_tab);
     }
 
@@ -389,9 +397,18 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
     else
     {
         LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
-        Goose_receiver_start();
-        LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+    Goose_receiver_start();
 
+    //      if (FAIL == Goose_receiver_start())
+    // {
+    //     LOG_ERROR("State_Machine", "Failed to start GOOSE receiver");
+    //     printf("State_Machine Failed to start GOOSE receiver");
+    //     goose_receiver_cleanup(); // Attempt to clean up even on start failure
+    //     retval = FAIL;
+    // }
+    // else {
+    //     LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
+    // }
         cJSON *json_response = cJSON_CreateObject();
         if (!json_response)
         {
@@ -434,13 +451,25 @@ static bool state_stop_init(void *data)
 
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
-    LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+        LOG_INFO("State_Machine", "Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
     printf("state_stop_enter ::State_Machine Entered STOP state from %s due to %s\n",
            state_to_string(from), state_event_to_string(event));
-    // Stop the SV Publisher module here
-    SVPublisher_stop();
-    LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
+    fflush(stdout);
 
+    LOG_INFO("State_Machine", "Stopping SV Publisher...");
+    SVPublisher_stop() ;
+
+    LOG_INFO("State_Machine", "SV Publisher stopped successfully");
+    
+printf("SV Publisher stopped successfully\n");
+fflush(stdout);
+    LOG_INFO("State_Machine", "Stopping GOOSE receiver...");
+    if (goose_receiver_cleanup() == FAIL) {
+        LOG_ERROR("State_Machine", "Failed to clean up GOOSE receiver");
+    } else {
+        LOG_INFO("State_Machine", "GOOSE receiver stopped successfully");
+        printf("GOOSE receiver stopped successfully\n");
+    }
     cJSON *json_response = cJSON_CreateObject();
     if (!json_response)
     {
@@ -465,16 +494,16 @@ static bool state_stop_enter(void *data, state_e from, state_event_e event, cons
         {
             LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
         }
-        free(response_str); // Free the string allocated by cJSON_PrintUnformatted
+        free(response_str);
     }
     else
     {
         LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
     }
 
-    cJSON_Delete(json_response); // Free the cJSON object
+    cJSON_Delete(json_response);
+    return SUCCESS;
 }
-
 
 static void *state_machine_thread_internal(void *arg)
 {
@@ -497,12 +526,7 @@ static void *state_machine_thread_internal(void *arg)
 
     while (!internal_shutdown_flag)
     {
-
         state_event_e event;
-        if (sm->shutdown_check_func && sm->shutdown_check_func()) {
-            LOG_INFO("State_Machine", "Shutdown signal received from ModuleManager. Exiting thread.");
-            break; // Exit the loop
-        }
         if (SUCCESS == event_queue_pop(&event_queue_internal, &event, &requestId, &data_obj))
         {
             LOG_DEBUG("State_Machine", "popped event: %s, requestId: %s",
@@ -541,9 +565,15 @@ static void *state_machine_thread_internal(void *arg)
             data_obj = NULL;
         }
     }
-printf("state_machine_thread_internal:: State machine thread exiting\n");
+
     state_machine_free(sm);
     return NULL;
+}
+static void sigint_handler(int signalId) {
+    running_Goose = 0;
+    internal_shutdown_flag = true;
+    StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
+    LOG_INFO("Goose_Listener", "Received SIGINT, pushing shutdown event...");
 }
 
 int StateMachine_Launch(int (*shutdown_check_func)(void))
