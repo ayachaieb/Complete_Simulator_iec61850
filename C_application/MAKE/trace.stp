@@ -1,0 +1,29 @@
+
+# Create a trace script (save as trace.stp)
+probe function("goose_receiver_cleanup")
+{
+    printf("Entering %s\n", probefunc())
+}
+
+probe function("goose_thread_task")
+{
+    printf("Entering %s\n", probefunc())
+}
+
+probe function("GooseReceiver_stop")
+{
+    printf("Entering %s\n", probefunc())
+}
+
+probe function("GooseReceiver_destroy")
+{
+    printf("Entering %s\n", probefunc())
+}
+
+probe function("*")
+{
+    if (probefunc() == "pthread_join")
+    {
+        printf("Entering %s\n", probefunc())
+    }
+}

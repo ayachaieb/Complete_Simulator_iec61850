@@ -895,7 +895,8 @@ void SVPublisher_stop()
     }
 
    
-    printf("SV_Publisher resources cleaned up.");
+  
+    printf("SV_Publisher threads stopped.\n");
 }
 
 void setup_timer(ThreadData *data)

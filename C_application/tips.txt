@@ -46,83 +46,11 @@ Commented debug prints → LOG_DEBUG
         // {
 
 
+# Basic system call trace
+strace ./sv_simulator
 
+# Trace specific system calls
+strace -e pthread_join,close,free ./sv_simulator
 
-
-
-
-
-
-
-
-prompt
-
-[INFO] [IPC] Received: {"type":"stop_simulation","data":{"requestId":"1750175475321"}} (../SRC/ipc.c:311)
-[2025-06-17 16:51:15.322] [ERROR] [Parser] Missing or invalid 'config' array in 'data' object (../SRC/parser.c:118)
-[2025-06-17 16:51:15.322] [ERROR] [IPC] Failed to parse incoming JSON: (null) (../SRC/ipc.c:321)
-not all of the buffersreceived  have the config part like theis one stop_simulation
-i need to modyfy 
-this ::
-int parseRequestConfig(
-    const char* buffer,
-    cJSON** type_obj_out,
-    cJSON** data_obj_out,
-    char** requestId_out,
-    cJSON** json_request_out // Output parameter for the root cJSON object
-) {
-    // Initialize output pointers to NULL for safety
-    *type_obj_out = NULL;
-    *data_obj_out = NULL;
-    *requestId_out = NULL;
- 
-    *json_request_out = NULL; // Initialize root JSON pointer
-
-    cJSON *json_request = cJSON_Parse(buffer);
-    if (!json_request) {
-        LOG_ERROR("Parser", "Failed to parse incoming JSON: %s", cJSON_GetErrorPtr());
-        return FAIL;
-    }
-    *json_request_out = json_request; // Store the root object for the caller to delete
-
-    // Extract message type
-    cJSON *type_obj = cJSON_GetObjectItemCaseSensitive(json_request, "type");
-    if (!type_obj || !cJSON_IsString(type_obj)) { // Corrected: Use type_obj instead of *
-        LOG_ERROR("Parser", "Missing or invalid 'type' field in JSON message");
-        return FAIL; // json_request_out is already set, caller will delete it
-    }
-    *type_obj_out = type_obj; // Pass the type object to the caller
-
-  // Extract the main data object (which contains 'config' array and 'requestId')
-    cJSON *data_container_obj = cJSON_GetObjectItemCaseSensitive(json_request, "data");
-    if (!data_container_obj || !cJSON_IsObject(data_container_obj)) {
-        LOG_ERROR("Parser", "Missing or invalid 'data' object in JSON message");
-        return FAIL;
-    }
-
-    // Extract requestId from the data_container_obj
-    cJSON *requestId_obj = cJSON_GetObjectItemCaseSensitive(data_container_obj, "requestId");
-    if (requestId_obj && cJSON_IsString(requestId_obj)) {
-        *requestId_out = strdup(requestId_obj->valuestring);
-        if (!*requestId_out) {
-            LOG_ERROR("Parser", "Failed to duplicate requestId string: Out of memory");
-            return FAIL;
-        }
-    } else {
-        LOG_DEBUG("Parser", "No 'requestId' found or it's not a string.");
-    }
-
-    // Extract the 'config' array from the data_container_obj
-    cJSON *config_array_obj = cJSON_GetObjectItemCaseSensitive(data_container_obj, "config");
-    if (!config_array_obj || !cJSON_IsArray(config_array_obj)) {
-        LOG_ERROR("Parser", "Missing or invalid 'config' array in 'data' object");
-        return FAIL;
-    }
-    *data_obj_out = config_array_obj; // Pass the config array to the caller
-
-    LOG_DEBUG("Parser", "Successfully parsed simulation config.");
-    return SUCCESS;
-}
-i
-in a way it is ableto handle any time of request
-like this {"type":"stop_simulation","data":{"requestId":"1750175475321"}}
-or this  {"type":"start_simulation","data":{"config":[{"appId":"1000","dstMac":"01:0c:cd:02:00:00","svInterface":"lo","scenarioConfigFile":"scenario.txt","svIDs":"svid1"},{"appId":"2000","dstMac":"01:0c:cd:02:10:08","svInterface":"lo","scenarioConfigFile":"scenario.txt","svIDs":"svid22"},{"appId":"3000","dstMac":"01:0c:cd:02:ff:ff","svInterface":"lo","scenarioConfigFile":"scenario_DPA.txt","svIDs":"svid333"},{"appId":"4000","dstMac":"01:0c:cd:02:01:01","svInterface":"lo","scenarioConfigFile":"scenario_DPA.txt","svIDs":"svid4444"},{"appId":"5000","dstMac":"01:0c:cd:02:ab:cd","svInterface":"lo","scenarioConfigFile":"scenario.txt","svIDs":"svid55555"}],"requestId":"1750176194964"}}
+# Save to file for analysis
+strace -o strace.log ./sv_simulator
