@@ -37,10 +37,17 @@ void sigint_handler_Goose(int signalId)
 
     StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
 
-    goose_receiver_cleanup();
+   if( SUCCESS == goose_receiver_cleanup())
+    {
+        printf("GOOSE receiver cleanup completed successfully.\n");
+          fflush(stdout);
+    }
+    else
+    {
+        printf("GOOSE receiver cleanup failed.\n");
+    }
 
-    printf("GOOSE receiver cleaned up.\n");
-    fflush(stdout);
+
 
     // Exit the process after cleanup
     exit(0);
@@ -80,9 +87,9 @@ gooseListener(GooseSubscriber subscriber, void *parameter)
 
     MmsValue_printToBuffer(values, buffer, 1024);
 
-    printf("  AllData: %s\n", buffer);
+    //printf("  AllData: %s\n", buffer);
     //  printf("--------------------------\n");
-    fflush(stdout);
+    //fflush(stdout);
 }
 bool goose_receiver_cleanup(void)
 {
@@ -114,6 +121,7 @@ bool goose_receiver_cleanup(void)
     {
         for (int i = 0; i < goose_instance_count; ++i)
         {
+            printf("Joining thread %d...\n", i);
             if (threads[i] != 0)
             {
                 struct timespec timeout;
@@ -183,7 +191,7 @@ void *goose_thread_task(void *arg)
     LOG_INFO("Goose_Listener", "Set interface %s for appid 0x%d", data->interface, data->AppID);
 
     // Set up signal handler
-    signal(SIGINT, sigint_handler_Goose);
+   // signal(SIGINT, sigint_handler_Goose);
 
     // Create subscriber
     data->subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues",
