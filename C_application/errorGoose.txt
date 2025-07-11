@@ -1,81 +1,201 @@
- here i didnt click to start simulation
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-Reading symbols from ../BIN/sv_simulator...
-(gdb) b goose_receiver_cleanup
-Breakpoint 1 at 0x34aa: file ../SRC/Goose_Listener.c, line 88.
-(gdb) b goose_thread_task
-Breakpoint 2 at 0x394b: file ../SRC/Goose_Listener.c, line 167.
-(gdb) run
-Starting program: /media/eya/data/Complete_Simulator_iec61850/C_application/BIN/sv_simulator 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-[New Thread 0x7ffff7bff640 (LWP 86445)]
-^C
-Thread 1 "sv_simulator" received signal SIGINT, Interrupt.
-0x00007ffff7d1b63d in __GI___select (nfds=4, readfds=0x7ffffffee120, writefds=0x0, exceptfds=0x0, timeout=0x7ffffffee110) at ../sysdeps/unix/sysv/linux/select.c:69
-69      ../sysdeps/unix/sysv/linux/select.c: No such file or directory.
-(gdb) 
- here i clicked start simulation :::
- (gdb) b goose_thread_task
-Breakpoint 1 at 0x394b: file ../SRC/Goose_Listener.c, line 167.
-(gdb) b goose_receiver_cleanup
-Breakpoint 2 at 0x34aa: file ../SRC/Goose_Listener.c, line 88.
-(gdb) c
-The program is not being run.
-(gdb) c
-The program is not being run.
-(gdb) run
-Starting program: /media/eya/data/Complete_Simulator_iec61850/C_application/BIN/sv_simulator 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-[New Thread 0x7ffff7bff640 (LWP 91833)]
-
-***** here i clicked start simulation 
-StateMachine::StateMachine_push_event ::Pushing event: start_simulation, requestId: 1751556232264
-state_machine_thread_internal:: State_Machine popped event: start_simulation, requestId: 1751556232264
-StateMachine::StateMachine_push_event ::Pushing event: init_success, requestId: 1751556232264
-state_machine_run ::State changed from IDLE to INIT due to event start_simulation
-state_machine_thread_internal:: State_Machine popped event: init_success, requestId: 1751556232264
-[New Thread 0x7ffff73fe640 (LWP 92366)]
-Timer started for appid 4096 with signal 40
-[New Thread 0x7ffff6bfd640 (LWP 92367)]
-Timer started for appid 8192 with signal 36
-
-Thread 2 "sv_simulator" received signal SIG40, Real-time event 40.
-[Switching to Thread 0x7ffff7bff640 (LWP 91833)]
-__pthread_create_2_1 (newthread=<optimised out>, attr=<optimised out>, start_routine=<optimised out>, arg=<optimised out>) at ./nptl/pthread_create.c:835
-835     ./nptl/pthread_create.c: No such file or directory.
-(gdb) c
-Continuing.
-
-Thread 4 "sv_simulator" received signal SIG40, Real-time event 40.
-[Switching to Thread 0x7ffff6bfd640 (LWP 92367)]
-0x00007ffff7ce57f8 in __GI___clock_nanosleep (clock_id=clock_id@entry=0, flags=flags@entry=0, req=req@entry=0x7ffff6bfcdf0, rem=rem@entry=0x7ffff6bfcdf0) at ../sysdeps/unix/sysv/linux/clock_nanosleep.c:78
-78      ../sysdeps/unix/sysv/linux/clock_nanosleep.c: No such file or directory.
-(gdb) Quit
-(gdb) Quit
-(gdb) c
-Continuing.
-
-Thread 1 "sv_simulator" received signal SIG40, Real-time event 40.
-[Switching to Thread 0x7ffff7eb1740 (LWP 91789)]
-0x00007ffff7d1b63d in __GI___select (nfds=4, readfds=0x7ffffffee120, writefds=0x0, exceptfds=0x0, timeout=0x7ffffffee110) at ../sysdeps/unix/sysv/linux/select.c:69
-69      ../sysdeps/unix/sysv/linux/select.c: No such file or directory.
-(gdb) c
-Continuing.
-
-Thread 2 "sv_simulator" received signal SIG36, Real-time event 36.
-[Switching to Thread 0x7ffff7bff640 (LWP 91833)]
-timer_handler (signum=48, si=0xffffffff00000000, uc=0x55555557465f) at ../SRC/SV_Publisher.c:160
-160     {
-(gdb) 
-Continuing.
-
-Thread 3 "sv_simulator" received signal SIG36, Real-time event 36.
-[Switching to Thread 0x7ffff73fe640 (LWP 92366)]
-0x00007ffff7ce57f8 in __GI___clock_nanosleep (clock_id=clock_id@entry=0, flags=flags@entry=0, req=req@entry=0x7ffff73fddf0, rem=rem@entry=0x7ffff73fddf0) at ../sysdeps/unix/sysv/linux/clock_nanosleep.c:78
-78      ../sysdeps/unix/sysv/linux/clock_nanosleep.c: No such file or directory.
-(gdb) 
-Continuing.
- as you see  it does not stop inthe breakpoint but in timehandlers
+this is strace output ::
+rt_sigreturn({mask=[RT_2 RT_4 RT_6 RT_10]}) = 0
+rt_sigreturn({mask=[RT_2 RT_6 RT_10]})  = 0
+rt_sigreturn({mask=[RT_2 RT_10]})       = 0
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
+close(3)                                = 0
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x1, si_overrun=0, si_int=1677733776, si_ptr=0x7f3164002f90} ---
+rt_sigreturn({mask=[]})                 = 0
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x9, si_overrun=0, si_int=1677734112, si_ptr=0x7f31640030e0} ---
+rt_sigreturn({mask=[RT_4]})             = 0
+rt_sigreturn({mask=[]})                 = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = 0
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x1, si_overrun=0, si_int=1677733776, si_ptr=0x7f3164002f90} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x9, si_overrun=0, si_int=1677734112, si_ptr=0x7f31640030e0} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x1, si_overrun=0, si_int=1677733776, si_ptr=0x7f3164002f90} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x9, si_overrun=0, si_int=1677734112, si_ptr=0x7f31640030e0} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x9, si_overrun=0, si_int=1677734112, si_ptr=0x7f31640030e0} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x1, si_overrun=0, si_int=1677733776, si_ptr=0x7f3164002f90} ---
+--- SIGRT_8 {si_signo=SIGRT_8, si_code=SI_TIMER, si_timerid=0, si_overrun=0, si_int=1677733664, si_ptr=0x7f3164002f20} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[RT_4 RT_8]})        = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[RT_4 RT_8]})        = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[RT_4 RT_8]})        = 0
+rt_sigreturn({mask=[RT_4]})             = 0
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[RT_4]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[RT_4]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x9, si_overrun=0, si_int=1677734112, si_ptr=0x7f31640030e0} ---
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x4, si_overrun=0, si_int=1677733328, si_ptr=0x7f3164002dd0} ---
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[RT_2 RT_4 RT_10]})  = 0
+rt_sigreturn({mask=[RT_2 RT_10]})       = 0
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[RT_2 RT_10]})       = 0
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+--- SIGRT_8 {si_signo=SIGRT_8, si_code=SI_TIMER, si_timerid=0, si_overrun=0, si_int=1677733664, si_ptr=0x7f3164002f20} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[RT_6]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x4, si_overrun=0, si_int=1677733328, si_ptr=0x7f3164002dd0} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+--- SIGRT_8 {si_signo=SIGRT_8, si_code=SI_TIMER, si_timerid=0x3, si_overrun=0, si_int=1677733104, si_ptr=0x7f3164002cf0} ---
+rt_sigreturn({mask=[RT_6 RT_10]})       = 0
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[RT_6 RT_10]})       = 0
+rt_sigreturn({mask=[RT_10]})            = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_8 {si_signo=SIGRT_8, si_code=SI_TIMER, si_timerid=0, si_overrun=0, si_int=1677733664, si_ptr=0x7f3164002f20} ---
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[RT_4]})             = 0
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[RT_4 RT_6]})        = 0
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[RT_4 RT_6]})        = 0
+rt_sigreturn({mask=[RT_4]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_8 {si_signo=SIGRT_8, si_code=SI_TIMER, si_timerid=0, si_overrun=0, si_int=1677733664, si_ptr=0x7f3164002f20} ---
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x1, si_overrun=0, si_int=1677733776, si_ptr=0x7f3164002f90} ---
+rt_sigreturn({mask=[RT_8]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+rt_sigreturn({mask=[RT_10]})            = 0
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x4, si_overrun=0, si_int=1677733328, si_ptr=0x7f3164002dd0} ---
+--- SIGRT_8 {si_signo=SIGRT_8, si_code=SI_TIMER, si_timerid=0x3, si_overrun=0, si_int=1677733104, si_ptr=0x7f3164002cf0} ---
+rt_sigreturn({mask=[RT_2 RT_6 RT_10]})  = 0
+rt_sigreturn({mask=[RT_2 RT_6]})        = 0
+rt_sigreturn({mask=[RT_2]})             = 0
+--- SIGRT_10 {si_signo=SIGRT_10, si_code=SI_TIMER, si_timerid=0x7, si_overrun=0, si_int=1677733888, si_ptr=0x7f3164003000} ---
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x6, si_overrun=0, si_int=1677734000, si_ptr=0x7f3164003070} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+rt_sigreturn({mask=[]})                 = 202
+--- SIGRT_2 {si_signo=SIGRT_2, si_code=SI_TIMER, si_timerid=0x5, si_overrun=0, si_int=1677733552, si_ptr=0x7f3164002eb0} ---
+--- SIGRT_6 {si_signo=SIGRT_6, si_code=SI_TIMER, si_timerid=0x2, si_overrun=0, si_int=1677733440, si_ptr=0x7f3164002e40} ---
+--- SIGRT_4 {si_signo=SIGRT_4, si_code=SI_TIMER, si_timerid=0x8, si_overrun=0, si_int=1677733216, si_ptr=0x7f3164002d60} ---
+rt_sigreturn({mask=[RT_2 RT_6]})        = 0
+rt_sigreturn({mask=[RT_2]})             = 0
+rt_sigreturn({mask=[]})                 = 202
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+futex(0x7f3168d35990, FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, 11160, NULL, FUTEX_BITSET_MATCH_ANY) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
++++ killed by SIGABRT +++

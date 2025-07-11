@@ -9,11 +9,11 @@
 #include "goose_subscriber.h"
 // Configuration structure for GOOSE receiver
 typedef struct {
-    const char* interface;       // Network interface (e.g., "eth0")*
+    char* interface;       // Network interface (e.g., "eth0")*
     uint32_t goose_id;        // GOOSE control block ID to listen for*
-    const char* GoCBRef; // Reference to the GOOSE Control Block*
-    const char* DatSet;  // Data Set reference
-    const uint8_t* MACAddress; // MAC address for GOOSE communication
+     char* GoCBRef; // Reference to the GOOSE Control Block*
+    char* DatSet;  // Data Set reference
+    uint8_t* MACAddress; // MAC address for GOOSE communication
     uint32_t AppID;  // Application ID for GOOSE*
     GooseReceiver receiver ;
     GooseSubscriber subscriber ; // GOOSE subscriber instance
