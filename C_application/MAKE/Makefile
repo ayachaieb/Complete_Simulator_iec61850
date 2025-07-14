@@ -52,7 +52,7 @@ $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
 all: release
 
 # Debug build
-debug: CFLAGS += -g -DDEBUG -O0
+debug: CFLAGS += -g -fsanitize=address -DDEBUG -O0
 debug: $(BIN_DIR)/sv_simulator
 
 # Release build

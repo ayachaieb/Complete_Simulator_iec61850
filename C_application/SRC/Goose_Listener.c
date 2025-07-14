@@ -23,35 +23,30 @@ static ThreadData *thread_data = NULL;
 int goose_instance_count = 0;
 static pthread_mutex_t goose_cleanup_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void goose_thread_cleanup(void *arg);
+
 void sigint_handler_Goose(int signalId)
 {
-    if (cleanup_in_progress)
-    {
-        return; // Prevent re-entrant cleanup
-    }
-    cleanup_in_progress = 1;
-
-    printf("Goose Received SIGINT, shutting down...\n");
-    fflush(stdout);
-
+    // Only set atomic flags in signal handler - this is async-signal-safe
     running_Goose = 0;
-    internal_shutdown_flag = true;
+    internal_shutdown_flag = 1;
+    cleanup_in_progress = 1;
+}
 
-    StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
-
-   if( SUCCESS == goose_receiver_cleanup())
-    {
-        printf("GOOSE receiver cleanup completed successfully.\n");
-          fflush(stdout);
+void monitor_shutdown() {
+    while (running_Goose) {
+        sleep(1);
     }
-    else
-    {
+    
+    // Do cleanup here, not in signal handler
+    printf("Shutdown requested, cleaning up...\n");
+    fflush(stdout);
+    
+    if (SUCCESS == goose_receiver_cleanup()) {
+        printf("GOOSE receiver cleanup completed successfully.\n");
+    } else {
         printf("GOOSE receiver cleanup failed.\n");
     }
-
-
-
-    // Exit the process after cleanup
+    
     exit(0);
 }
 long long get_current_time_ms() {
@@ -101,88 +96,7 @@ if (now - last_print_time > 1000) { // Only print once per second
     //  printf("--------------------------\n");
     //fflush(stdout);
 }
-bool goose_receiver_cleanup(void) {
-    // Step 0: Lock to prevent concurrent cleanup attempts
-    pthread_mutex_lock(&goose_cleanup_mutex);
-    
-    // Step 1: Signal all threads to stop
-    running_Goose = false;
-    internal_shutdown_flag = true;
-    
-   for (int i = 0; i < goose_instance_count; ++i) {
-        if (thread_data[i].receiver) {
-            GooseReceiver_stop(thread_data[i].receiver);
-        }
-    }
-      // Second pass - force stop if needed
-    for (int i = 0; i < goose_instance_count; ++i) {
-        if (thread_data[i].receiver && GooseReceiver_isRunning(thread_data[i].receiver)) {
-            Thread_sleep(100);
-            GooseReceiver_stop(thread_data[i].receiver);
-        }
-    }
 
-    // Step 3: Join threads with proper signal handling
-    sigset_t mask, oldmask;
-    sigemptyset(&mask);
-    sigaddset(&mask, SIGINT);
-    pthread_sigmask(SIG_BLOCK, &mask, &oldmask); // Block signals during join
-
-    if (threads != NULL) {
-        for (int i = 0; i < goose_instance_count; ++i) {
-            if (threads[i] != 0) {
-                struct timespec timeout;
-                clock_gettime(CLOCK_REALTIME, &timeout);
-                timeout.tv_sec += 2; // Increased timeout to 2 seconds
-                
-                int rc = pthread_timedjoin_np(threads[i], NULL, &timeout);
-                if (rc == ETIMEDOUT) {
-                    LOG_ERROR("Goose_Listener", "Thread %d timeout - canceling", i);
-                    pthread_cancel(threads[i]);
-                    pthread_detach(threads[i]); // Avoid zombie thread
-                }
-                else if (rc != 0) {
-                    LOG_ERROR("Goose_Listener", "Thread %d join error: %s", i, strerror(rc));
-                }
-            }
-        }
-        free(threads);
-        threads = NULL;
-           pthread_mutex_unlock(&goose_cleanup_mutex);
-    return SUCCESS;
-        
-    
-    }
-    pthread_sigmask(SIG_SETMASK, &oldmask, NULL); // Restore signal mask
-    printf("step 3 completed\n");
-
-    // Step 4: Clean up resources after all threads are done
-    for (int i = 0; i < goose_instance_count; ++i) {
-        if (thread_data[i].receiver != NULL) {
-            GooseReceiver_destroy(thread_data[i].receiver);
-            thread_data[i].receiver = NULL;
-        }
-        if (thread_data[i].subscriber != NULL) {
-            GooseSubscriber_destroy(thread_data[i].subscriber);
-            thread_data[i].subscriber = NULL;
-        }
-        
-        free(thread_data[i].interface);
-        free(thread_data[i].GoCBRef);
-        free(thread_data[i].DatSet);
-        free(thread_data[i].MACAddress);
-        
-        memset(&thread_data[i], 0, sizeof(ThreadData)); // Clear the structure
-    }
-    
-    free(thread_data);
-    thread_data = NULL;
-    goose_instance_count = 0;
-    
-    pthread_mutex_unlock(&goose_cleanup_mutex);
-    LOG_INFO("Goose_Listener", "GOOSE cleanup complete");
-    return SUCCESS;
-}
 static void goose_thread_cleanup(void *arg) {
     ThreadData *data = (ThreadData *)arg;
     if (data == NULL) return;
@@ -194,78 +108,268 @@ static void goose_thread_cleanup(void *arg) {
         GooseReceiver_destroy(data->receiver);
         data->receiver = NULL;
     }
-    
-    if (data->subscriber != NULL) {
-        GooseSubscriber_destroy(data->subscriber);
-        data->subscriber = NULL;
-    }
+
 }
-
-
-void *goose_thread_task(void *arg) {
+void *goose_thread_task(void *arg) 
+{
     ThreadData *data = (ThreadData *)arg;
     int ret = SUCCESS;
+    
+    if (data == NULL) {
+        return (void*)(intptr_t)FAIL;
+    }
     
     // Set cancellation points
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
     pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
     
-    // The entire function body must be within the push/pop block
-    pthread_cleanup_push(goose_thread_cleanup, data);
-    
-    do { // This do-while(0) creates a single block for push/pop
-        LOG_INFO("Goose_Listener", "Thread started for appid 0x%04x", data->AppID);
-        
-        data->receiver = GooseReceiver_create();
-        if (!data->receiver) {
-            LOG_ERROR("Goose_Listener", "Receiver creation failed");
-            ret = FAIL;
-            break;
-        }
-        
-        GooseReceiver_setInterfaceId(data->receiver, data->interface);
-        
-        data->subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", NULL);
-        if (!data->subscriber) {
-            LOG_ERROR("Goose_Listener", "Subscriber creation failed");
-            ret = FAIL;
-            break;
-        }
-        
-        GooseSubscriber_setAppId(data->subscriber, 1000);
-        uint8_t mac[] = {0x01, 0x0c, 0xcd, 0x01, 0x00, 0x01};
-        GooseSubscriber_setDstMac(data->subscriber, mac);
-        GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
-        GooseReceiver_addSubscriber(data->receiver, data->subscriber);
-        
-        GooseReceiver_start(data->receiver);
-        
-        // Main loop with cancellation points
-        while (running_Goose && !internal_shutdown_flag) {
-            pthread_testcancel(); // Add explicit cancellation point
-            
-            if (!GooseReceiver_isRunning(data->receiver)) {
-                LOG_WARN("Goose_Listener", "Receiver stopped unexpectedly");
-                ret = FAIL;
-                break;
-            }
-            
-             sigset_t mask, oldmask;
+    // Block signals that might interfere with cleanup
+    sigset_t mask, oldmask;
     sigemptyset(&mask);
     sigaddset(&mask, SIGRTMIN);
     sigaddset(&mask, SIGRTMIN+1);
-    // Add all SIGRT signals you're seeing in strace
+    sigaddset(&mask, SIGRTMIN+2);
+    sigaddset(&mask, SIGRTMIN+3);
+    sigaddset(&mask, SIGRTMIN+4);
+    sigaddset(&mask, SIGRTMIN+5);
     pthread_sigmask(SIG_BLOCK, &mask, &oldmask);
     
-    Thread_sleep(50);
+    // Install cleanup handler
+    pthread_cleanup_push(goose_thread_cleanup, data);
     
-    pthread_sigmask(SIG_SETMASK, &oldmask, NULL);
+    LOG_INFO("Goose_Listener", "Thread started for appid 0x%04x", data->AppID);
+    
+    // Initialize receiver
+    data->receiver = GooseReceiver_create();
+    if (!data->receiver) {
+        LOG_ERROR("Goose_Listener", "Receiver creation failed");
+        ret = FAIL;
+        goto cleanup;
+    }
+    
+    GooseReceiver_setInterfaceId(data->receiver, data->interface);
+    
+    // Use the actual GoCBRef from thread_data instead of hardcoded string
+    data->subscriber = GooseSubscriber_create(data->GoCBRef, NULL);
+    if (!data->subscriber) {
+        LOG_ERROR("Goose_Listener", "Subscriber creation failed");
+        ret = FAIL;
+        goto cleanup;
+    }
+    
+    // Use the actual AppID from thread_data instead of hardcoded 1000
+    GooseSubscriber_setAppId(data->subscriber, data->AppID);
+    
+    // Use the actual MAC address from thread_data instead of hardcoded MAC
+    GooseSubscriber_setDstMac(data->subscriber, data->MACAddress);
+    
+    GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
+    GooseReceiver_addSubscriber(data->receiver, data->subscriber);
+    
+    GooseReceiver_start(data->receiver);
+    
+    // Check if receiver started successfully
+    if (!GooseReceiver_isRunning(data->receiver)) {
+        LOG_ERROR("Goose_Listener", "Failed to start receiver");
+        ret = FAIL;
+        goto cleanup;
+    }
+    
+    // Main loop with proper cancellation handling
+    while (running_Goose && !internal_shutdown_flag) {
+        pthread_testcancel(); // Cancellation point
+        
+        if (!GooseReceiver_isRunning(data->receiver)) {
+            LOG_WARN("Goose_Listener", "Receiver stopped unexpectedly");
+            ret = FAIL;
+            break;
         }
-    } while(0);
+        
+        // Sleep with cancellation point - use nanosleep instead of Thread_sleep
+        struct timespec ts = {0, 50000000}; // 50ms
+        if (nanosleep(&ts, NULL) == -1 && errno == EINTR) {
+            // Handle interruption gracefully
+            pthread_testcancel();
+        }
+    }
     
-    pthread_cleanup_pop(1); // Execute cleanup handler
+cleanup:
+    // Restore signal mask before cleanup
+    pthread_sigmask(SIG_SETMASK, &oldmask, NULL);
+    
+    // Pop and execute cleanup handler
+    pthread_cleanup_pop(1);
+    
+    LOG_INFO("Goose_Listener", "Thread exiting for appid 0x%04x", data->AppID);
     return (ret == SUCCESS) ? NULL : (void*)(intptr_t)ret;
 }
+bool goose_receiver_cleanup(void) {
+    pthread_mutex_lock(&goose_cleanup_mutex);
+    
+    // Step 1: Signal all threads to stop gracefully
+    running_Goose = false;
+    internal_shutdown_flag = true;
+    
+    // Step 2: Stop all receivers first
+    for (int i = 0; i < goose_instance_count; ++i) {
+        if (thread_data[i].receiver && GooseReceiver_isRunning(thread_data[i].receiver)) {
+            GooseReceiver_stop(thread_data[i].receiver);
+        }
+    }
+    
+    // Give threads time to exit gracefully
+    struct timespec sleep_time = {0, 100000000}; // 100ms
+    nanosleep(&sleep_time, NULL);
+    
+    // Step 3: Join threads with timeout
+    if (threads != NULL) {
+        for (int i = 0; i < goose_instance_count; ++i) {
+            if (threads[i] != 0) {
+                void *thread_result;
+                struct timespec timeout;
+                clock_gettime(CLOCK_REALTIME, &timeout);
+                timeout.tv_sec += 3; // 3 second timeout
+                
+                int rc = pthread_timedjoin_np(threads[i], &thread_result, &timeout);
+                if (rc == ETIMEDOUT) {
+                    LOG_ERROR("Goose_Listener", "Thread %d timeout - canceling", i);
+                    pthread_cancel(threads[i]);
+                    
+                    // Try to join after cancel
+                    timeout.tv_sec += 1;
+                    rc = pthread_timedjoin_np(threads[i], NULL, &timeout);
+                    if (rc == ETIMEDOUT) {
+                        LOG_ERROR("Goose_Listener", "Thread %d still hanging - detaching", i);
+                        pthread_detach(threads[i]);
+                    }
+                } else if (rc != 0) {
+                    LOG_ERROR("Goose_Listener", "Thread %d join error: %s", i, strerror(rc));
+                }
+                threads[i] = 0;  // Mark as handled
+            }
+        }
+        free(threads);
+        threads = NULL;
+    }
+    
+    // Step 4: Clean up all resources
+    for (int i = 0; i < goose_instance_count; ++i) {
+        // Clean up GooseReceiver and GooseSubscriber
+        if (thread_data[i].receiver != NULL) {
+            if (GooseReceiver_isRunning(thread_data[i].receiver)) {
+                GooseReceiver_stop(thread_data[i].receiver);
+            }
+            GooseReceiver_destroy(thread_data[i].receiver);
+            thread_data[i].receiver = NULL;
+        }
+        
+        if (thread_data[i].subscriber != NULL) {
+            GooseSubscriber_destroy(thread_data[i].subscriber);
+            thread_data[i].subscriber = NULL;
+        }
+        
+        // Free allocated strings with null checks
+        if (thread_data[i].interface) {
+            free(thread_data[i].interface);
+            thread_data[i].interface = NULL;
+        }
+        if (thread_data[i].GoCBRef) {
+            free(thread_data[i].GoCBRef);
+            thread_data[i].GoCBRef = NULL;
+        }
+        if (thread_data[i].DatSet) {
+            free(thread_data[i].DatSet);
+            thread_data[i].DatSet = NULL;
+        }
+        if (thread_data[i].MACAddress) {
+            free(thread_data[i].MACAddress);
+            thread_data[i].MACAddress = NULL;
+        }
+        
+        memset(&thread_data[i], 0, sizeof(ThreadData));
+    }
+    
+    if (thread_data) {
+        free(thread_data);
+        thread_data = NULL;
+    }
+    goose_instance_count = 0;
+    
+    pthread_mutex_unlock(&goose_cleanup_mutex);
+    LOG_INFO("Goose_Listener", "GOOSE cleanup complete");
+    return SUCCESS;
+}
+
+// // If pthread_timedjoin_np is not available on your system, use this alternative:
+// bool goose_receiver_cleanup_alternative(void) {
+//     pthread_mutex_lock(&goose_cleanup_mutex);
+    
+//     // Signal all threads to stop
+//     running_Goose = false;
+//     internal_shutdown_flag = true;
+    
+//     for (int i = 0; i < goose_instance_count; ++i) {
+//         if (thread_data[i].receiver) {
+//             GooseReceiver_stop(thread_data[i].receiver);
+//         }
+//     }
+    
+//     // Give threads time to finish gracefully
+//     Thread_sleep(500);
+    
+//     // Cancel and join threads
+//     if (threads != NULL) {
+//         for (int i = 0; i < goose_instance_count; ++i) {
+//             if (threads[i] != 0) {
+//                 pthread_cancel(threads[i]);
+//                 pthread_join(threads[i], NULL);
+//             }
+//         }
+//         free(threads);
+//         threads = NULL;
+//     }
+    
+//     // Clean up resources
+//     for (int i = 0; i < goose_instance_count; ++i) {
+//         if (thread_data[i].receiver != NULL) {
+//             GooseReceiver_destroy(thread_data[i].receiver);
+//             thread_data[i].receiver = NULL;
+//         }
+//         if (thread_data[i].subscriber != NULL) {
+//             GooseSubscriber_destroy(thread_data[i].subscriber);
+//             thread_data[i].subscriber = NULL;
+//         }
+        
+//         if (thread_data[i].interface) {
+//             free(thread_data[i].interface);
+//             thread_data[i].interface = NULL;
+//         }
+//         if (thread_data[i].GoCBRef) {
+//             free(thread_data[i].GoCBRef);
+//             thread_data[i].GoCBRef = NULL;
+//         }
+//         if (thread_data[i].DatSet) {
+//             free(thread_data[i].DatSet);
+//             thread_data[i].DatSet = NULL;
+//         }
+//         if (thread_data[i].MACAddress) {
+//             free(thread_data[i].MACAddress);
+//             thread_data[i].MACAddress = NULL;
+//         }
+        
+//         memset(&thread_data[i], 0, sizeof(ThreadData));
+//     }
+    
+//     if (thread_data) {
+//         free(thread_data);
+//         thread_data = NULL;
+//     }
+//     goose_instance_count = 0;
+    
+//     pthread_mutex_unlock(&goose_cleanup_mutex);
+//     LOG_INFO("Goose_Listener", "GOOSE cleanup complete");
+//     return SUCCESS;
+// }
 
 
 int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
