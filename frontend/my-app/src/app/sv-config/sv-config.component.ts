@@ -81,7 +81,7 @@ startSimulation() {
           }
           setTimeout(() => {
             this.simulationStatus = '';
-          }, 20000); // Clear after 20 seconds
+          }, 30000); // Clear after 20 seconds
         } else if ('message' in response) {
           // Keep existing message handling for other potential responses
           this.simulationStatus = response.message;

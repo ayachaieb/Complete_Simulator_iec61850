@@ -85,7 +85,7 @@ main(int argc, char **argv)
                 // printf("GOOSE message sent.\n"); // Uncomment for verbose output
             }
 
-            Thread_sleep(100); // Publish every 100 milliseconds (adjust as needed)
+            Thread_sleep(1); // Publish every 100 milliseconds (adjust as needed)
                                // GOOSE messages often have a specific retransmission rate
         }
 

@@ -22,6 +22,7 @@
         "goose_publisher.h": "c",
         "stdbool.h": "c",
         "stdint.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "linked_list.h": "c"
     }
 }

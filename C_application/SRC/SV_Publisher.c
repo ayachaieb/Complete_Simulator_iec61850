@@ -161,10 +161,11 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
     ThreadData *current_data = (ThreadData *)si->si_value.sival_ptr;
     if (current_data == NULL)
     {
-        printf("Timer handler: current_data is NULL\n");
+     
+        LOG_ERROR("SV_Publisher", "Timer handler: current_data is NULL");
         return;
     }
-    //   printf("Timer handler for appid  0x%04x\n", current_data->parameters.appId);
+  
 
     static __thread int sample = 0;
     bool faultCondition = false;
@@ -200,11 +201,7 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             channel1_current2 = (int)(1000.f * fOmtStpmSimuGetVal(phases[current_phase].channel1_current[1], FREQ_EN_HZ, 240.0f, 0)); // I2
             channel1_current3 = (int)(1000.f * fOmtStpmSimuGetVal(phases[current_phase].channel1_current[2], FREQ_EN_HZ, 120.0f, 0)); // I3
 #endif
-            /*if(current_phase == 1)
-            {
-                printf("[%d] V1 %d V2 %d V3 %d \n\r",sNbLoop208us,channel1_voltage1,channel1_voltage2,channel1_voltage3);
-                printf("[%d] I1 %d I2 %d I3 %d \n\r",sNbLoop208us,channel1_current1,channel1_current2,channel1_current3);
-            }*/
+        
             SVPublisher_ASDU_setINT32(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_I1], channel1_current1);
             SVPublisher_ASDU_setQuality(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_I1Q], q);
 
@@ -229,8 +226,6 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             SVPublisher_ASDU_setINT32(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_V4], channel1_voltage1 + channel1_voltage2 + channel1_voltage3);
             SVPublisher_ASDU_setQuality(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_V4Q], q);
 
-            // printf("Channel 1 - Voltage1: %d, Voltage2: %d, Voltage3: %d\n", channel1_voltage1, channel1_voltage2, channel1_voltage3);
-            // printf("Channel 1 - Current1: %d, Current2: %d, Current3: %d\n", channel1_current1, channel1_current2, channel1_current3);
 
 #ifdef SINU_METHOD_ANA
             angleCrs += pasCrs;
@@ -260,7 +255,7 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             {
                 if ((tick_208_us - phase_start_tick) >= phase_duration_ticks)
                 {
-                    // printf("[time %u ms] Passing Phase from %d -> %d \n\r", phases[current_phase].duration_ms, current_phase, current_phase + 1);
+                   
                     current_phase++;
                     phase_start_tick = tick_208_us;
                     phase_duration_ticks = phases[current_phase].duration_ms * 1000 / (unsigned int)DELAY_208US;
@@ -286,7 +281,7 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             if (running)
             {
                 SVPublisher_publish(current_data->svPublisher);
-                // printf("Published from appid 0x%04x\n", current_data->parameters.appId);
+               
             }
         }
 
@@ -295,7 +290,7 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             isMeasuring = true;
             latencyMeasured = false;
             faultStartTimeNs = Hal_getTimeInNs();
-            // printf("Fault detected, start measuring latency...\n");
+            
         }
     }
 }
@@ -390,10 +385,7 @@ static void setupSVPublisher(ThreadData *data)
     }
     SVPublisher_setupComplete(data->svPublisher);
 
-    // else
-    // {
-    //     printf("Failed to create SVPublisher for appid %u\n", data->parameters.appId);
-    // }
+
 }
 
 int loadScenarioFile(const char *filename)
@@ -466,33 +458,14 @@ int loadScenarioFile(const char *filename)
     return 0;
 }
 
-/* GOOSE listener callback */
-static void gooseListener(GooseSubscriber subscriber, void *parameter)
-{
-    uint32_t newStNum = GooseSubscriber_getStNum(subscriber);
 
-    /* Only if stNum changed */
-    if (newStNum != oldStNum)
-    {
-        oldStNum = newStNum;
-
-        /* If we are currently measuring (fault active) and haven't measured latency yet */
-        if (isMeasuring && !latencyMeasured)
-        {
-            uint64_t now = Hal_getTimeInNs();
-            uint64_t latency = now - faultStartTimeNs;
-            printf("Latency measured: %f ms (stNum changed to %u)\n", ((float)latency / 1000000.f), newStNum);
-            latencyMeasured = true;
-        }
-    }
-}
 
 static int setupGooseSubscriber(ThreadData *data)
 {
     data->gooseReceiver = GooseReceiver_create();
     if (data->gooseReceiver == NULL)
     {
-        printf("Failed to create GooseReceiver\n");
+        
         return -1;
     }
 
@@ -501,29 +474,11 @@ static int setupGooseSubscriber(ThreadData *data)
     data->gooseSubscriber = GooseSubscriber_create(data->goCbRef, NULL);
     if (data->gooseSubscriber == NULL)
     {
-        printf("Failed to create GooseSubscriber\n");
+
         GooseReceiver_destroy(data->gooseReceiver);
         return -1;
     }
-    // printf("dstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
-    //        data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
-    //        data->parameters.dstAddress[3], data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
-    //  uint8_t dstMac[6] = {0x01, 0x0c, 0xcd, 0x01, 0x10, 0x08};
-    // GooseSubscriber_setDstMac(data->gooseSubscriber, data->parameters.dstAddress);
-
-    // printf("GOOSE appid 0x%04x\n", data->GOOSEappId);
-    // GooseSubscriber_setAppId(data->gooseSubscriber, data->GOOSEappId);
-    // GooseSubscriber_setListener(data->gooseSubscriber, gooseListener, NULL);
-    // GooseReceiver_addSubscriber(data->gooseReceiver, data->gooseSubscriber);
-
-    // GooseReceiver_start(data->gooseReceiver);
-
-    // if (!GooseReceiver_isRunning(data->gooseReceiver))
-    // {
-    //     printf("Failed to start GOOSE subscriber. Root permission or correct interface required.\n");
-    //     GooseReceiver_destroy(data->gooseReceiver);
-    //     return -1;
-    // }
+  
 
     return 0;
 }
@@ -532,42 +487,26 @@ void *thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
 
-  //  printf("Thread started for appid 0x%04x on interface %s\n", data->parameters.appId, data->svInterface);
-   /* printf("svInterface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           data->svInterface, data->parameters.appId,
-           data->parameters.dstAddress[0], data->parameters.dstAddress[1], data->parameters.dstAddress[2],
-           data->parameters.dstAddress[3], data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
-*/
     data->parameters.vlanPriority = 0;
 
     data->svPublisher = SVPublisher_create(&data->parameters, data->svInterface);
     if (!data->svPublisher)
     {
-        printf("Failed to create SVPublisher for appid %u\n", data->parameters.appId);
+       
         goto cleanup_on_error;
     }
     if (loadScenarioFile(data->scenarioConfigFile) != 0)
     {
-        printf("Erreur loading scenario file\n");
+      
         goto cleanup_on_error;
     }
-    printf("phase_count = %u\n", phase_count);
-// uncomment  if you want to use GOOSE
-/// i  will be receiving GOOSE messages once i start the simulation the vdpa  will send GOOSE messages
-//once i send a phase change command to the vdpa it will send GOOSE messages then i will calculate the latency
-//so i need to setup GOOSE subscriber to listen for GOOSE messages with personalized parameters
-// for every svinstance i will have a GOOSE subscriber
-    // Optional: Comment out GOOSE if not needed, or fix with correct interface
-    // if (setupGooseSubscriber(data) != 0)
-    // {
-    //     printf("Failed to setup GOOSE Subscriber\n");
-    //     goto cleanup_on_error;
-    // }
+   
+
 
     setupSVPublisher(data);
     if (!data->svPublisher)
     {
-        printf("Failed to create SVPublisher\n");
+
         goto cleanup_on_error;
     }
 
@@ -604,11 +543,10 @@ void *thread_task(void *arg)
     if (data->svIDs)
         free(data->svIDs);
 
-   // printf("SV_Publisher Thread for appid 0x%04x finished publishing\n", data->parameters.appId);
     return NULL;
 
 cleanup_on_error:
-    // This block handles cleanup only if an error occurred during initialization
+    //  only if an error occurred during initialization
     if (data->svPublisher)
     {
         SVPublisher_destroy(data->svPublisher);
@@ -630,7 +568,7 @@ cleanup_on_error:
     if (data->svIDs)
         free(data->svIDs);
 
-    printf("Thread for appid 0x%04x failed initialization and finished cleanup\n", data->parameters.appId);
+
     return NULL;
 }
 
@@ -853,7 +791,7 @@ bool SVPublisher_start(void)
             LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
         }
     }
-    // printf("All threads created successfully: %d\n", all_threads_created);
+  
     LOG_INFO("SV_Publisher", "SV Publisher threads started.");
 
     return all_threads_created;
@@ -877,7 +815,8 @@ void SVPublisher_stop()
                 {
                     LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
                 }
-                printf("SV_Publisher  Joined thread for instance %d.\n", i);
+             
+                
             }
         }
         free(threads);
@@ -894,7 +833,8 @@ void SVPublisher_stop()
     }
 
     instance_count = 0;
-    printf("SV_Publisher resources cleaned up.");
+
+    
 }
 
 void setup_timer(ThreadData *data)
@@ -907,7 +847,8 @@ void setup_timer(ThreadData *data)
     // Ensure signal number is within valid range
     if (signal_num > SIGRTMAX)
     {
-        printf("Signal number %d exceeds SIGRTMAX for appid %u\n", signal_num, data->parameters.appId);
+       
+        
         return;
     }
 
@@ -945,5 +886,6 @@ void setup_timer(ThreadData *data)
     }
 
     data->timerid = timerid;
-    printf("Timer started for appid %u with signal %d\n", data->parameters.appId, signal_num);
+
+    
 }

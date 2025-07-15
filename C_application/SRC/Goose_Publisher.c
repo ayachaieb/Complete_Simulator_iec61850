@@ -11,7 +11,7 @@
 #include "mms_value.h"
 #include "goose_publisher.h"
 #include "hal_thread.h"
-
+#include "logger.h"
 LinkedList dataSetValues ;
 GoosePublisher publisher;
 
@@ -56,14 +56,16 @@ void goose_publisher_send(GOOSE_SimulationConfig* config)
             }
             else {
                 if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
-                    printf("Error sending message!\n");
+                   
+                    
                 }
             }
         }
 
     }
   else {
-        printf("Failed to create GOOSE publisher. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
+         LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
+
     }
 
 }
