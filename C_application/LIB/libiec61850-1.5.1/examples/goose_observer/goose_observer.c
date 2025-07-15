@@ -1,18 +1,21 @@
 /*
  * goose_observer.c
  *
- * This is an example for generic GOOSE observer
+ * This is an example for a GOOSE observer that tries to precisely
+ * match the publisher's configuration, assuming a libiec61850
+ * version without GooseFilterConfig.
  *
  * Has to be started as root in Linux.
  */
 
 #include "goose_receiver.h"
 #include "goose_subscriber.h"
-#include "hal_thread.h"
+#include "hal_thread.h" // For Thread_sleep
 
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> // For memcpy (though not strictly needed here anymore, good practice)
 
 static int running = 1;
 
@@ -21,10 +24,15 @@ void sigint_handler(int signalId)
     running = 0;
 }
 
+
 void
 gooseListener(GooseSubscriber subscriber, void* parameter)
 {
-    printf("GOOSE event:\n");
+    printf("\n--- GOOSE Event Received ---\n");
+    fflush(stdout);
+     printf(" Message validity: %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+    
+     // Rest of the existing code
     printf("  vlanTag: %s\n", GooseSubscriber_isVlanSet(subscriber) ? "found" : "NOT found");
     if (GooseSubscriber_isVlanSet(subscriber))
     {
@@ -44,12 +52,15 @@ gooseListener(GooseSubscriber subscriber, void* parameter)
     printf("  ndsCom: %s\n", GooseSubscriber_needsCommission(subscriber) ? "true" : "false");
     printf("  simul: %s\n", GooseSubscriber_isTest(subscriber) ? "true" : "false");
     printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-            GooseSubscriber_getSqNum(subscriber));
+             GooseSubscriber_getSqNum(subscriber));
     printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
 
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
 
-    printf("  timestamp: %u.%u\n", (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
+    printf("  timestamp: %llu ms (approx %u.%03u seconds)\n",
+           (long long unsigned int)timestamp,
+           (uint32_t) (timestamp / 1000), (uint32_t) (timestamp % 1000));
+
     printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
 
     MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
@@ -59,43 +70,56 @@ gooseListener(GooseSubscriber subscriber, void* parameter)
     MmsValue_printToBuffer(values, buffer, 1024);
 
     printf("  AllData: %s\n", buffer);
+    printf("--------------------------\n");
 }
 
-int
-main(int argc, char** argv)
+
+
+int main(int argc, char** argv)
 {
-    GooseReceiver receiver = GooseReceiver_create();
+ GooseReceiver receiver = GooseReceiver_create();
 
-     if (argc > 1) {
-         printf("Set interface id: %s\n", argv[1]);
-         GooseReceiver_setInterfaceId(receiver, argv[1]);
-     }
-     else {
-         printf("Using interface eth0\n");
-         GooseReceiver_setInterfaceId(receiver, "eth0");
-     }
+ const char *interfaceId = NULL;
+ if (argc > 1) {
+ interfaceId = argv[1];
+ } else {
+ interfaceId = "lo";
+ }
+ printf("Using interface %s\n", interfaceId);
+ GooseReceiver_setInterfaceId(receiver, interfaceId);
 
-    GooseSubscriber subscriber = GooseSubscriber_create("", NULL);
-    GooseSubscriber_setObserver(subscriber);
-    GooseSubscriber_setListener(subscriber, gooseListener, NULL);
+ const char* PUBLISHER_GO_ID = "simpleIOGenericIO/LLN0$GO$gcbAnalogValues";
+ GooseSubscriber subscriber = GooseSubscriber_create(PUBLISHER_GO_ID, NULL);
 
-    GooseReceiver_addSubscriber(receiver, subscriber);
+ if (subscriber == NULL) {
+ printf("Failed to create GOOSE subscriber.\n");
+ GooseReceiver_destroy(receiver);
+ return -1;
+ }
 
-    GooseReceiver_start(receiver);
+ // Explicitly set parameters to match publisher
+ uint8_t dstMac[6] = {0x01, 0x0C, 0xCD, 0x01, 0x00, 0x01};
+ GooseSubscriber_setDstMac(subscriber, dstMac);
+ GooseSubscriber_setAppId(subscriber, 1000);
 
-    if (GooseReceiver_isRunning(receiver)) {
-        signal(SIGINT, sigint_handler);
 
-        while (running) {
-            Thread_sleep(100);
-        }
-    }
-    else {
-        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
-    }
+ GooseSubscriber_setListener(subscriber, gooseListener, NULL);
+ GooseReceiver_addSubscriber(receiver, subscriber);
 
-    GooseReceiver_stop(receiver);
+ GooseReceiver_start(receiver);
 
-    GooseReceiver_destroy(receiver);
-    return 0;
+ if (GooseReceiver_isRunning(receiver)) {
+ signal(SIGINT, sigint_handler);
+ printf("GOOSE observer started. Listening for messages with goID '%s'...\n", PUBLISHER_GO_ID);
+ while (running) {
+ Thread_sleep(100);
+ }
+ } else {
+ printf("Failed to start GOOSE receiver. Check interface '%s' and root permissions.\n", interfaceId);
+ }
+
+ printf("Stopping GOOSE observer...\n");
+ GooseReceiver_stop(receiver);
+ GooseReceiver_destroy(receiver);
+ return 0;
 }

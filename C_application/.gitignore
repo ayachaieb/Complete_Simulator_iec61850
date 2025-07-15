@@ -1,0 +1,49 @@
+# Compiled binaries
+*.o
+*.obj
+*.ko
+*.mod.c
+*.s
+
+# Executables
+*.exe
+*.out
+*.bin
+sv_simulator  # Explicitly ignore your executable if it has a fixed name
+BIN/          # Ignore the entire BIN directory if all executables are there
+
+# Debugging files
+*.d
+*.su
+*.map
+*.bak
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.so
+*.dylib
+
+# Log files
+*.log
+*.log.*
+
+# Build directories
+OBJ/          # Ignore the entire OBJ directory for object files
+build/
+dist/
+
+# Editor/IDE specific files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store # macOS specific
+Thumbs.db # Windows specific
+
+# Other temporary files
+*.*~
+*.tmp
+*.bak

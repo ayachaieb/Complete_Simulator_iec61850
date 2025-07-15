@@ -55,8 +55,8 @@ main(int argc, char** argv)
         GooseReceiver_setInterfaceId(receiver, argv[1]);
     }
     else {
-        printf("Using interface eth0\n");
-        GooseReceiver_setInterfaceId(receiver, "eth0");
+        printf("Using interface enp0s31f6\n");
+        GooseReceiver_setInterfaceId(receiver, "enp0s31f6");
     }
 
     GooseSubscriber subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues", NULL);

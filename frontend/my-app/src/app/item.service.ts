@@ -10,11 +10,15 @@ export interface Item {
 export interface SVConfig {
   appID: string;
   macAddress: string;
-  GOid: string;
   interface: string;
-  cbref: string;
   svid: string;
   scenariofile: string;
+  gocbRef: string,
+  datSet: string,
+  goID: string,
+  MAC: string,
+  APPID: string,
+  interface_Goose: string
 }
 
 export interface GooseConfig {

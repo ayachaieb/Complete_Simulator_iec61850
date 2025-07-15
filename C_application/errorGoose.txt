@@ -1,0 +1,61 @@
+static void
+gooseListener(GooseSubscriber subscriber, void *parameter)
+{
+    printf("GOOSE event:\n");
+    printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
+           GooseSubscriber_getSqNum(subscriber));
+    printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
+
+    uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
+
+    printf("  timestamp: %u.%u\n", (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
+    printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
+
+    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
+
+    char buffer[1024];
+
+    MmsValue_printToBuffer(values, buffer, 1024);
+
+    printf("  allData: %s\n", buffer);
+}
+
+
+
+void *goose_thread_task(void *arg)
+{
+    ThreadData *data = (ThreadData *)arg;
+
+    printf("Thread started for appid 0x%04x on interface %s\n", data->AppID, data->interface);
+    printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           data->interface, data->AppID,
+           data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
+           data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
+
+    GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
+    GooseReceiver_addSubscriber(data->receiver, data->subscriber);
+    GooseReceiver_start(data->receiver);
+
+    if (GooseReceiver_isRunning(data->receiver)== false)
+    {
+        signal(SIGINT, sigint_handler);
+
+        while (running_Goose)
+        {
+            Thread_sleep(100);
+        }
+        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%04x is shutting down.", data->AppID);
+    }
+    else
+    {
+        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
+        printf("Please check the interface %s .\n", data->interface);
+    }
+
+    GooseReceiver_stop(data->receiver);
+    GooseReceiver_destroy(data->receiver);
+
+    LOG_INFO("Goose_Listener", "Thread for appid %p gracefully shutting down.", data->AppID);
+
+    return NULL;
+}
