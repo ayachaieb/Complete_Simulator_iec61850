@@ -15,7 +15,7 @@
 volatile sig_atomic_t running_Goose = 1;
 extern volatile bool internal_shutdown_flag;
 GooseReceiver receiver = NULL;
-bool goose_receiver_cleanup(void);
+int goose_receiver_cleanup(void);
 bool goose_receiver_is_running(void);
 static pthread_t *threads = NULL;
 static ThreadData *thread_data = NULL;
@@ -26,40 +26,46 @@ sigint_handler(int signalId)
     running_Goose = 0;
     StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
     internal_shutdown_flag = true; // Signal ipc_run_loop to exit
-  
-    goose_receiver_cleanup(); 
 
-    exit(0); 
+    if (SUCCESS == goose_receiver_cleanup())
+    {
+        LOG_INFO("Goose_Listener", "Cleaning up thread  successfully");
+    }
+    else
+    {
+        LOG_ERROR("Goose_Listener", "Failed to clean up GOOSE receiver.");
+    }
+
+    exit(0);
 }
 
 static void
 gooseListener(GooseSubscriber subscriber, void *parameter)
 {
 
-    static FILE* logFile = NULL;
+    static FILE *logFile = NULL;
 
-    if (logFile == NULL) {
-   
+    if (logFile == NULL)
+    {
+
         logFile = fopen("log.txt", "a");
 
-     
-        if (logFile == NULL) {
-       
+        if (logFile == NULL)
+        {
+
             fprintf(stderr, "CRITICAL: Failed to open log.txt: %s. Falling back to console.\n", strerror(errno));
-         
+
             logFile = stdout;
         }
     }
 
-   
     char timeStr[64];
     time_t now = time(NULL);
-    struct tm* tm_info = localtime(&now);
+    struct tm *tm_info = localtime(&now);
 
     // Format ="YYYY-MM-DD HH:MM:SS".
     strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
 
-   
     fprintf(logFile, "\n--- [%s] GOOSE Event Received ---\n", timeStr);
 
     fprintf(logFile, "  Message validity: %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
@@ -84,18 +90,19 @@ gooseListener(GooseSubscriber subscriber, void *parameter)
     fprintf(logFile, "  ndsCom: %s\n", GooseSubscriber_needsCommission(subscriber) ? "true" : "false");
     fprintf(logFile, "  simul: %s\n", GooseSubscriber_isTest(subscriber) ? "true" : "false");
     fprintf(logFile, "  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-           GooseSubscriber_getSqNum(subscriber));
+            GooseSubscriber_getSqNum(subscriber));
     fprintf(logFile, "  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
 
     uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
 
     fprintf(logFile, "  timestamp: %llu ms (approx %u.%03u seconds)\n",
-           (long long unsigned int)timestamp,
-           (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
+            (long long unsigned int)timestamp,
+            (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
 
-    MmsValue* values = GooseSubscriber_getDataSetValues(subscriber);
+    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
 
-    if (values != NULL) {
+    if (values != NULL)
+    {
         char buffer[1024];
         MmsValue_printToBuffer(values, buffer, sizeof(buffer));
         fprintf(logFile, "  AllData: %s\n", buffer);
@@ -103,25 +110,57 @@ gooseListener(GooseSubscriber subscriber, void *parameter)
 
     fprintf(logFile, "-----------------------------------------------------\n");
 
-    // Flush 
+    // Flush
     fflush(logFile);
 }
 
-
-bool goose_receiver_cleanup(void)
+int goose_receiver_cleanup(void)
 {
-  
-    if (receiver != NULL)
+    if (thread_data == NULL)
+        return FAIL;
+
+    LOG_INFO("Goose_Listener", "Cleaning up thread resources");
+
+    // Loop 1: Destroying GooseReceiver objects (which implicitly destroy their GooseSubscriber objects)
+    for (int i = 0; i < goose_instance_count; i++)
     {
-        GooseReceiver_stop(receiver);
-        GooseReceiver_destroy(receiver);
-        receiver = NULL; 
+        if (thread_data[i].receiver != NULL)
+        {
+            GooseReceiver_stop(thread_data[i].receiver);
+            GooseReceiver_destroy(thread_data[i].receiver);
+            thread_data[i].receiver = NULL;
+        }
     }
 
+    // REMOVE THIS ENTIRE BLOCK:
+    /*
+    for (int i = 0; i < goose_instance_count; i++)
+    {
+        if (thread_data[i].subscriber != NULL)
+        {
+            GooseSubscriber_destroy(thread_data[i].subscriber);
+            thread_data[i].subscriber = NULL;
+        }
+    }
+    */
+
+    // Thread joining and freeing threads array
+    if (threads != NULL)
+    {
+        for (int i = 0; i < goose_instance_count; i++)
+        {
+            if (pthread_join(threads[i], NULL) != 0)
+                {
+                    LOG_ERROR("Goose_Listener", "Failed to join thread for instance %d", i);
+                }
+        }
+        free(threads);
+        threads = NULL;
+    }
     return SUCCESS;
 }
 
-bool goose_receiver_is_running_Goose(void)
+bool goose_receiver_is_running(void)
 {
 
     return receiver != NULL;
@@ -130,7 +169,6 @@ bool goose_receiver_is_running_Goose(void)
 void *goose_thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
-
 
     signal(SIGINT, sigint_handler);
     if (data->receiver == NULL)
@@ -142,8 +180,6 @@ void *goose_thread_task(void *arg)
         LOG_ERROR("Goose_Listener", "Failed to create GooseReceiver for appid 0x%d", data->AppID);
         return NULL;
     }
-
-
 
     GooseReceiver_setInterfaceId(data->receiver, data->interface);
 
@@ -159,8 +195,6 @@ void *goose_thread_task(void *arg)
 
     GooseSubscriber_setDstMac(data->subscriber, mac);
 
-    
-
     if (data->subscriber == NULL)
 
     {
@@ -173,8 +207,6 @@ void *goose_thread_task(void *arg)
 
         return NULL;
     }
-
-   
 
     GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
 
@@ -189,8 +221,6 @@ void *goose_thread_task(void *arg)
         LOG_ERROR("Goose_Listener", "Failed to start GooseReceiver for appid 0x%d on interface %s",
 
                   data->AppID, data->interface);
-
-  
 
         GooseReceiver_destroy(data->receiver);
 
@@ -208,17 +238,9 @@ void *goose_thread_task(void *arg)
         Thread_sleep(100);
     }
 
-
-
     LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%d shutting down.", data->AppID);
 
-     GooseReceiver_stop(data->receiver);
-
-     GooseReceiver_destroy(data->receiver);
-
-     data->receiver = NULL;
-
-     data->subscriber = NULL;
+  
 }
 
 int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
@@ -231,7 +253,6 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
         return FAIL;
     }
 
-
     if (threads != NULL || thread_data != NULL)
     {
         LOG_INFO("Goose_Listener", "Previous SV Publisher instances found. Cleaning up before re-initialization.");
@@ -243,20 +264,20 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
         }
         if (thread_data)
         {
-  
+
             for (int i = 0; i < number_of_subscribers; ++i)
             {
 
                 if (thread_data[i].interface)
                     free(thread_data[i].interface);
-                if (thread_data[i].goose_id)
-                    free(thread_data[i].goose_id);
+            
                 if (thread_data[i].GoCBRef)
                     free(thread_data[i].GoCBRef);
                 if (thread_data[i].DatSet)
                     free(thread_data[i].DatSet);
                 if (thread_data[i].MACAddress)
                     free(thread_data[i].MACAddress);
+                
             }
             free(thread_data);
             thread_data = NULL;
@@ -275,34 +296,34 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
     memset(threads, 0, goose_instance_count * sizeof(pthread_t)); // Initialize to 0
 
     thread_data = (ThreadData *)malloc(goose_instance_count * sizeof(ThreadData));
-    if (!thread_data)
+    if (NULL== thread_data)
     {
         LOG_ERROR("Goose_Listener", "Memory allocation failed for thread_data!");
         free(threads); // Clean up threads array
         threads = NULL;
         return FAIL;
     }
-    memset(thread_data, 0, goose_instance_count * sizeof(ThreadData)); 
+    memset(thread_data, 0, goose_instance_count * sizeof(ThreadData));
     int i = 0;
 
     for (i = 0; i < goose_instance_count; i++)
     {
-        
+
         memset(&thread_data[i], 0, sizeof(ThreadData));
-        thread_data[i].receiver = NULL;  
-        thread_data[i].subscriber = NULL; 
+        thread_data[i].receiver = NULL;
+        thread_data[i].subscriber = NULL;
         if (config[i].appId)
         {
             char *endptr;
-            unsigned long val = strtoul(config[i].appId, &endptr, 10); 
+            unsigned long val = strtoul(config[i].appId, &endptr, 10);
             if (*endptr != '\0' || val > UINT32_MAX)
             {
                 LOG_ERROR("Goose_Listener", "Invalid appId format or value for instance %d: %s", i, config[i].appId);
                 goto cleanup_init_failure;
             }
 
-            thread_data[i].AppID = (uint32_t)val;                                 
-            thread_data[i].goose_id = (uint32_t)strtoul(config[i].appId, NULL, 10); 
+            thread_data[i].AppID = (uint32_t)val;
+            thread_data[i].goose_id = (uint32_t)strtoul(config[i].appId, NULL, 10);
         }
         else
         {
@@ -325,11 +346,10 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             LOG_ERROR("Goose_Listener", "interface is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-     
 
         if (config[i].GoCBRef)
         {
-            thread_data[i].GoCBRef = strdup(config[i].GoCBRef); 
+            thread_data[i].GoCBRef = strdup(config[i].GoCBRef);
 
             if (!thread_data[i].GoCBRef)
             {
@@ -342,7 +362,6 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             LOG_ERROR("Goose_Listener", "GoCBRef is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-   
 
         if (config[i].DatSet)
         {
@@ -360,7 +379,6 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
         }
         LOG_INFO("Goose_Listener", "DatSet: %s", thread_data[i].DatSet);
 
-  
         thread_data[i].MACAddress = (uint8_t *)malloc(6 * sizeof(uint8_t));
         if (NULL != thread_data[i].MACAddress)
         {
@@ -381,8 +399,6 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
                  thread_data[i].MACAddress[4], thread_data[i].MACAddress[5]);
 
         LOG_INFO("Goose_Listener", "All thread_data initialized successfully");
-
-   
     }
     return SUCCESS;
 
@@ -433,11 +449,11 @@ int Goose_receiver_start()
         }
         else
         {
-         
+
             LOG_INFO("Goose_Listener", "Created thread for instance %d", i);
         }
     }
-  
+
     LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
 
     return all_threads_created;
