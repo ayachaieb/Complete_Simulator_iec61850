@@ -43,7 +43,7 @@ static void state_machine_free(state_machine_t *sm)
 static int state_machine_init(state_machine_t *sm)
 {
     int retval = SUCCESS;
-    
+
     sm->handlers = calloc(4, sizeof(state_handler_t));
     if (!sm->handlers)
     {
@@ -154,7 +154,7 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
         }
         break;
     case STATE_STOP:
-       
+
         if (STATE_EVENT_start_simulation == event)
         {
             next = STATE_INIT;
@@ -167,7 +167,6 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
     if (next != current || event != STATE_EVENT_NONE)
     {
         state_enter(sm, next, current, event, requestId, data_obj);
-      
     }
     return retval;
 }
@@ -179,7 +178,6 @@ static void state_enter(state_machine_t *sm, state_e to, state_e from, state_eve
 
         if (sm->handlers[to].enter)
         {
-           
 
             sm->handlers[to].enter(NULL, from, event, requestId, data_obj);
         }
@@ -190,19 +188,18 @@ static void state_enter(state_machine_t *sm, state_e to, state_e from, state_eve
 static bool state_idle_init(void *data)
 {
     return true;
-
 }
 
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
- 
+
     LOG_INFO("State_Machine", "Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
     return true;
 }
 
 static bool state_init_init(void *data)
 {
- 
+
     return true;
 }
 
@@ -214,23 +211,28 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
     SV_SimulationConfig *svconfig_tab = NULL; // Pointer for dynamic array
     int array_size = 0;
 
-  
     if (cJSON_IsArray(data_obj))
     {
         array_size = cJSON_GetArraySize(data_obj);
+        if (array_size <= 0)
+        {
+            LOG_ERROR("State_Machine", "Received empty or invalid configuration array.");
+            retval = FAIL;
+            goto cleanup; // Jump to cleanup
+        }
         LOG_INFO("State_Machine", "Received %d configuration instances.", array_size);
 
         if (array_size > 0)
         {
-        
+
             svconfig_tab = (SV_SimulationConfig *)malloc(array_size * sizeof(SV_SimulationConfig));
-            if (!svconfig_tab)
+            if (NULL == svconfig_tab)
             {
                 LOG_ERROR("State_Machine", "Failed to allocate memory for SV_SimulationConfig array.");
                 retval = FAIL;
-                goto cleanup; 
+                goto cleanup;
             }
-           
+
             memset(svconfig_tab, 0, array_size * sizeof(SV_SimulationConfig));
         }
 
@@ -239,7 +241,7 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
             cJSON *instance_json_obj = cJSON_GetArrayItem(data_obj, i);
             if (instance_json_obj)
             {
-               
+
                 if (parseSVconfig(instance_json_obj, &svconfig_tab[i]) == SUCCESS)
                 {
                     LOG_INFO("State_Machine", "Successfully parsed instance %d: appId=%s, dstMac=%s, svInterface=%s, scenarioConfigFile=%s, svIDs=%s",
@@ -248,18 +250,17 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
                 else
                 {
                     LOG_ERROR("State_Machine", "Failed to parse instance %d.", i);
-                    retval = FAIL; 
-                    goto cleanup; 
+                    retval = FAIL;
+                    goto cleanup;
                 }
             }
             else
             {
                 LOG_ERROR("State_Machine", "Failed to get instance %d from array.", i);
-                retval = FAIL; 
-                goto cleanup;  // Jump to cleanup
+                retval = FAIL;
+                goto cleanup; // Jump to cleanup
             }
         }
-
 
         if (retval == SUCCESS)
         { // Only proceed if all parsing was successful
@@ -267,7 +268,7 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
             {
                 LOG_ERROR("State_Machine", "Failed to initialize SV Publisher module");
                 retval = FAIL;
-                
+
                 goto cleanup;
             }
             else
@@ -276,11 +277,11 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
                 // If SVPublisher_init succeeds, it is now responsible for managing svconfig_tab memory
                 //  svconfig_tab to NULL to prevent double freeing in cleanup
 
-                if (SUCCESS == Goose_receiver_init(svconfig_tab,array_size))
+                if (SUCCESS == Goose_receiver_init(svconfig_tab, array_size))
                 {
                     LOG_INFO("State_Machine", "Goose receiver initialized successfully");
                 }
-                svconfig_tab = NULL;
+              
             }
         }
     }
@@ -301,12 +302,11 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
         else
         {
             LOG_INFO("State_Machine", "Init success event pushed to state machine");
-            
         }
     }
     else
     {
-        
+
         if (SUCCESS != StateMachine_push_event(STATE_EVENT_init_failed, requestId, data_obj))
         {
             LOG_ERROR("State_Machine", "Failed to push init failed event to state machine");
@@ -314,19 +314,26 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
     }
 
 cleanup:
-   
+
     if (svconfig_tab != NULL)
     {
-        for (int i = 0; i < array_size; i++)
+       for (int i = 0; i < array_size; i++)
         {
-         
-            free(svconfig_tab[i].appId);
-            free(svconfig_tab[i].dstMac);
-            free(svconfig_tab[i].svInterface);
-            free(svconfig_tab[i].scenarioConfigFile);
-            free(svconfig_tab[i].svIDs);
+            // Existing free calls (assuming these were already there)
+            if (svconfig_tab[i].appId) free(svconfig_tab[i].appId);
+            if (svconfig_tab[i].dstMac) free(svconfig_tab[i].dstMac);
+            if (svconfig_tab[i].svInterface) free(svconfig_tab[i].svInterface);
+            if (svconfig_tab[i].scenarioConfigFile) free(svconfig_tab[i].scenarioConfigFile);
+            if (svconfig_tab[i].svIDs) free(svconfig_tab[i].svIDs);
+
+            if (svconfig_tab[i].GoCBRef) free(svconfig_tab[i].GoCBRef);
+            if (svconfig_tab[i].DatSet) free(svconfig_tab[i].DatSet);
+            if (svconfig_tab[i].GoID) free(svconfig_tab[i].GoID);
+            if (svconfig_tab[i].MACAddress) free(svconfig_tab[i].MACAddress);
+            if (svconfig_tab[i].AppID) free(svconfig_tab[i].AppID);
+            if (svconfig_tab[i].Interface) free(svconfig_tab[i].Interface);
         }
-        free(svconfig_tab);
+        free(svconfig_tab); // This frees the array itself
     }
 
     return retval;
@@ -334,7 +341,7 @@ cleanup:
 
 static bool state_running_init(void *data)
 {
-  
+
     return true;
 }
 
@@ -350,7 +357,7 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
     if (FAIL == SVPublisher_start())
     {
         LOG_ERROR("State_Machine", "Failed to start SV Publisher");
-      
+
         SVPublisher_stop();
         retval = FAIL;
     }
@@ -393,7 +400,7 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
         cJSON_Delete(json_response); // Free the cJSON object
     }
 
-return retval;
+    return retval;
 }
 static bool state_stop_init(void *data)
 {
@@ -403,7 +410,6 @@ static bool state_stop_init(void *data)
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
     LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
-
 
     SVPublisher_stop();
     LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
@@ -432,14 +438,14 @@ static bool state_stop_enter(void *data, state_e from, state_event_e event, cons
         {
             LOG_INFO("State_Machine", "Response sent successfully: %s", response_str);
         }
-        free(response_str); 
+        free(response_str);
     }
     else
     {
         LOG_ERROR("State_Machine", "Failed to serialize JSON response in event handler.");
     }
 
-    cJSON_Delete(json_response); 
+    cJSON_Delete(json_response);
 }
 
 static void *state_machine_thread_internal(void *arg)
@@ -468,7 +474,6 @@ static void *state_machine_thread_internal(void *arg)
         {
             LOG_DEBUG("State_Machine", "popped event: %s, requestId: %s",
                       state_event_to_string(event), requestId ? requestId : "N/A");
-           
         }
         else
         {
@@ -482,7 +487,6 @@ static void *state_machine_thread_internal(void *arg)
             break;
         }
 
-  
         if (SUCCESS != state_machine_run(sm, event, requestId, data_obj))
         {
             LOG_ERROR("State_Machine", "State machine run failed for event: %s, requestId: %s",
@@ -511,7 +515,7 @@ int StateMachine_Launch(void)
     int retval = SUCCESS;
     sm_data_internal.current_state = STATE_IDLE;
     sm_data_internal.handlers = NULL;
- 
+
     if (SUCCESS != event_queue_init(&event_queue_internal))
     {
 
@@ -552,7 +556,6 @@ int StateMachine_push_event(state_event_e event, const char *requestId, cJSON *d
 
         LOG_INFO("State_Machine", "Pushing event: %s, requestId: %s",
                  state_event_to_string(event), requestId ? requestId : "N/A");
-        
     }
     else
     {
