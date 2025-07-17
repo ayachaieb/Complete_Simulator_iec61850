@@ -193,7 +193,7 @@ static bool state_idle_init(void *data)
 static bool state_idle_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
 
-    LOG_INFO("State_Machine", "Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
+//    LOG_INFO("State_Machine", "Entered IDLE state from %s due to %s", state_to_string(from), state_event_to_string(event));
     return true;
 }
 
@@ -220,7 +220,7 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
             retval = FAIL;
             goto cleanup; // Jump to cleanup
         }
-        LOG_INFO("State_Machine", "Received %d configuration instances.", array_size);
+      //  LOG_INFO("State_Machine", "Received %d configuration instances.", array_size);
 
         if (array_size > 0)
         {
@@ -244,8 +244,8 @@ static bool state_init_enter(void *data, state_e from, state_event_e event, cons
 
                 if (parseSVconfig(instance_json_obj, &svconfig_tab[i]) == SUCCESS)
                 {
-                    LOG_INFO("State_Machine", "Successfully parsed instance %d: appId=%s, dstMac=%s, svInterface=%s, scenarioConfigFile=%s, svIDs=%s",
-                             i, svconfig_tab[i].appId, svconfig_tab[i].dstMac, svconfig_tab[i].svInterface, svconfig_tab[i].scenarioConfigFile, svconfig_tab[i].svIDs);
+                  //  LOG_INFO("State_Machine", "Successfully parsed instance %d: appId=%s, dstMac=%s, svInterface=%s, scenarioConfigFile=%s, svIDs=%s",
+                    //         i, svconfig_tab[i].appId, svconfig_tab[i].dstMac, svconfig_tab[i].svInterface, svconfig_tab[i].scenarioConfigFile, svconfig_tab[i].svIDs);
                 }
                 else
                 {
@@ -363,7 +363,7 @@ static bool state_running_enter(void *data, state_e from, state_event_e event, c
     }
     else
     {
-        LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
+     //   LOG_INFO("State_Machine", "SV Publisher started successfully in RUNNING state");
         Goose_receiver_start();
         LOG_INFO("State_Machine", "Goose receiver started successfully in RUNNING state");
 
@@ -409,7 +409,7 @@ static bool state_stop_init(void *data)
 
 static bool state_stop_enter(void *data, state_e from, state_event_e event, const char *requestId)
 {
-    LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
+  //  LOG_INFO("State_Machine", "state_stop_enter Entered STOP state from %s due to %s", state_to_string(from), state_event_to_string(event));
 
     SVPublisher_stop();
     LOG_INFO("State_Machine", "SV Publisher stopped in STOP state.");
@@ -569,7 +569,7 @@ int StateMachine_push_event(state_event_e event, const char *requestId, cJSON *d
 
 int StateMachine_shutdown(void)
 {
-    LOG_INFO("State_Machine", "Shutting down StateMachine module...");
+   // LOG_INFO("State_Machine", "Shutting down StateMachine module...");
     event_queue_internal.shutdown = EXIT_FAILURE;                // Set shutdown flag to true
     int c1 = pthread_cond_signal(&event_queue_internal.cond);    // Signal to wake up the thread
     int c2 = pthread_join(sm_thread_internal, NULL);             // Wait for the thread to finish

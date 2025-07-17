@@ -27,7 +27,7 @@ IEC_SRV_INC_MOD = \
 
 CFLAGS += $(IEC_SRV_INC_MOD) -I/usr/include/libxml2
 
-LDFLAGS = -lm -lcjson -lrt -lpthread -lxml2 -lssl -lcrypto
+LDFLAGS = -lm -lcjson -lrt -lpthread -lxml2 -lssl -lcrypto -fsanitize=address -g 
 # Directory structure
 SRC_DIR = ../SRC
 INC_DIR = ../INC
@@ -52,7 +52,7 @@ $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
 all: release
 
 # Debug build
-debug: CFLAGS += -g  -DDEBUG -O0
+debug: CFLAGS += -fsanitize=address -g -DDEBUG -O0 
 debug: $(BIN_DIR)/sv_simulator
 # Release build
 release: CFLAGS += -O2 -DNDEBUG

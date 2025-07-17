@@ -200,14 +200,14 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
             {
                 fprintf(fp, "%s", full_json_buffer);
                 fclose(fp);
-                LOG_INFO("IPC", "Full JSON message written to received_json.txt");
+            //    LOG_INFO("IPC", "Full JSON message written to received_json.txt");
             }
             else
             {
                 LOG_ERROR("IPC", "Failed to open received_json.txt for writing");
             }
          
-            LOG_INFO("IPC", "Received: %s", full_json_buffer);
+          //  LOG_INFO("IPC", "Received: %s", full_json_buffer);
             // Process the received JSON message
             state_event_e event = STATE_EVENT_NONE;
             char *requestId = NULL;

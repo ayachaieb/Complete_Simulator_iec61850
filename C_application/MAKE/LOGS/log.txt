@@ -1456,3 +1456,291 @@
   timestamp: 1752675840847 ms (approx 1752675840.847 seconds)
   AllData: unknown type
 -----------------------------------------------------
+
+--- [2025-07-17 10:52:03] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 76524
+  timeToLive: 500
+  timestamp: 1752745835435 ms (approx 1752745835.435 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 10:52:03] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 76523
+  timeToLive: 500
+  timestamp: 1752745835435 ms (approx 1752745835.435 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 10:52:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 88527
+  timeToLive: 500
+  timestamp: 1752745835435 ms (approx 1752745835.435 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 10:52:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 88526
+  timeToLive: 500
+  timestamp: 1752745835435 ms (approx 1752745835.435 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 10:52:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 88528
+  timeToLive: 500
+  timestamp: 1752745835435 ms (approx 1752745835.435 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 11:19:34] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 11796
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 11:19:34] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 11799
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 11:23:14] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 201509
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 11:31:31] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 634449
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 11:33:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 726423
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 11:33:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 726425
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 13:14:41] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 5991861
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 13:14:41] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 5991865
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 13:15:11] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 6017952
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 13:15:11] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 6017952
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
+
+--- [2025-07-17 14:09:52] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 8792646
+  timeToLive: 500
+  timestamp: 1752747561251 ms (approx 1752747561.251 seconds)
+  AllData: unknown type
+-----------------------------------------------------
