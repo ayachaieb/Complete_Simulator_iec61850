@@ -1,0 +1,18 @@
+
+--- [2025-07-18 17:05:54] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  goCbRef: simpleIOGenericIO/LLN0$GO$gcbAnalogValues
+  dataSet: simpleIOGenericIO/LLN0$AnalogValues
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 1 sqNum: 196141
+  timeToLive: 500
+  timestamp: 1752854540770 ms (approx 1752854540.770 seconds)
+  AllData: unknown type
+-----------------------------------------------------

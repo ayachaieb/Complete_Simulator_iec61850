@@ -133,21 +133,11 @@ printf("Cleaning up thread resources\n");
 
             GooseReceiver_stop(thread_data[i].receiver);
             GooseReceiver_destroy(thread_data[i].receiver);
-            // thread_data[i].receiver = NULL;
+             thread_data[i].receiver = NULL;
         }
     }
 
-    // REMOVE THIS ENTIRE BLOCK:
-    /*
-    for (int i = 0; i < goose_instance_count; i++)
-    {
-        if (thread_data[i].subscriber != NULL)
-        {
-            GooseSubscriber_destroy(thread_data[i].subscriber);
-            thread_data[i].subscriber = NULL;
-        }
-    }
-    */
+
 
     // Thread joining and freeing threads array
     if (threads != NULL)
