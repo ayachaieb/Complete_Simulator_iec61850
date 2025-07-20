@@ -20,7 +20,7 @@ static volatile sig_atomic_t running = 1;
 
 /* Signal handler for Ctrl+C */
 void
-sigint_handler(int dummy) {
+sigint_handler(int running) {
     running = 0;
 }
 

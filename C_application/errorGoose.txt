@@ -64,3 +64,28 @@ Cleaning up receiver for instance 0 ----   10
 [2025-07-18 16:49:08.572] [INFO] [State_Machine] StateMachine module shutdown complete. (../SRC/State_Machine.c:578)
 [2025-07-18 16:49:08.572] [INFO] [ModuleManager] All modules shut down successfully (../SRC/Module_Manager.c:61)
 [2025-07-18 16:49:08.572] [INFO] [Main] Application shutdown complete. Goodbye! (../SRC/main.c:75)
+
+
+=================================================================
+==9042==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 226 byte(s) in 4 object(s) allocated from:
+    #0 0x557644ef2a78 in __interceptor_strdup (/home/eya/Complete_Simulator_iec61850/C_application/BIN/sv_simulator+0x6fa78) (BuildId: ced317bb9b954c253ba9f931c2bb11357b10fd77)
+    #1 0x557644fb219e in logger_log ../SRC/logger.c:206
+    #2 0x557644fa5b1c in goose_thread_task ../SRC/Goose_Listener.c:241
+    #3 0x7f5f54b00aa3 in start_thread nptl/pthread_create.c:447
+
+Direct leak of 96 byte(s) in 4 object(s) allocated from:
+    #0 0x557644ef2a78 in __interceptor_strdup (/home/eya/Complete_Simulator_iec61850/C_application/BIN/sv_simulator+0x6fa78) (BuildId: ced317bb9b954c253ba9f931c2bb11357b10fd77)
+    #1 0x557644fb222b in logger_log ../SRC/logger.c:208
+    #2 0x557644fa5b1c in goose_thread_task ../SRC/Goose_Listener.c:241
+    #3 0x7f5f54b00aa3 in start_thread nptl/pthread_create.c:447
+
+Direct leak of 60 byte(s) in 4 object(s) allocated from:
+    #0 0x557644ef2a78 in __interceptor_strdup (/home/eya/Complete_Simulator_iec61850/C_application/BIN/sv_simulator+0x6fa78) (BuildId: ced317bb9b954c253ba9f931c2bb11357b10fd77)
+    #1 0x557644fb2156 in logger_log ../SRC/logger.c:205
+    #2 0x557644fa5b1c in goose_thread_task ../SRC/Goose_Listener.c:241
+    #3 0x7f5f54b00aa3 in start_thread nptl/pthread_create.c:447
+
+SUMMARY: AddressSanitizer: 382 byte(s) leaked in 12 allocation(s).
+eya@LAPTOP-HBOIJ934:~/Complete_Simulator_iec61850/C_application/MAKE$ 
