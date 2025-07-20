@@ -29,11 +29,14 @@ sigint_handler(int signalId)
 
     if (SUCCESS == goose_receiver_cleanup())
     {
-        LOG_INFO("Goose_Listener", "Cleaning up thread  successfully");
+        printf("Goose_ListenerCleaning up thread  successfully");
+        printf(" FASAKH BALIZZZZ\n");
+        fflush(stdout);
     }
     else
     {
-        LOG_ERROR("Goose_Listener", "Failed to clean up GOOSE receiver.");
+      //  LOG_ERROR("Goose_Listener", "Failed to clean up GOOSE receiver.");
+      printf("Failed to clean up GOOSE receiver.\n");
     }
 
     exit(0);
@@ -119,30 +122,22 @@ int goose_receiver_cleanup(void)
     if (thread_data == NULL)
         return FAIL;
 
-    LOG_INFO("Goose_Listener", "Cleaning up thread resources");
-
+  //  LOG_INFO("Goose_Listener", "Cleaning up thread resources");
+printf("Cleaning up thread resources\n");
     // Loop 1: Destroying GooseReceiver objects (which implicitly destroy their GooseSubscriber objects)
     for (int i = 0; i < goose_instance_count; i++)
-    {
+    { printf("Cleaning up receiver for instance %d ----   %d\n", i,goose_instance_count);
         if (thread_data[i].receiver != NULL)
         {
+            printf("Cleaning up receiver" );
+
             GooseReceiver_stop(thread_data[i].receiver);
             GooseReceiver_destroy(thread_data[i].receiver);
-            thread_data[i].receiver = NULL;
+             thread_data[i].receiver = NULL;
         }
     }
 
-    // REMOVE THIS ENTIRE BLOCK:
-    /*
-    for (int i = 0; i < goose_instance_count; i++)
-    {
-        if (thread_data[i].subscriber != NULL)
-        {
-            GooseSubscriber_destroy(thread_data[i].subscriber);
-            thread_data[i].subscriber = NULL;
-        }
-    }
-    */
+
 
     // Thread joining and freeing threads array
     if (threads != NULL)
@@ -157,6 +152,8 @@ int goose_receiver_cleanup(void)
         free(threads);
         threads = NULL;
     }
+    //LOG_INFO("Goose_Listener", "All threads joined successfully");
+    printf("All threads joined successfully\n");
     return SUCCESS;
 }
 
@@ -182,8 +179,6 @@ void *goose_thread_task(void *arg)
     }
 
     GooseReceiver_setInterfaceId(data->receiver, data->interface);
-
-    LOG_INFO("Goose_Listener", "Set interface %s for appid 0x%d", data->interface, data->AppID);
 
     data->subscriber = GooseSubscriber_create("simpleIOGenericIO/LLN0$GO$gcbAnalogValues",
 
@@ -255,7 +250,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
 
     if (threads != NULL || thread_data != NULL)
     {
-        LOG_INFO("Goose_Listener", "Previous SV Publisher instances found. Cleaning up before re-initialization.");
+        LOG_INFO("Goose_Listener", "Previous GOOSE Publisher instances found. Cleaning up before re-initialization.");
 
         if (threads)
         {
@@ -377,7 +372,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             LOG_ERROR("Goose_Listener", "DatSet is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        LOG_INFO("Goose_Listener", "DatSet: %s", thread_data[i].DatSet);
+
 
         thread_data[i].MACAddress = (uint8_t *)malloc(6 * sizeof(uint8_t));
         if (NULL != thread_data[i].MACAddress)
@@ -393,17 +388,17 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             LOG_ERROR("Goose_Listener", "dstMac is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        LOG_INFO("Goose_Listener", "dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
-                 thread_data[i].MACAddress[0], thread_data[i].MACAddress[1],
-                 thread_data[i].MACAddress[2], thread_data[i].MACAddress[3],
-                 thread_data[i].MACAddress[4], thread_data[i].MACAddress[5]);
+        // LOG_INFO("Goose_Listener", "dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
+        //          thread_data[i].MACAddress[0], thread_data[i].MACAddress[1],
+        //          thread_data[i].MACAddress[2], thread_data[i].MACAddress[3],
+        //          thread_data[i].MACAddress[4], thread_data[i].MACAddress[5]);
 
         LOG_INFO("Goose_Listener", "All thread_data initialized successfully");
     }
     return SUCCESS;
 
 cleanup_init_failure:
-    LOG_INFO("Goose_Listener", "cleanup happening");
+    LOG_INFO("Goose_Listener", "cleanup_init_failure happening");
     // Free all memory allocated
     for (int j = 0; j <= i; ++j)
     {
@@ -450,11 +445,11 @@ int Goose_receiver_start()
         else
         {
 
-            LOG_INFO("Goose_Listener", "Created thread for instance %d", i);
+          //  LOG_INFO("Goose_Listener", "Created thread for instance %d", i);
         }
     }
 
-    LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
+    LOG_INFO("Goose_Listener", "Goose_Listener threads started.");
 
     return all_threads_created;
     return 0;

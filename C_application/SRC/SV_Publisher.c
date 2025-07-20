@@ -574,8 +574,8 @@ cleanup_on_error:
 
 bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
 {
-    LOG_INFO("SV_Publisher", "Starting VDPA SV Publisher");
-    LOG_INFO("SV_Publisher", "UID: %d", getuid());
+   // LOG_INFO("SV_Publisher", "Starting VDPA SV Publisher");
+  //  LOG_INFO("SV_Publisher", "UID: %d", getuid());
 
     if (instances == NULL || number_publishers <= 0)
     {
@@ -702,7 +702,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             LOG_ERROR("SV_Publisher", "scenarioConfigFile is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        LOG_INFO("SV_Publisher", "scenarioConfigFile: %s", thread_data[i].scenarioConfigFile);
+ //       LOG_INFO("SV_Publisher", "scenarioConfigFile: %s", thread_data[i].scenarioConfigFile);
         if (instances[i].svIDs)
         {
             thread_data[i].svIDs = strdup(instances[i].svIDs);
@@ -717,7 +717,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             LOG_ERROR("SV_Publisher", "svIDs is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        LOG_INFO("SV_Publisher", "svIDs: %s", thread_data[i].svIDs);
+     //   LOG_INFO("SV_Publisher", "svIDs: %s", thread_data[i].svIDs);
         // Parse and copy MAC address
         if (instances[i].dstMac)
         {
@@ -732,14 +732,14 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             LOG_ERROR("SV_Publisher", "dstMac is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-        LOG_INFO("SV_Publisher", "dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
-                 thread_data[i].parameters.dstAddress[0], thread_data[i].parameters.dstAddress[1],
-                 thread_data[i].parameters.dstAddress[2], thread_data[i].parameters.dstAddress[3],
-                 thread_data[i].parameters.dstAddress[4], thread_data[i].parameters.dstAddress[5]);
+        // LOG_INFO("SV_Publisher", "dstMac: %02x:%02x:%02x:%02x:%02x:%02x",
+        //          thread_data[i].parameters.dstAddress[0], thread_data[i].parameters.dstAddress[1],
+        //          thread_data[i].parameters.dstAddress[2], thread_data[i].parameters.dstAddress[3],
+        //          thread_data[i].parameters.dstAddress[4], thread_data[i].parameters.dstAddress[5]);
     }
-    LOG_INFO("SV_Publisher", "outtaa");
+  //  LOG_INFO("SV_Publisher", "outtaa");
     return SUCCESS;
-    LOG_INFO("SV_Publisher", "cleanup happening");
+
 cleanup_init_failure:
     // Free all memory allocated so far for thread_data and threads
     for (int j = 0; j <= i; ++j)
@@ -788,7 +788,7 @@ bool SVPublisher_start(void)
         }
         else
         {
-            LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
+           // LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
         }
     }
   

@@ -226,6 +226,7 @@ int parseGOOSEConfig(
             freeGOOSEConfig(config); // Free already allocated memory
             return FAIL;
         }
+        return SUCCESS; // Successfully parsed all required fields
     }
     else
     {

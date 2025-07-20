@@ -23,6 +23,11 @@
         "stdbool.h": "c",
         "stdint.h": "c",
         "util.h": "c",
-        "linked_list.h": "c"
-    }
+        "linked_list.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c"
+    },
+    "cmake.sourceDirectory": "/media/eya/data/Test_tool/C_application/LIB/libiec61850-1.5.1"
 }

@@ -21,6 +21,7 @@ int check_app_shutdown_status(void) {
 }
 
 int main(void) {
+    printf("Starting application...\n");
     if (!logger_init(8192, 80)) {
    
         fprintf(stderr, "Failed to initialize logger. Exiting.\n");

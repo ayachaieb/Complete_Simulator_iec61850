@@ -1,61 +1,66 @@
-static void
-gooseListener(GooseSubscriber subscriber, void *parameter)
-{
-    printf("GOOSE event:\n");
-    printf("  stNum: %u sqNum: %u\n", GooseSubscriber_getStNum(subscriber),
-           GooseSubscriber_getSqNum(subscriber));
-    printf("  timeToLive: %u\n", GooseSubscriber_getTimeAllowedToLive(subscriber));
-
-    uint64_t timestamp = GooseSubscriber_getTimestamp(subscriber);
-
-    printf("  timestamp: %u.%u\n", (uint32_t)(timestamp / 1000), (uint32_t)(timestamp % 1000));
-    printf("  message is %s\n", GooseSubscriber_isValid(subscriber) ? "valid" : "INVALID");
-
-    MmsValue *values = GooseSubscriber_getDataSetValues(subscriber);
-
-    char buffer[1024];
-
-    MmsValue_printToBuffer(values, buffer, 1024);
-
-    printf("  allData: %s\n", buffer);
-}
-
-
-
-void *goose_thread_task(void *arg)
-{
-    ThreadData *data = (ThreadData *)arg;
-
-    printf("Thread started for appid 0x%04x on interface %s\n", data->AppID, data->interface);
-    printf("Interface %s\nappid 0x%04x\ndstMac: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           data->interface, data->AppID,
-           data->MACAddress[0], data->MACAddress[1], data->MACAddress[2],
-           data->MACAddress[3], data->MACAddress[4], data->MACAddress[5]);
-
-    GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
-    GooseReceiver_addSubscriber(data->receiver, data->subscriber);
-    GooseReceiver_start(data->receiver);
-
-    if (GooseReceiver_isRunning(data->receiver)== false)
-    {
-        signal(SIGINT, sigint_handler);
-
-        while (running_Goose)
-        {
-            Thread_sleep(100);
-        }
-        LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%04x is shutting down.", data->AppID);
-    }
-    else
-    {
-        printf("Failed to start GOOSE subscriber. Reason can be that the Ethernet interface doesn't exist or root permission are required.\n");
-        printf("Please check the interface %s .\n", data->interface);
-    }
-
-    GooseReceiver_stop(data->receiver);
-    GooseReceiver_destroy(data->receiver);
-
-    LOG_INFO("Goose_Listener", "Thread for appid %p gracefully shutting down.", data->AppID);
-
-    return NULL;
-}
+$ sudo ../BIN/sv_simulator
+Starting application...
+^CCleaning up thread resources
+Cleaning up receiver for instance 0 ----   10
+[2025-07-18 16:48:33.359] [INFO] [ModuleManager] Initializing modules... (../SRC/Module_Manager.c:10)
+[2025-07-18 16:48:33.359] [INFO] [State_Machine] Created state machine thread in module (../SRC/State_Machine.c:532)
+[2025-07-18 16:48:33.359] [INFO] [IPC] Connected to Node.js IPC server (or connection in progress) (../SRC/ipc.c:76)
+[2025-07-18 16:48:33.359] [INFO] [ModuleManager] All modules initialized successfully (../SRC/Module_Manager.c:27)
+[2025-07-18 16:48:33.359] [INFO] [Main] All modules initialized. Press Ctrl+C to shut down. (../SRC/main.c:46)
+[2025-07-18 16:48:33.359] [INFO] [ModuleManager] Starting main application loop (../SRC/Module_Manager.c:40)
+[2025-07-18 16:48:37.581] [INFO] [IPC] Event: start_simulation (../SRC/ipc.c:229)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] Pushing event: start_simulation, requestId: 1752853717581 (../SRC/State_Machine.c:557)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] Entered INITIATION state from IDLE due to start_simulation (../SRC/State_Machine.c:209)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] SV Publisher initialized successfully  (../SRC/State_Machine.c:276)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] Starting Goose_Listener (../SRC/Goose_Listener.c:243)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [Goose_Listener] All thread_data initialized successfully (../SRC/Goose_Listener.c:396)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] Goose receiver initialized successfully (../SRC/State_Machine.c:282)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] Pushing event: init_success, requestId: 1752853717581 (../SRC/State_Machine.c:557)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] Init success event pushed to state machine (../SRC/State_Machine.c:304)
+[2025-07-18 16:48:37.582] [INFO] [State_Machine] Entered RUNNING state from INIT due to init_success (../SRC/State_Machine.c:353)
+[2025-07-18 16:48:37.582] [INFO] [SV_Publisher] SV Publisher threads started. (../SRC/SV_Publisher.c:795)
+[2025-07-18 16:48:37.583] [INFO] [Goose_Listener] Goose_Listener threads started. (../SRC/Goose_Listener.c:452)
+[2025-07-18 16:48:37.583] [INFO] [State_Machine] Goose receiver started successfully in RUNNING state (../SRC/State_Machine.c:368)
+[2025-07-18 16:48:37.583] [INFO] [State_Machine] Response sent successfully: {"status":"state running currently executing ...","requestId":"1752853717581"} (../SRC/State_Machine.c:392)
+[2025-07-18 16:48:38.685] [INFO] [IPC] Event: stop_simulation (../SRC/ipc.c:239)
+[2025-07-18 16:48:38.685] [INFO] [State_Machine] Pushing event: stop_simulation, requestId: 1752853718684 (../SRC/State_Machine.c:557)
+[2025-07-18 16:48:38.685] [INFO] [SV_Publisher] Signaling SV Publisher threads to shut down... (../SRC/SV_Publisher.c:802)
+[2025-07-18 16:48:38.685] [INFO] [SV_Publisher] Joining thread for instance 0... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:38.691] [INFO] [SV_Publisher] Thread for appid 0x5000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:38.713] [INFO] [SV_Publisher] Thread for appid 0x9100 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:38.713] [INFO] [SV_Publisher] Thread for appid 0x7000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.074] [INFO] [SV_Publisher] Thread for appid 0x1000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.077] [INFO] [SV_Publisher] Thread for appid 0x2000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.079] [INFO] [SV_Publisher] Joining thread for instance 1... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.084] [INFO] [SV_Publisher] Joining thread for instance 2... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.088] [INFO] [SV_Publisher] Thread for appid 0x3000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.089] [INFO] [SV_Publisher] Thread for appid 0x4000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.094] [INFO] [SV_Publisher] Thread for appid 0x6000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.097] [INFO] [SV_Publisher] Thread for appid 0x8000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.099] [INFO] [SV_Publisher] Thread for appid 0x9000 gracefully shutting down. (../SRC/SV_Publisher.c:522)
+[2025-07-18 16:48:39.099] [INFO] [SV_Publisher] Joining thread for instance 3... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.099] [INFO] [SV_Publisher] Joining thread for instance 4... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.099] [INFO] [SV_Publisher] Joining thread for instance 5... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.102] [INFO] [SV_Publisher] Joining thread for instance 6... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.102] [INFO] [SV_Publisher] Joining thread for instance 7... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.106] [INFO] [SV_Publisher] Joining thread for instance 8... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.106] [INFO] [SV_Publisher] Joining thread for instance 9... (../SRC/SV_Publisher.c:813)
+[2025-07-18 16:48:39.106] [INFO] [State_Machine] SV Publisher stopped in STOP state. (../SRC/State_Machine.c:415)
+[2025-07-18 16:48:39.106] [INFO] [State_Machine] Response sent successfully: {"status":"state STOP currently executing ...","requestId":"1752853718684"} (../SRC/State_Machine.c:439)
+[2025-07-18 16:49:08.572] [INFO] [State_Machine]  Pushing event without data: shutdown, requestId: N/A (../SRC/State_Machine.c:563)
+[2025-07-18 16:49:08.572] [INFO] [Main] Initiating application shutdown... (../SRC/main.c:52)
+[2025-07-18 16:49:08.572] [ERROR] [Main] Error Code -1: Application terminated with an error. (../SRC/main.c:60)
+[2025-07-18 16:49:08.572] [INFO] [ModuleManager] Shutting down all modules... (../SRC/Module_Manager.c:47)
+[2025-07-18 16:49:08.572] [INFO] [IPC] Shutting down... (../SRC/ipc.c:279)
+[2025-07-18 16:49:08.572] [INFO] [State_Machine] StateMachine module shutdown complete. (../SRC/State_Machine.c:578)
+[2025-07-18 16:49:08.572] [INFO] [ModuleManager] All modules shut down successfully (../SRC/Module_Manager.c:61)
+[2025-07-18 16:49:08.572] [INFO] [Main] Application shutdown complete. Goodbye! (../SRC/main.c:75)
