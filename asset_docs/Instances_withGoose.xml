@@ -5,12 +5,12 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario_DPA.txt</scenarioConfigFile>
         <svIDs>svid1</svIDs>
-        <GoCBRef>IED1/LLN0$GO$gcbGoose1</GoCBRef>
-        <DatSet>IED1/LLN0$DS$GooseDataSet1</DatSet>
+        <GoCBRef>DEP_1Tranche/LLN0$GO$gcbInstProt</GoCBRef>
+        <DatSet>simpleIOGenericIO/LLN0$AnalogValues</DatSet>
         <GoID>GooseID_Instance1</GoID>
         <MACAddress>01:0C:CD:01:00:01</MACAddress>
         <AppID>1000</AppID>
-        <Interface>lo</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>8192</appId>
@@ -18,12 +18,12 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario_DPA.txt</scenarioConfigFile>
         <svIDs>svid22</svIDs>
-        <GoCBRef>IED2/LLN0$GO$gcbGoose2</GoCBRef>
-        <DatSet>IED2/LLN0$DS$GooseDataSet2</DatSet>
+        <GoCBRef>DEP_2Tranche/LLN0$GO$gcbInstProt</GoCBRef>
+        <DatSet>simpleIOGenericIO/LLN0$AnalogValues</DatSet>
         <GoID>GooseID_Instance2</GoID>
-        <MACAddress>01:0C:CD:01:00:02</MACAddress>
-        <AppID>1001</AppID>
-        <Interface>lo</Interface>
+        <MACAddress>01:0C:CD:01:00:01</MACAddress>
+        <AppID>1000</AppID>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>12288</appId>
@@ -31,12 +31,12 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario.txt</scenarioConfigFile>
         <svIDs>svid333</svIDs>
-        <GoCBRef>IED3/LLN0$GO$gcbGoose3</GoCBRef>
-        <DatSet>IED3/LLN0$DS$GooseDataSet3</DatSet>
+        <GoCBRef>DEP_3Tranche/LLN0$GO$gcbInstProt</GoCBRef>
+        <DatSet>DEP_4Tranche/LLN0$GO$gcbInstProt</DatSet>
         <GoID>GooseID_Instance3</GoID>
-        <MACAddress>01:0C:CD:01:00:03</MACAddress>
-        <AppID>1002</AppID>
-        <Interface>lo</Interface>
+        <MACAddress>01:0C:CD:01:00:01</MACAddress>
+        <AppID>1000</AppID>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>16384</appId>
@@ -44,12 +44,12 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario_DPA.txt</scenarioConfigFile>
         <svIDs>svid4444</svIDs>
-        <GoCBRef>IED4/LLN0$GO$gcbGoose4</GoCBRef>
+        <GoCBRef>DEP_5Tranche/LLN0$GO$gcbInstProt</GoCBRef>
         <DatSet>IED4/LLN0$DS$GooseDataSet4</DatSet>
         <GoID>GooseID_Instance4</GoID>
-        <MACAddress>01:0C:CD:01:00:04</MACAddress>
-        <AppID>1003</AppID>
-        <Interface>lo</Interface>
+        <MACAddress>01:0C:CD:01:00:01</MACAddress>
+        <AppID>1000</AppID>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>20480</appId>
@@ -57,12 +57,12 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario.txt</scenarioConfigFile>
         <svIDs>svid55555</svIDs>
-        <GoCBRef>IED5/LLN0$GO$gcbGoose5</GoCBRef>
+        <GoCBRef>DEP_6Tranche/LLN0$GO$gcbInstProt</GoCBRef>
         <DatSet>IED5/LLN0$DS$GooseDataSet5</DatSet>
         <GoID>GooseID_Instance5</GoID>
         <MACAddress>01:0C:CD:01:00:05</MACAddress>
         <AppID>1004</AppID>
-        <Interface>lo</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>24576</appId>
@@ -70,12 +70,12 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario.txt</scenarioConfigFile>
         <svIDs>svid666666</svIDs>
-        <GoCBRef>IED6/LLN0$GO$gcbGoose6</GoCBRef>
+        <GoCBRef>DEP_7Tranche/LLN0$GO$gcbInstProt</GoCBRef>
         <DatSet>IED6/LLN0$DS$GooseDataSet6</DatSet>
         <GoID>GooseID_Instance6</GoID>
         <MACAddress>01:0C:CD:01:00:06</MACAddress>
         <AppID>1005</AppID>
-        <Interface>lo</Interface>
+        <Interface>enp0s31f6</Interface>
     </instance>
     <instance>
         <appId>28672</appId>
@@ -83,7 +83,7 @@
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario.txt</scenarioConfigFile>
         <svIDs>svid7777777</svIDs>
-        <GoCBRef>IED7/LLN0$GO$gcbGoose7</GoCBRef>
+        <GoCBRef>DEP_25Tranche/LLN0$GO$gcbInstProt</GoCBRef>
         <DatSet>IED7/LLN0$DS$GooseDataSet7</DatSet>
         <GoID>GooseID_Instance7</GoID>
         <MACAddress>01:0C:CD:01:00:07</MACAddress>

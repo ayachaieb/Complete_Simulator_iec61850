@@ -28,6 +28,7 @@
 // Internal state for the SV Publisher module
 
 // CommParameters parameters = {0, 0, 0x5000, {0x01, 0x0C, 0xCD, 0x01, 0x00, 0x01}};
+#define MAX_GOOSE_SUBSCRIPTIONS 24
 
 #define COM_VDPA_NB_ECH_PAR_SV 2
 #define FREQ_EN_HZ (f32)50.
@@ -60,6 +61,22 @@
 typedef float f32;
 typedef f32 float32_t; // Pour compatibilite ancienne version
 
+typedef struct
+{
+    char path[128];
+    uint8_t mac[6];
+    uint16_t appId;
+    uint32_t lastStNum;
+    uint64_t faultStartTimeNs;
+    bool isMeasuring;
+    bool latencyMeasured;
+} GooseSubscriptionState;
+
+GooseSubscriptionState gooseStates[MAX_GOOSE_SUBSCRIPTIONS];
+
+
+int gooseCount = 0;
+
 enum
 {
     COM_VDPA_ECH_DATA_IND_I1,
@@ -83,8 +100,10 @@ enum
 
 typedef struct
 {
-    float channel1_voltage[3];
-    float channel1_current[3];
+    float channel1_voltage[3];     // amplitudes
+    float channel1_voltage_phi[3]; // phase shifts in degrees
+    float channel1_current[3];     // amplitudes
+    float channel1_current_phi[3]; // phase shifts in degrees
     int duration_ms;
 } PhaseSettings;
 
@@ -125,6 +144,8 @@ typedef struct
 {
     uint16_t GOOSEappId; // app id svpub
     char *svInterface;
+    char *gooseInterface; // Interface for GOOSE
+
     const char *scenarioConfigFile;
     char **svIDs;
     CommParameters parameters;
@@ -155,17 +176,80 @@ void sigint_handler(int sig)
     StateMachine_push_event(STATE_EVENT_shutdown, NULL, NULL);
     internal_shutdown_flag = true; // Signal ipc_run_loop to exit
 }
+
+static void gooseListener(GooseSubscriber subscriber, void *parameter) {
+    GooseSubscriptionState *state = (GooseSubscriptionState *)parameter;
+    uint32_t newStNum = GooseSubscriber_getStNum(subscriber);
+
+    if (newStNum != state->lastStNum) {
+        state->lastStNum = newStNum;
+
+        if (state->isMeasuring && !state->latencyMeasured) {
+            uint64_t now = Hal_getTimeInNs();
+            uint64_t latency = now - state->faultStartTimeNs;
+            printf("GOOSE [%s]: Latency measured: %f ms (stNum changed to %u)\n",
+                   state->path, ((float)latency / 1000000.f), newStNum);
+            state->latencyMeasured = true;
+        }
+    }
+}
+
+
+static int setupGooseSubscribers(ThreadData *data) {
+    data->gooseReceiver = GooseReceiver_create();
+    if (data->gooseReceiver == NULL) {
+        printf("Failed to create GooseReceiver\n");
+        return -1;
+    }
+
+    GooseReceiver_setInterfaceId(data->gooseReceiver, data->svInterface);
+
+    for (int i = 0; i < instance_count; i++) {
+        // Each subscriber needs its own instance
+        GooseSubscriber subscriber = GooseSubscriber_create(thread_data[i].goCbRef, NULL);
+        if (subscriber == NULL) {
+            printf("Failed to create GooseSubscriber for gocbref %s\n", thread_data[i].goCbRef);
+            continue;
+        }
+
+        GooseSubscriber_setDstMac(subscriber, thread_data[i].parameters.dstAddress);
+        GooseSubscriber_setAppId(subscriber, thread_data[i].GOOSEappId);
+
+        strcpy(gooseStates[i].path, thread_data[i].goCbRef);
+        memcpy(gooseStates[i].mac, thread_data[i].parameters.dstAddress, 6);
+        gooseStates[i].appId = thread_data[i].GOOSEappId;
+        gooseStates[i].lastStNum = 0;
+        gooseStates[i].faultStartTimeNs = 0;
+        gooseStates[i].isMeasuring = false;
+        gooseStates[i].latencyMeasured = false;
+
+        GooseSubscriber_setListener(subscriber, gooseListener, &gooseStates[i]);
+        GooseReceiver_addSubscriber(data->gooseReceiver, subscriber);
+
+        printf("GOOSE Subscriber for %s created with AppId %u\n", thread_data[i].goCbRef, thread_data[i].GOOSEappId);
+    }
+
+    GooseReceiver_start(data->gooseReceiver);
+
+    if (!GooseReceiver_isRunning(data->gooseReceiver)) {
+        printf("Failed to start GOOSE subscribers\n");
+        GooseReceiver_destroy(data->gooseReceiver);
+        return -1;
+    }
+    return 0;
+}
+
+
 void timer_handler(int signum, siginfo_t *si, void *uc)
 
 {
     ThreadData *current_data = (ThreadData *)si->si_value.sival_ptr;
     if (current_data == NULL)
     {
-     
+
         LOG_ERROR("SV_Publisher", "Timer handler: current_data is NULL");
         return;
     }
-  
 
     static __thread int sample = 0;
     bool faultCondition = false;
@@ -201,7 +285,7 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             channel1_current2 = (int)(1000.f * fOmtStpmSimuGetVal(phases[current_phase].channel1_current[1], FREQ_EN_HZ, 240.0f, 0)); // I2
             channel1_current3 = (int)(1000.f * fOmtStpmSimuGetVal(phases[current_phase].channel1_current[2], FREQ_EN_HZ, 120.0f, 0)); // I3
 #endif
-        
+
             SVPublisher_ASDU_setINT32(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_I1], channel1_current1);
             SVPublisher_ASDU_setQuality(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_I1Q], q);
 
@@ -225,7 +309,6 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
 
             SVPublisher_ASDU_setINT32(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_V4], channel1_voltage1 + channel1_voltage2 + channel1_voltage3);
             SVPublisher_ASDU_setQuality(asdu, tbIndData[sample][COM_VDPA_ECH_DATA_IND_V4Q], q);
-
 
 #ifdef SINU_METHOD_ANA
             angleCrs += pasCrs;
@@ -255,7 +338,7 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             {
                 if ((tick_208_us - phase_start_tick) >= phase_duration_ticks)
                 {
-                   
+
                     current_phase++;
                     phase_start_tick = tick_208_us;
                     phase_duration_ticks = phases[current_phase].duration_ms * 1000 / (unsigned int)DELAY_208US;
@@ -281,7 +364,6 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             if (running)
             {
                 SVPublisher_publish(current_data->svPublisher);
-               
             }
         }
 
@@ -290,7 +372,6 @@ void timer_handler(int signum, siginfo_t *si, void *uc)
             isMeasuring = true;
             latencyMeasured = false;
             faultStartTimeNs = Hal_getTimeInNs();
-            
         }
     }
 }
@@ -384,8 +465,6 @@ static void setupSVPublisher(ThreadData *data)
         SVPublisher_ASDU_setRefrTm(data->asdu, 0);
     }
     SVPublisher_setupComplete(data->svPublisher);
-
-
 }
 
 int loadScenarioFile(const char *filename)
@@ -458,31 +537,6 @@ int loadScenarioFile(const char *filename)
     return 0;
 }
 
-
-
-static int setupGooseSubscriber(ThreadData *data)
-{
-    data->gooseReceiver = GooseReceiver_create();
-    if (data->gooseReceiver == NULL)
-    {
-        
-        return -1;
-    }
-
-    GooseReceiver_setInterfaceId(data->gooseReceiver, data->svInterface);
-
-    data->gooseSubscriber = GooseSubscriber_create(data->goCbRef, NULL);
-    if (data->gooseSubscriber == NULL)
-    {
-
-        GooseReceiver_destroy(data->gooseReceiver);
-        return -1;
-    }
-  
-
-    return 0;
-}
-
 void *thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
@@ -492,16 +546,15 @@ void *thread_task(void *arg)
     data->svPublisher = SVPublisher_create(&data->parameters, data->svInterface);
     if (!data->svPublisher)
     {
-       
-        goto cleanup_on_error;
+
+        LOG_ERROR("SV_Publisher", "Failed to create SV publisher\n");
+        return NULL;
     }
     if (loadScenarioFile(data->scenarioConfigFile) != 0)
     {
-      
+
         goto cleanup_on_error;
     }
-   
-
 
     setupSVPublisher(data);
     if (!data->svPublisher)
@@ -510,6 +563,13 @@ void *thread_task(void *arg)
         goto cleanup_on_error;
     }
 
+     /* Setup GOOSE Subscriber */
+    if (setupGooseSubscribers(data) != 0) 
+    {
+        printf("Failed to setup GOOSE Subscriber\n");
+        return -1;
+    }
+    
     phase_start_tick = tick_208_us;
     phase_duration_ticks = phases[current_phase].duration_ms * 1000 / (unsigned int)DELAY_208US;
 
@@ -568,14 +628,13 @@ cleanup_on_error:
     if (data->svIDs)
         free(data->svIDs);
 
-
     return NULL;
 }
 
 bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
 {
-   // LOG_INFO("SV_Publisher", "Starting VDPA SV Publisher");
-  //  LOG_INFO("SV_Publisher", "UID: %d", getuid());
+    // LOG_INFO("SV_Publisher", "Starting VDPA SV Publisher");
+    //  LOG_INFO("SV_Publisher", "UID: %d", getuid());
 
     if (instances == NULL || number_publishers <= 0)
     {
@@ -702,7 +761,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             LOG_ERROR("SV_Publisher", "scenarioConfigFile is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
- //       LOG_INFO("SV_Publisher", "scenarioConfigFile: %s", thread_data[i].scenarioConfigFile);
+        //       LOG_INFO("SV_Publisher", "scenarioConfigFile: %s", thread_data[i].scenarioConfigFile);
         if (instances[i].svIDs)
         {
             thread_data[i].svIDs = strdup(instances[i].svIDs);
@@ -717,7 +776,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             LOG_ERROR("SV_Publisher", "svIDs is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-     //   LOG_INFO("SV_Publisher", "svIDs: %s", thread_data[i].svIDs);
+        //   LOG_INFO("SV_Publisher", "svIDs: %s", thread_data[i].svIDs);
         // Parse and copy MAC address
         if (instances[i].dstMac)
         {
@@ -737,7 +796,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
         //          thread_data[i].parameters.dstAddress[2], thread_data[i].parameters.dstAddress[3],
         //          thread_data[i].parameters.dstAddress[4], thread_data[i].parameters.dstAddress[5]);
     }
-  //  LOG_INFO("SV_Publisher", "outtaa");
+    //  LOG_INFO("SV_Publisher", "outtaa");
     return SUCCESS;
 
 cleanup_init_failure:
@@ -788,10 +847,10 @@ bool SVPublisher_start(void)
         }
         else
         {
-           // LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
+            // LOG_INFO("SV_Publisher", "Created thread for instance %d", i);
         }
     }
-  
+
     LOG_INFO("SV_Publisher", "SV Publisher threads started.");
 
     return all_threads_created;
@@ -815,8 +874,6 @@ void SVPublisher_stop()
                 {
                     LOG_ERROR("SV_Publisher", "Failed to join thread for instance %d: %s", i, strerror(errno));
                 }
-             
-                
             }
         }
         free(threads);
@@ -833,8 +890,6 @@ void SVPublisher_stop()
     }
 
     instance_count = 0;
-
-    
 }
 
 void setup_timer(ThreadData *data)
@@ -847,8 +902,7 @@ void setup_timer(ThreadData *data)
     // Ensure signal number is within valid range
     if (signal_num > SIGRTMAX)
     {
-       
-        
+
         return;
     }
 
@@ -886,6 +940,4 @@ void setup_timer(ThreadData *data)
     }
 
     data->timerid = timerid;
-
-    
 }
