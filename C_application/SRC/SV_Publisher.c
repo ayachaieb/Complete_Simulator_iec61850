@@ -145,7 +145,7 @@ typedef struct
     uint16_t GOOSEappId; // app id svpub
     char *svInterface;
     char *gooseInterface; // Interface for GOOSE
-
+    char *goCbRef;
     const char *scenarioConfigFile;
     char **svIDs;
     CommParameters parameters;
@@ -156,7 +156,7 @@ typedef struct
     GooseReceiver gooseReceiver;
     GooseSubscriber gooseSubscriber;
     timer_t timerid;
-    char *goCbRef;
+    
 
 } ThreadData;
 
@@ -180,6 +180,8 @@ void sigint_handler(int sig)
 static void gooseListener(GooseSubscriber subscriber, void *parameter) {
     GooseSubscriptionState *state = (GooseSubscriptionState *)parameter;
     uint32_t newStNum = GooseSubscriber_getStNum(subscriber);
+ // Log every received message
+    printf("GOOSE [%s]: Received message with stNum %u\n", state->path, newStNum);
 
     if (newStNum != state->lastStNum) {
         state->lastStNum = newStNum;
@@ -196,6 +198,7 @@ static void gooseListener(GooseSubscriber subscriber, void *parameter) {
 
 
 static int setupGooseSubscribers(ThreadData *data) {
+   
     data->gooseReceiver = GooseReceiver_create();
     if (data->gooseReceiver == NULL) {
         printf("Failed to create GooseReceiver\n");
@@ -205,6 +208,7 @@ static int setupGooseSubscribers(ThreadData *data) {
     GooseReceiver_setInterfaceId(data->gooseReceiver, data->svInterface);
 
     for (int i = 0; i < instance_count; i++) {
+        printf("Setting up GOOSE subscriber for %s with AppId %u instance count %d\n", data->goCbRef, data->GOOSEappId ,instance_count);
         // Each subscriber needs its own instance
         GooseSubscriber subscriber = GooseSubscriber_create(thread_data[i].goCbRef, NULL);
         if (subscriber == NULL) {
@@ -738,9 +742,22 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             LOG_ERROR("SV_Publisher", "svInterface is NULL for instance %d", i);
             goto cleanup_init_failure;
         }
-
+        if (instances[i].Interface)
+        {
+            thread_data[i].gooseInterface = strdup(instances[i].Interface);
+            if (!thread_data[i].gooseInterface)
+            {
+                LOG_ERROR("SV_Publisher", "Memory allocation failed for gooseInterface for instance %d", i);
+                goto cleanup_init_failure;
+            }
+        }
+        else
+        {
+            LOG_ERROR("SV_Publisher", "gooseInterface is NULL for instance %d", i);
+            goto cleanup_init_failure;
+        }
         // Assuming goCbRef is a fixed string or can be derived
-        thread_data[i].goCbRef = strdup("goose_subscriber"); // Example: fixed string
+        thread_data[i].goCbRef = strdup(instances[i].GoCBRef); // Example: fixed string
         if (!thread_data[i].goCbRef)
         {
             LOG_ERROR("SV_Publisher", "Memory allocation failed for goCbRef for instance %d", i);
