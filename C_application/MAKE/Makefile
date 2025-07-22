@@ -26,8 +26,8 @@ IEC_SRV_INC_MOD = \
     -I$(LIBIEC_HOME)/include/libiec61850
 
 CFLAGS += $(IEC_SRV_INC_MOD) -I/usr/include/libxml2
-
-LDFLAGS = -lm -lcjson -lrt -lpthread -lxml2 -lssl -lcrypto -fsanitize=address -g 
+#-fsanitize=address
+LDFLAGS = -lm -lcjson -lrt -lpthread -lxml2 -lssl -lcrypto -g 
 # Directory structure
 SRC_DIR = ../SRC
 INC_DIR = ../INC
@@ -51,8 +51,8 @@ $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
 # Default target (release build)
 all: release
 
-# Debug build
-debug: CFLAGS += -fsanitize=address -static-libasan -g -DDEBUG -O0 
+# Debug build  -fsanitize=address -static-libasan
+debug: CFLAGS += -g -DDEBUG -O0 
 debug: $(BIN_DIR)/sv_simulator
 # Release build
 release: CFLAGS += -O2 -DNDEBUG

@@ -10,7 +10,7 @@
         <GoID>GooseID_Instance1</GoID>
         <MACAddress>01:0C:CD:01:00:01</MACAddress>
         <AppID>1000</AppID>
-        <Interface>enp0s31f6</Interface>
+        <Interface>lo</Interface>
     </instance>
     <instance>
         <appId>8192</appId>
@@ -23,7 +23,7 @@
         <GoID>GooseID_Instance2</GoID>
         <MACAddress>01:0C:CD:01:00:01</MACAddress>
         <AppID>1000</AppID>
-        <Interface>enp0s31f6</Interface>
+        <Interface>lo</Interface>
     </instance>
     <instance>
         <appId>12288</appId>

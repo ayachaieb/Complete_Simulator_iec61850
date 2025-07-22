@@ -72,9 +72,6 @@ typedef struct
     bool latencyMeasured;
 } GooseSubscriptionState;
 
-GooseSubscriptionState gooseStates[MAX_GOOSE_SUBSCRIPTIONS];
-
-
 int gooseCount = 0;
 
 enum
@@ -125,7 +122,7 @@ static uint64_t faultStartTimeNs = 0;
 
 static f32 angleCrs = (f32)0.;
 static f32 pasCrs = FREQ_EN_HZ * (f32)360. * COM_VDPA_CADENCE_ECH_EN_US / (f32)1000000.;
-
+int count = 0;
 PhaseSettings phases[MAX_PHASES];
 int phase_count = 0;
 
@@ -156,7 +153,6 @@ typedef struct
     GooseReceiver gooseReceiver;
     GooseSubscriber gooseSubscriber;
     timer_t timerid;
-    
 
 } ThreadData;
 
@@ -177,16 +173,19 @@ void sigint_handler(int sig)
     internal_shutdown_flag = true; // Signal ipc_run_loop to exit
 }
 
-static void gooseListener(GooseSubscriber subscriber, void *parameter) {
+static void gooseListener(GooseSubscriber subscriber, void *parameter)
+{
     GooseSubscriptionState *state = (GooseSubscriptionState *)parameter;
     uint32_t newStNum = GooseSubscriber_getStNum(subscriber);
- // Log every received message
+    // Log every received message
     printf("GOOSE [%s]: Received message with stNum %u\n", state->path, newStNum);
 
-    if (newStNum != state->lastStNum) {
+    if (newStNum != state->lastStNum)
+    {
         state->lastStNum = newStNum;
 
-        if (state->isMeasuring && !state->latencyMeasured) {
+        if (state->isMeasuring && !state->latencyMeasured)
+        {
             uint64_t now = Hal_getTimeInNs();
             uint64_t latency = now - state->faultStartTimeNs;
             printf("GOOSE [%s]: Latency measured: %f ms (stNum changed to %u)\n",
@@ -196,53 +195,59 @@ static void gooseListener(GooseSubscriber subscriber, void *parameter) {
     }
 }
 
+static int setupGooseSubscribers(ThreadData *data)
+{
 
-static int setupGooseSubscribers(ThreadData *data) {
-   
     data->gooseReceiver = GooseReceiver_create();
-    if (data->gooseReceiver == NULL) {
+    if (data->gooseReceiver == NULL)
+    {
         printf("Failed to create GooseReceiver\n");
         return -1;
     }
 
-    GooseReceiver_setInterfaceId(data->gooseReceiver, data->svInterface);
+    GooseReceiver_setInterfaceId(data->gooseReceiver, data->gooseInterface);
 
-    for (int i = 0; i < instance_count; i++) {
-        printf("Setting up GOOSE subscriber for %s with AppId %u instance count %d\n", data->goCbRef, data->GOOSEappId ,instance_count);
-        // Each subscriber needs its own instance
-        GooseSubscriber subscriber = GooseSubscriber_create(thread_data[i].goCbRef, NULL);
-        if (subscriber == NULL) {
-            printf("Failed to create GooseSubscriber for gocbref %s\n", thread_data[i].goCbRef);
-            continue;
-        }
-
-        GooseSubscriber_setDstMac(subscriber, thread_data[i].parameters.dstAddress);
-        GooseSubscriber_setAppId(subscriber, thread_data[i].GOOSEappId);
-
-        strcpy(gooseStates[i].path, thread_data[i].goCbRef);
-        memcpy(gooseStates[i].mac, thread_data[i].parameters.dstAddress, 6);
-        gooseStates[i].appId = thread_data[i].GOOSEappId;
-        gooseStates[i].lastStNum = 0;
-        gooseStates[i].faultStartTimeNs = 0;
-        gooseStates[i].isMeasuring = false;
-        gooseStates[i].latencyMeasured = false;
-
-        GooseSubscriber_setListener(subscriber, gooseListener, &gooseStates[i]);
-        GooseReceiver_addSubscriber(data->gooseReceiver, subscriber);
-
-        printf("GOOSE Subscriber for %s created with AppId %u\n", thread_data[i].goCbRef, thread_data[i].GOOSEappId);
+    printf("Setting up GOOSE subscriber for %s interface=%s with AppId %u\n", data->goCbRef,data->gooseInterface ,data->GOOSEappId ,instance_count);
+    // Each subscriber needs its own instance
+    GooseSubscriber subscriber = GooseSubscriber_create(data->goCbRef, NULL);
+    if (subscriber == NULL)
+    {
+        printf("Failed to create GooseSubscriber for gocbref %s\n", data->goCbRef);
     }
+
+    GooseSubscriber_setDstMac(subscriber, data->parameters.dstAddress);
+    // printf("MAC address set for GOOSE subscriber: %02X:%02X:%02X:%02X:%02X:%02X\n",
+    //        data->parameters.dstAddress[0], data->parameters.dstAddress[1],
+    //        data->parameters.dstAddress[2], data->parameters.dstAddress[3],
+    //        data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
+
+    GooseSubscriber_setAppId(subscriber, data->GOOSEappId);
+
+   // printf("GOOSE Subscriber created for %s with GOAppId %u\n", data->goCbRef, data->GOOSEappId);
+    GooseSubscriptionState gooseStates;
+    strcpy(gooseStates.path, data->goCbRef);
+    memcpy(gooseStates.mac, data->parameters.dstAddress, 6);
+    gooseStates.appId = data->GOOSEappId;
+    gooseStates.lastStNum = 0;
+    gooseStates.faultStartTimeNs = 0;
+    gooseStates.isMeasuring = false;
+    gooseStates.latencyMeasured = false;
+
+    GooseSubscriber_setListener(subscriber, gooseListener, &gooseStates);
+    GooseReceiver_addSubscriber(data->gooseReceiver, subscriber);
+
+ 
 
     GooseReceiver_start(data->gooseReceiver);
 
-    if (!GooseReceiver_isRunning(data->gooseReceiver)) {
+    if (!GooseReceiver_isRunning(data->gooseReceiver))
+    {
         printf("Failed to start GOOSE subscribers\n");
         GooseReceiver_destroy(data->gooseReceiver);
         return -1;
     }
     return 0;
 }
-
 
 void timer_handler(int signum, siginfo_t *si, void *uc)
 
@@ -544,7 +549,8 @@ int loadScenarioFile(const char *filename)
 void *thread_task(void *arg)
 {
     ThreadData *data = (ThreadData *)arg;
-
+    count++;
+  //  printf("Thread %d started with AppId %u\n", count, data->parameters.appId);
     data->parameters.vlanPriority = 0;
 
     data->svPublisher = SVPublisher_create(&data->parameters, data->svInterface);
@@ -567,13 +573,13 @@ void *thread_task(void *arg)
         goto cleanup_on_error;
     }
 
-     /* Setup GOOSE Subscriber */
-    if (setupGooseSubscribers(data) != 0) 
+    /* Setup GOOSE Subscriber */
+    if (setupGooseSubscribers(data) != 0)
     {
         printf("Failed to setup GOOSE Subscriber\n");
         return -1;
     }
-    
+
     phase_start_tick = tick_208_us;
     phase_duration_ticks = phases[current_phase].duration_ms * 1000 / (unsigned int)DELAY_208US;
 
@@ -720,7 +726,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             // For now, GOOSEappId is also a string from JSON, so we'll assume it's handled elsewhere or convert it.
             // Let's assume GOOSEappId is derived from appId string, so it should be uint32_t
             thread_data[i].parameters.appId = val;                                       // Store the numeric value directly
-            thread_data[i].GOOSEappId = (uint32_t)strtoul(instances[i].appId, NULL, 10); // Convert string appId to uint32_t
+            thread_data[i].GOOSEappId = (uint32_t)strtoul(instances[i].AppID, NULL, 10); // Convert string appId to uint32_t
         }
         else
         {

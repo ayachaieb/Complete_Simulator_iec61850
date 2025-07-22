@@ -1,6 +1,8 @@
 /*
  * goose_publisher_example.c
- * Compatible with libiec61850 1.5.1
+ *
+ * Modified to send GOOSE messages continuously.
+ * Rectified to handle signals correctly and fix sleep duration.
  */
 
 #include <stdint.h>
@@ -8,20 +10,32 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <signal.h>
+#include <signal.h> // Required for signal handling
 
 #include "mms_value.h"
 #include "goose_publisher.h"
-#include "hal_thread.h"
+#include "hal_thread.h" // For Thread_sleep
 
+/* Global flag to control the main loop.
+ * 'volatile' ensures the compiler doesn't optimize away reads of this variable.
+ * 'sig_atomic_t' ensures that access is atomic with respect to signals.
+ */
 static volatile sig_atomic_t running = 1;
 
-void sigint_handler(int signum)
+/*
+ * Signal handler for SIGINT (Ctrl+C).
+ * The function signature for a signal handler is void handler(int signum).
+ */
+void
+sigint_handler(int signum)
 {
+    /* Set the global 'running' flag to 0 to terminate the main loop. */
     running = 0;
 }
 
-int main(int argc, char **argv)
+/* has to be executed as root! */
+int
+main(int argc, char **argv)
 {
     const char *interface = NULL;
 
@@ -29,23 +43,20 @@ int main(int argc, char **argv)
         interface = argv[1];
     }
     else {
-        interface = "eth0";
+        interface = "lo"; // Default interface if not provided as an argument
     }
 
     printf("Using interface %s\n", interface);
 
+    // Register the signal handler for SIGINT (Ctrl+C)
     signal(SIGINT, sigint_handler);
 
     LinkedList dataSetValues = LinkedList_create();
 
-    // Create dataset values
-    MmsValue* value1 = MmsValue_newIntegerFromInt32(1234);
-    MmsValue* value2 = MmsValue_newBinaryTime(false);
-    MmsValue* value3 = MmsValue_newIntegerFromInt32(5678);
-    
-    LinkedList_add(dataSetValues, value1);
-    LinkedList_add(dataSetValues, value2);
-    LinkedList_add(dataSetValues, value3);
+    // Initial dataset values
+    LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(1234));
+    LinkedList_add(dataSetValues, MmsValue_newBinaryTime(false));
+    LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(5678));
 
     CommParameters gooseCommParameters;
 
@@ -56,34 +67,31 @@ int main(int argc, char **argv)
     gooseCommParameters.dstAddress[3] = 0x01;
     gooseCommParameters.dstAddress[4] = 0x00;
     gooseCommParameters.dstAddress[5] = 0x01;
-    gooseCommParameters.vlanId = 0;
-    gooseCommParameters.vlanPriority = 4;
 
+
+    /*
+     * Create a new GOOSE publisher instance.
+     */
     GoosePublisher publisher = GoosePublisher_create(&gooseCommParameters, interface);
 
     if (publisher) {
-        GoosePublisher_setGoCbRef(publisher, "DEP_1Tranche/LLN0$GO$gcbInstProt");
-        GoosePublisher_setConfRev(publisher, 1);
-        GoosePublisher_setTimeAllowedToLive(publisher, 2000);
+        GoosePublisher_setGoCbRef(publisher,"DEP_1Tranche/LLN0$GO$gcbInstProt");
+       // GoosePublisher_setDataSetRef(publisher, "simpleIOGenericIO/LLN0$DS$dsAnalogValues");
+        //GoosePublisher_setConfRev(publisher, 1);
 
         printf("Starting GOOSE publishing. Press Ctrl+C to stop.\n");
 
-        uint32_t stNum = 0;
-        
+
         while (running) {
-            stNum++;
-            GoosePublisher_setStNum(publisher, stNum);
-            
-            // Update the timestamp value directly
-            MmsValue_setBinaryTime(value2, Hal_getTimeInMs());
-            
             if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
                 fprintf(stderr, "Error sending GOOSE message!\n");
-                break;
+                break; // Exit loop on publish error
             }
 
-            printf("Published GOOSE message with stNum: %u\n", stNum);
-            
+            /*
+             * The Thread_sleep() function takes milliseconds as an argument.
+             * Sleeping for 100ms is a more reasonable interval than 1ms.
+             */
             Thread_sleep(100);
         }
 
@@ -91,8 +99,8 @@ int main(int argc, char **argv)
         GoosePublisher_destroy(publisher);
     }
     else {
-        fprintf(stderr, "Failed to create GOOSE publisher.\n");
-        fprintf(stderr, "Please ensure '%s' is a valid interface and run as root.\n", interface);
+        fprintf(stderr, "Failed to create GOOSE publisher. Reason: Ethernet interface doesn't exist or root permissions are required.\n");
+        fprintf(stderr, "Please ensure '%s' is a valid and active network interface, and run as root (sudo).\n", interface);
     }
 
     LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction) MmsValue_delete);

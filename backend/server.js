@@ -48,7 +48,7 @@ app.post('/api/verify-config', (req, res) => {
     return res.status(400).json({ errors: ["Request body must be an array of configurations."] });
   }
 
-configs.forEach((config, index) => {
+  configs.forEach((config, index) => {
     const errors = [];
 
     // Validation rules for new XML structure
@@ -68,16 +68,16 @@ configs.forEach((config, index) => {
     if (!config.svIDs || !/^[A-Za-z0-9]+$/.test(config.svIDs)) {
       errors.push(`Instance ${index}: svIDs  must be alphanumeric(e.g., sv2004)`);
     }
-        // Validation rules for the newly added GOOSE configuration fields
-    if (!config.GoCBRef || !/^[A-Za-z0-9\/$]+$/.test(config.GoCBRef)) {
-      errors.push(`Instance ${index}: GoCBRef must be alphanumeric and can contain '/' or '$' (e.g., "IEDName/LLN0$GO$gcbName")`);
+    if (!config.GoCBRef || !/^[A-Za-z0-9_\/$]+$/.test(config.GoCBRef)) {
+      errors.push(`Instance ${index}: GoCBRef must be alphanumeric and can contain '_', '/' or '$' (e.g., "IEDName/LLN0$GO$gcbName")`);
     }
-    if (!config.DatSet || !/^[A-Za-z0-9\/$]+$/.test(config.DatSet)) {
-      errors.push(`Instance ${index}: DatSet must be alphanumeric and can contain '/' or '$' (e.g., "IEDName/LLN0$DS$AnalogValues")`);
+    if (!config.DatSet || !/^[A-Za-z0-9_\/$]+$/.test(config.DatSet)) {
+      errors.push(`Instance ${index}: DatSet must be alphanumeric and can contain '_', '/' or '$' (e.g., "IEDName/LLN0$DS$AnalogValues")`);
     }
     if (!config.GoID || !/^[A-Za-z0-9_]+$/.test(config.GoID)) {
       errors.push(`Instance ${index}: GoID must be alphanumeric and can contain '_' (e.g., "MyGooseID")`);
     }
+
     // Re-using the MAC address validation from dstMac, as it's the same format
     if (!config.MACAddress || !/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(config.MACAddress)) {
       errors.push(`Instance ${index}: MACAddress must be in format XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX`);
@@ -95,7 +95,7 @@ configs.forEach((config, index) => {
     }
   });
 
- if (allErrors.length > 0) {
+  if (allErrors.length > 0) {
     console.log("Validation errors:", allErrors);
     return res.status(400).json({ errors: allErrors });
   }
@@ -153,7 +153,7 @@ const pendingResponses = new Map();
 app.post('/api/start-simulation', (req, res) => {
   console.log('Processing /api/start-simulation with config:', req.body);
   const requestId = Date.now().toString();
-  
+
   try {
     pendingResponses.set(requestId, res);
     sendToCApp('start_simulation', {
@@ -170,7 +170,7 @@ app.post('/api/start-simulation', (req, res) => {
 app.post('/api/stop-simulation', (req, res) => {
   console.log('Processing /api/stop-simulation');
   const requestId = Date.now().toString();
-  
+
   try {
     pendingResponses.set(requestId, res);
     sendToCApp('stop_simulation', {
@@ -186,7 +186,7 @@ app.post('/api/stop-simulation', (req, res) => {
 app.post('/api/send-goose-message', (req, res) => {
   console.log('Processing /api/send-goose-message with config:', req.body);
   const requestId = Date.now().toString();
-  
+
   try {
     pendingResponses.set(requestId, res);
     sendToCApp('send_goose_message', {
@@ -222,10 +222,10 @@ const socketServer = net.createServer((socket) => {
     try {
       const message = data.toString();
       console.log('Received from C app:', message);
-      
+
       const parsed = JSON.parse(message);
       const { requestId, ...response } = parsed;
-      
+
       const res = pendingResponses.get(requestId);
       if (res) {
         res.json(response);
