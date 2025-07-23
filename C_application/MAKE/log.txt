@@ -1,0 +1,6534 @@
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44913 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570367 ms (approx 1753266570.367 seconds)
+  AllData: {44912,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44914 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570467 ms (approx 1753266570.467 seconds)
+  AllData: {44913,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44915 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570567 ms (approx 1753266570.567 seconds)
+  AllData: {44914,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44916 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570667 ms (approx 1753266570.667 seconds)
+  AllData: {44915,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44917 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570768 ms (approx 1753266570.768 seconds)
+  AllData: {44916,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44918 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570869 ms (approx 1753266570.869 seconds)
+  AllData: {44917,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44919 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266570969 ms (approx 1753266570.969 seconds)
+  AllData: {44918,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44920 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571069 ms (approx 1753266571.069 seconds)
+  AllData: {44919,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44921 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571169 ms (approx 1753266571.169 seconds)
+  AllData: {44920,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44922 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571270 ms (approx 1753266571.270 seconds)
+  AllData: {44921,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44923 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571370 ms (approx 1753266571.370 seconds)
+  AllData: {44922,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44924 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571470 ms (approx 1753266571.470 seconds)
+  AllData: {44923,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44925 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571570 ms (approx 1753266571.570 seconds)
+  AllData: {44924,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44926 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571671 ms (approx 1753266571.671 seconds)
+  AllData: {44925,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44927 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571771 ms (approx 1753266571.771 seconds)
+  AllData: {44926,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44928 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571871 ms (approx 1753266571.871 seconds)
+  AllData: {44927,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:31] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44929 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266571971 ms (approx 1753266571.971 seconds)
+  AllData: {44928,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44930 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572072 ms (approx 1753266572.072 seconds)
+  AllData: {44929,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44931 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572172 ms (approx 1753266572.172 seconds)
+  AllData: {44930,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44932 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572273 ms (approx 1753266572.273 seconds)
+  AllData: {44931,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44933 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572373 ms (approx 1753266572.373 seconds)
+  AllData: {44932,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44934 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572473 ms (approx 1753266572.473 seconds)
+  AllData: {44933,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44935 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572574 ms (approx 1753266572.574 seconds)
+  AllData: {44934,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44936 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572674 ms (approx 1753266572.674 seconds)
+  AllData: {44935,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44937 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572774 ms (approx 1753266572.774 seconds)
+  AllData: {44936,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44938 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572874 ms (approx 1753266572.874 seconds)
+  AllData: {44937,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:32] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44939 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266572975 ms (approx 1753266572.975 seconds)
+  AllData: {44938,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44940 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573075 ms (approx 1753266573.075 seconds)
+  AllData: {44939,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44941 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573175 ms (approx 1753266573.175 seconds)
+  AllData: {44940,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44942 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573276 ms (approx 1753266573.276 seconds)
+  AllData: {44941,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44943 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573376 ms (approx 1753266573.376 seconds)
+  AllData: {44942,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44944 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573477 ms (approx 1753266573.477 seconds)
+  AllData: {44943,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44945 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573577 ms (approx 1753266573.577 seconds)
+  AllData: {44944,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44946 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573677 ms (approx 1753266573.677 seconds)
+  AllData: {44945,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44947 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573777 ms (approx 1753266573.777 seconds)
+  AllData: {44946,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44948 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573878 ms (approx 1753266573.878 seconds)
+  AllData: {44947,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:33] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44949 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266573978 ms (approx 1753266573.978 seconds)
+  AllData: {44948,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44950 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574078 ms (approx 1753266574.078 seconds)
+  AllData: {44949,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44951 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574179 ms (approx 1753266574.179 seconds)
+  AllData: {44950,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44952 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574279 ms (approx 1753266574.279 seconds)
+  AllData: {44951,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44953 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574379 ms (approx 1753266574.379 seconds)
+  AllData: {44952,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44954 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574479 ms (approx 1753266574.479 seconds)
+  AllData: {44953,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44955 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574580 ms (approx 1753266574.580 seconds)
+  AllData: {44954,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44956 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574680 ms (approx 1753266574.680 seconds)
+  AllData: {44955,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44957 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574780 ms (approx 1753266574.780 seconds)
+  AllData: {44956,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44958 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574881 ms (approx 1753266574.881 seconds)
+  AllData: {44957,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:34] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44959 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266574981 ms (approx 1753266574.981 seconds)
+  AllData: {44958,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44960 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575081 ms (approx 1753266575.081 seconds)
+  AllData: {44959,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44961 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575181 ms (approx 1753266575.181 seconds)
+  AllData: {44960,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44962 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575285 ms (approx 1753266575.285 seconds)
+  AllData: {44961,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44963 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575385 ms (approx 1753266575.385 seconds)
+  AllData: {44962,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44964 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575486 ms (approx 1753266575.486 seconds)
+  AllData: {44963,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44965 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575586 ms (approx 1753266575.586 seconds)
+  AllData: {44964,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44966 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575686 ms (approx 1753266575.686 seconds)
+  AllData: {44965,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44967 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575788 ms (approx 1753266575.788 seconds)
+  AllData: {44966,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44968 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575888 ms (approx 1753266575.888 seconds)
+  AllData: {44967,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44969 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266575988 ms (approx 1753266575.988 seconds)
+  AllData: {44968,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44970 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576089 ms (approx 1753266576.089 seconds)
+  AllData: {44969,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44971 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576192 ms (approx 1753266576.192 seconds)
+  AllData: {44970,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44972 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576293 ms (approx 1753266576.293 seconds)
+  AllData: {44971,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44973 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576394 ms (approx 1753266576.394 seconds)
+  AllData: {44972,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44974 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576496 ms (approx 1753266576.496 seconds)
+  AllData: {44973,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44975 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576596 ms (approx 1753266576.596 seconds)
+  AllData: {44974,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44976 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576696 ms (approx 1753266576.696 seconds)
+  AllData: {44975,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44977 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576796 ms (approx 1753266576.796 seconds)
+  AllData: {44976,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44978 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576897 ms (approx 1753266576.897 seconds)
+  AllData: {44977,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:36] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44979 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266576997 ms (approx 1753266576.997 seconds)
+  AllData: {44978,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44980 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577098 ms (approx 1753266577.098 seconds)
+  AllData: {44979,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44981 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577198 ms (approx 1753266577.198 seconds)
+  AllData: {44980,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44982 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577298 ms (approx 1753266577.298 seconds)
+  AllData: {44981,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44983 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577399 ms (approx 1753266577.399 seconds)
+  AllData: {44982,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44984 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577499 ms (approx 1753266577.499 seconds)
+  AllData: {44983,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44985 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577599 ms (approx 1753266577.599 seconds)
+  AllData: {44984,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44986 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577699 ms (approx 1753266577.699 seconds)
+  AllData: {44985,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44987 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577800 ms (approx 1753266577.800 seconds)
+  AllData: {44986,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44988 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266577900 ms (approx 1753266577.900 seconds)
+  AllData: {44987,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44989 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578004 ms (approx 1753266578.004 seconds)
+  AllData: {44988,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44990 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578104 ms (approx 1753266578.104 seconds)
+  AllData: {44989,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44991 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578204 ms (approx 1753266578.204 seconds)
+  AllData: {44990,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44992 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578304 ms (approx 1753266578.304 seconds)
+  AllData: {44991,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44993 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578405 ms (approx 1753266578.405 seconds)
+  AllData: {44992,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44994 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578505 ms (approx 1753266578.505 seconds)
+  AllData: {44993,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44995 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578605 ms (approx 1753266578.605 seconds)
+  AllData: {44994,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44996 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578705 ms (approx 1753266578.705 seconds)
+  AllData: {44995,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44997 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578806 ms (approx 1753266578.806 seconds)
+  AllData: {44996,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44998 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266578908 ms (approx 1753266578.908 seconds)
+  AllData: {44997,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 44999 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579009 ms (approx 1753266579.009 seconds)
+  AllData: {44998,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45000 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579109 ms (approx 1753266579.109 seconds)
+  AllData: {44999,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45001 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579209 ms (approx 1753266579.209 seconds)
+  AllData: {45000,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45002 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579310 ms (approx 1753266579.310 seconds)
+  AllData: {45001,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45003 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579410 ms (approx 1753266579.410 seconds)
+  AllData: {45002,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45004 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579510 ms (approx 1753266579.510 seconds)
+  AllData: {45003,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45005 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579610 ms (approx 1753266579.610 seconds)
+  AllData: {45004,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45006 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579711 ms (approx 1753266579.711 seconds)
+  AllData: {45005,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45007 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579811 ms (approx 1753266579.811 seconds)
+  AllData: {45006,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45008 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266579911 ms (approx 1753266579.911 seconds)
+  AllData: {45007,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45009 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580016 ms (approx 1753266580.016 seconds)
+  AllData: {45008,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45010 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580116 ms (approx 1753266580.116 seconds)
+  AllData: {45009,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45011 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580216 ms (approx 1753266580.216 seconds)
+  AllData: {45010,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45012 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580317 ms (approx 1753266580.317 seconds)
+  AllData: {45011,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45013 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580417 ms (approx 1753266580.417 seconds)
+  AllData: {45012,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45014 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580517 ms (approx 1753266580.517 seconds)
+  AllData: {45013,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45015 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580619 ms (approx 1753266580.619 seconds)
+  AllData: {45014,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45016 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580719 ms (approx 1753266580.719 seconds)
+  AllData: {45015,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45017 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580821 ms (approx 1753266580.821 seconds)
+  AllData: {45016,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45018 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266580921 ms (approx 1753266580.921 seconds)
+  AllData: {45017,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45019 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266581021 ms (approx 1753266581.021 seconds)
+  AllData: {45018,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:29:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 45020 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753266581121 ms (approx 1753266581.121 seconds)
+  AllData: {45019,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52739 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355076 ms (approx 1753267355.076 seconds)
+  AllData: {52738,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52740 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355177 ms (approx 1753267355.177 seconds)
+  AllData: {52739,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52741 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355277 ms (approx 1753267355.277 seconds)
+  AllData: {52740,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52742 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355378 ms (approx 1753267355.378 seconds)
+  AllData: {52741,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52743 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355478 ms (approx 1753267355.478 seconds)
+  AllData: {52742,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52744 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355578 ms (approx 1753267355.578 seconds)
+  AllData: {52743,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52745 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355679 ms (approx 1753267355.679 seconds)
+  AllData: {52744,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52746 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355779 ms (approx 1753267355.779 seconds)
+  AllData: {52745,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52747 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355879 ms (approx 1753267355.879 seconds)
+  AllData: {52746,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:35] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52748 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267355980 ms (approx 1753267355.980 seconds)
+  AllData: {52747,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52749 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356080 ms (approx 1753267356.080 seconds)
+  AllData: {52748,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52750 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356180 ms (approx 1753267356.180 seconds)
+  AllData: {52749,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52751 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356282 ms (approx 1753267356.282 seconds)
+  AllData: {52750,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52752 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356382 ms (approx 1753267356.382 seconds)
+  AllData: {52751,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52753 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356483 ms (approx 1753267356.483 seconds)
+  AllData: {52752,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52754 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356583 ms (approx 1753267356.583 seconds)
+  AllData: {52753,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52755 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356683 ms (approx 1753267356.683 seconds)
+  AllData: {52754,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52756 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356783 ms (approx 1753267356.783 seconds)
+  AllData: {52755,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52757 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356884 ms (approx 1753267356.884 seconds)
+  AllData: {52756,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:36] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52758 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267356984 ms (approx 1753267356.984 seconds)
+  AllData: {52757,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52759 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357084 ms (approx 1753267357.084 seconds)
+  AllData: {52758,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52760 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357185 ms (approx 1753267357.185 seconds)
+  AllData: {52759,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52761 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357285 ms (approx 1753267357.285 seconds)
+  AllData: {52760,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52762 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357385 ms (approx 1753267357.385 seconds)
+  AllData: {52761,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52763 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357485 ms (approx 1753267357.485 seconds)
+  AllData: {52762,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52764 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357586 ms (approx 1753267357.586 seconds)
+  AllData: {52763,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52765 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357686 ms (approx 1753267357.686 seconds)
+  AllData: {52764,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52766 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357786 ms (approx 1753267357.786 seconds)
+  AllData: {52765,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52767 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357887 ms (approx 1753267357.887 seconds)
+  AllData: {52766,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:37] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52768 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267357987 ms (approx 1753267357.987 seconds)
+  AllData: {52767,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52769 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358087 ms (approx 1753267358.087 seconds)
+  AllData: {52768,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52770 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358187 ms (approx 1753267358.187 seconds)
+  AllData: {52769,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52771 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358288 ms (approx 1753267358.288 seconds)
+  AllData: {52770,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52772 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358388 ms (approx 1753267358.388 seconds)
+  AllData: {52771,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52773 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358488 ms (approx 1753267358.488 seconds)
+  AllData: {52772,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52774 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358588 ms (approx 1753267358.588 seconds)
+  AllData: {52773,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52775 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358689 ms (approx 1753267358.689 seconds)
+  AllData: {52774,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52776 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358789 ms (approx 1753267358.789 seconds)
+  AllData: {52775,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52777 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358889 ms (approx 1753267358.889 seconds)
+  AllData: {52776,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52778 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267358989 ms (approx 1753267358.989 seconds)
+  AllData: {52777,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52779 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359090 ms (approx 1753267359.090 seconds)
+  AllData: {52778,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52780 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359190 ms (approx 1753267359.190 seconds)
+  AllData: {52779,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52781 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359290 ms (approx 1753267359.290 seconds)
+  AllData: {52780,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52782 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359391 ms (approx 1753267359.391 seconds)
+  AllData: {52781,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52783 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359491 ms (approx 1753267359.491 seconds)
+  AllData: {52782,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52784 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359591 ms (approx 1753267359.591 seconds)
+  AllData: {52783,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52785 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359691 ms (approx 1753267359.691 seconds)
+  AllData: {52784,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 11:42:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 52786 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753267359792 ms (approx 1753267359.792 seconds)
+  AllData: {52785,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:38] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86890 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270778442 ms (approx 1753270778.442 seconds)
+  AllData: {86889,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86891 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270778543 ms (approx 1753270778.543 seconds)
+  AllData: {86890,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86892 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270778645 ms (approx 1753270778.645 seconds)
+  AllData: {86891,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86893 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270778745 ms (approx 1753270778.745 seconds)
+  AllData: {86892,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:38] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86894 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270778845 ms (approx 1753270778.845 seconds)
+  AllData: {86893,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:38] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86895 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270778946 ms (approx 1753270778.946 seconds)
+  AllData: {86894,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86896 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779046 ms (approx 1753270779.046 seconds)
+  AllData: {86895,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86897 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779146 ms (approx 1753270779.146 seconds)
+  AllData: {86896,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86898 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779246 ms (approx 1753270779.246 seconds)
+  AllData: {86897,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86899 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779346 ms (approx 1753270779.346 seconds)
+  AllData: {86898,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86900 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779447 ms (approx 1753270779.447 seconds)
+  AllData: {86899,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86901 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779547 ms (approx 1753270779.547 seconds)
+  AllData: {86900,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86902 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779647 ms (approx 1753270779.647 seconds)
+  AllData: {86901,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86903 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779747 ms (approx 1753270779.747 seconds)
+  AllData: {86902,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86904 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779848 ms (approx 1753270779.848 seconds)
+  AllData: {86903,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:39] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86905 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270779948 ms (approx 1753270779.948 seconds)
+  AllData: {86904,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86906 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780048 ms (approx 1753270780.048 seconds)
+  AllData: {86905,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86907 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780148 ms (approx 1753270780.148 seconds)
+  AllData: {86906,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86908 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780249 ms (approx 1753270780.249 seconds)
+  AllData: {86907,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86909 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780349 ms (approx 1753270780.349 seconds)
+  AllData: {86908,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86910 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780449 ms (approx 1753270780.449 seconds)
+  AllData: {86909,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86911 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780549 ms (approx 1753270780.549 seconds)
+  AllData: {86910,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86912 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780650 ms (approx 1753270780.650 seconds)
+  AllData: {86911,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86913 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780750 ms (approx 1753270780.750 seconds)
+  AllData: {86912,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86914 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780850 ms (approx 1753270780.850 seconds)
+  AllData: {86913,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:40] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86915 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270780950 ms (approx 1753270780.950 seconds)
+  AllData: {86914,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86916 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781050 ms (approx 1753270781.050 seconds)
+  AllData: {86915,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86917 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781150 ms (approx 1753270781.150 seconds)
+  AllData: {86916,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86918 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781251 ms (approx 1753270781.251 seconds)
+  AllData: {86917,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86919 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781351 ms (approx 1753270781.351 seconds)
+  AllData: {86918,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86920 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781451 ms (approx 1753270781.451 seconds)
+  AllData: {86919,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86921 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781551 ms (approx 1753270781.551 seconds)
+  AllData: {86920,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86922 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781652 ms (approx 1753270781.652 seconds)
+  AllData: {86921,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86923 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781752 ms (approx 1753270781.752 seconds)
+  AllData: {86922,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86924 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781852 ms (approx 1753270781.852 seconds)
+  AllData: {86923,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:41] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86925 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270781952 ms (approx 1753270781.952 seconds)
+  AllData: {86924,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:42] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86926 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270782052 ms (approx 1753270782.052 seconds)
+  AllData: {86925,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:42] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86927 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270782153 ms (approx 1753270782.153 seconds)
+  AllData: {86926,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 12:39:42] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 86928 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753270782253 ms (approx 1753270782.253 seconds)
+  AllData: {86927,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:13] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121947 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274293523 ms (approx 1753274293.523 seconds)
+  AllData: {121946,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:13] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121948 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274293624 ms (approx 1753274293.624 seconds)
+  AllData: {121947,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:13] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121949 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274293724 ms (approx 1753274293.724 seconds)
+  AllData: {121948,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:13] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121950 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274293824 ms (approx 1753274293.824 seconds)
+  AllData: {121949,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:13] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121951 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274293925 ms (approx 1753274293.925 seconds)
+  AllData: {121950,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121952 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294025 ms (approx 1753274294.025 seconds)
+  AllData: {121951,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121953 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294125 ms (approx 1753274294.125 seconds)
+  AllData: {121952,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121954 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294226 ms (approx 1753274294.226 seconds)
+  AllData: {121953,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121955 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294327 ms (approx 1753274294.327 seconds)
+  AllData: {121954,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121956 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294427 ms (approx 1753274294.427 seconds)
+  AllData: {121955,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121957 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294527 ms (approx 1753274294.527 seconds)
+  AllData: {121956,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121958 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294628 ms (approx 1753274294.628 seconds)
+  AllData: {121957,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121959 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294728 ms (approx 1753274294.728 seconds)
+  AllData: {121958,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121960 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294828 ms (approx 1753274294.828 seconds)
+  AllData: {121959,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:14] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121961 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274294929 ms (approx 1753274294.929 seconds)
+  AllData: {121960,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121962 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295029 ms (approx 1753274295.029 seconds)
+  AllData: {121961,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121963 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295130 ms (approx 1753274295.130 seconds)
+  AllData: {121962,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121964 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295230 ms (approx 1753274295.230 seconds)
+  AllData: {121963,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121965 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295331 ms (approx 1753274295.331 seconds)
+  AllData: {121964,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121966 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295431 ms (approx 1753274295.431 seconds)
+  AllData: {121965,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121967 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295531 ms (approx 1753274295.531 seconds)
+  AllData: {121966,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121968 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295631 ms (approx 1753274295.631 seconds)
+  AllData: {121967,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121969 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295732 ms (approx 1753274295.732 seconds)
+  AllData: {121968,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121970 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295832 ms (approx 1753274295.832 seconds)
+  AllData: {121969,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:15] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121971 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274295933 ms (approx 1753274295.933 seconds)
+  AllData: {121970,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121972 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296033 ms (approx 1753274296.033 seconds)
+  AllData: {121971,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121973 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296133 ms (approx 1753274296.133 seconds)
+  AllData: {121972,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121974 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296233 ms (approx 1753274296.233 seconds)
+  AllData: {121973,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121975 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296334 ms (approx 1753274296.334 seconds)
+  AllData: {121974,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121976 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296434 ms (approx 1753274296.434 seconds)
+  AllData: {121975,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121977 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296534 ms (approx 1753274296.534 seconds)
+  AllData: {121976,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121978 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296634 ms (approx 1753274296.634 seconds)
+  AllData: {121977,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121979 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296735 ms (approx 1753274296.735 seconds)
+  AllData: {121978,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121980 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296835 ms (approx 1753274296.835 seconds)
+  AllData: {121979,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:16] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121981 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274296935 ms (approx 1753274296.935 seconds)
+  AllData: {121980,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121982 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297036 ms (approx 1753274297.036 seconds)
+  AllData: {121981,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121983 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297137 ms (approx 1753274297.137 seconds)
+  AllData: {121982,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121984 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297237 ms (approx 1753274297.237 seconds)
+  AllData: {121983,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121985 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297338 ms (approx 1753274297.338 seconds)
+  AllData: {121984,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121986 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297438 ms (approx 1753274297.438 seconds)
+  AllData: {121985,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121987 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297538 ms (approx 1753274297.538 seconds)
+  AllData: {121986,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121988 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297638 ms (approx 1753274297.638 seconds)
+  AllData: {121987,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121989 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297739 ms (approx 1753274297.739 seconds)
+  AllData: {121988,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121990 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297839 ms (approx 1753274297.839 seconds)
+  AllData: {121989,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:17] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121991 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274297939 ms (approx 1753274297.939 seconds)
+  AllData: {121990,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121992 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298040 ms (approx 1753274298.040 seconds)
+  AllData: {121991,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121993 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298140 ms (approx 1753274298.140 seconds)
+  AllData: {121992,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121994 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298240 ms (approx 1753274298.240 seconds)
+  AllData: {121993,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121995 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298340 ms (approx 1753274298.340 seconds)
+  AllData: {121994,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121996 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298440 ms (approx 1753274298.440 seconds)
+  AllData: {121995,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121997 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298541 ms (approx 1753274298.541 seconds)
+  AllData: {121996,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121998 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298641 ms (approx 1753274298.641 seconds)
+  AllData: {121997,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 121999 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298741 ms (approx 1753274298.741 seconds)
+  AllData: {121998,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122000 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298842 ms (approx 1753274298.842 seconds)
+  AllData: {121999,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:18] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122001 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274298942 ms (approx 1753274298.942 seconds)
+  AllData: {122000,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122002 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299042 ms (approx 1753274299.042 seconds)
+  AllData: {122001,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122003 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299142 ms (approx 1753274299.142 seconds)
+  AllData: {122002,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122004 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299243 ms (approx 1753274299.243 seconds)
+  AllData: {122003,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122005 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299343 ms (approx 1753274299.343 seconds)
+  AllData: {122004,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122006 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299443 ms (approx 1753274299.443 seconds)
+  AllData: {122005,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122007 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299543 ms (approx 1753274299.543 seconds)
+  AllData: {122006,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122008 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299644 ms (approx 1753274299.644 seconds)
+  AllData: {122007,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122009 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299744 ms (approx 1753274299.744 seconds)
+  AllData: {122008,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122010 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299844 ms (approx 1753274299.844 seconds)
+  AllData: {122009,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:19] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122011 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274299944 ms (approx 1753274299.944 seconds)
+  AllData: {122010,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122012 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300045 ms (approx 1753274300.045 seconds)
+  AllData: {122011,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122013 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300145 ms (approx 1753274300.145 seconds)
+  AllData: {122012,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122014 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300245 ms (approx 1753274300.245 seconds)
+  AllData: {122013,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122015 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300345 ms (approx 1753274300.345 seconds)
+  AllData: {122014,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122016 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300446 ms (approx 1753274300.446 seconds)
+  AllData: {122015,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122017 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300546 ms (approx 1753274300.546 seconds)
+  AllData: {122016,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122018 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300646 ms (approx 1753274300.646 seconds)
+  AllData: {122017,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122019 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300746 ms (approx 1753274300.746 seconds)
+  AllData: {122018,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122020 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300846 ms (approx 1753274300.846 seconds)
+  AllData: {122019,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:20] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122021 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274300947 ms (approx 1753274300.947 seconds)
+  AllData: {122020,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122022 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301047 ms (approx 1753274301.047 seconds)
+  AllData: {122021,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122023 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301147 ms (approx 1753274301.147 seconds)
+  AllData: {122022,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122024 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301248 ms (approx 1753274301.248 seconds)
+  AllData: {122023,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122025 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301348 ms (approx 1753274301.348 seconds)
+  AllData: {122024,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122026 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301448 ms (approx 1753274301.448 seconds)
+  AllData: {122025,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122027 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301548 ms (approx 1753274301.548 seconds)
+  AllData: {122026,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122028 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301649 ms (approx 1753274301.649 seconds)
+  AllData: {122027,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122029 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301749 ms (approx 1753274301.749 seconds)
+  AllData: {122028,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122030 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301849 ms (approx 1753274301.849 seconds)
+  AllData: {122029,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:21] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122031 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274301949 ms (approx 1753274301.949 seconds)
+  AllData: {122030,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122032 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302050 ms (approx 1753274302.050 seconds)
+  AllData: {122031,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122033 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302150 ms (approx 1753274302.150 seconds)
+  AllData: {122032,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122034 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302250 ms (approx 1753274302.250 seconds)
+  AllData: {122033,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122035 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302350 ms (approx 1753274302.350 seconds)
+  AllData: {122034,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122036 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302450 ms (approx 1753274302.450 seconds)
+  AllData: {122035,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122037 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302551 ms (approx 1753274302.551 seconds)
+  AllData: {122036,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122038 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302651 ms (approx 1753274302.651 seconds)
+  AllData: {122037,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122039 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302751 ms (approx 1753274302.751 seconds)
+  AllData: {122038,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122040 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302851 ms (approx 1753274302.851 seconds)
+  AllData: {122039,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:22] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122041 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274302952 ms (approx 1753274302.952 seconds)
+  AllData: {122040,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122042 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303052 ms (approx 1753274303.052 seconds)
+  AllData: {122041,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122043 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303152 ms (approx 1753274303.152 seconds)
+  AllData: {122042,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122044 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303253 ms (approx 1753274303.253 seconds)
+  AllData: {122043,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122045 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303353 ms (approx 1753274303.353 seconds)
+  AllData: {122044,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122046 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303453 ms (approx 1753274303.453 seconds)
+  AllData: {122045,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122047 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303553 ms (approx 1753274303.553 seconds)
+  AllData: {122046,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122048 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303654 ms (approx 1753274303.654 seconds)
+  AllData: {122047,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122049 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303754 ms (approx 1753274303.754 seconds)
+  AllData: {122048,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122050 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303854 ms (approx 1753274303.854 seconds)
+  AllData: {122049,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:23] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122051 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274303954 ms (approx 1753274303.954 seconds)
+  AllData: {122050,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122052 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304055 ms (approx 1753274304.055 seconds)
+  AllData: {122051,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122053 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304155 ms (approx 1753274304.155 seconds)
+  AllData: {122052,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122054 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304256 ms (approx 1753274304.256 seconds)
+  AllData: {122053,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122055 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304356 ms (approx 1753274304.356 seconds)
+  AllData: {122054,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122056 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304456 ms (approx 1753274304.456 seconds)
+  AllData: {122055,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122057 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304557 ms (approx 1753274304.557 seconds)
+  AllData: {122056,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122058 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304657 ms (approx 1753274304.657 seconds)
+  AllData: {122057,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122059 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304757 ms (approx 1753274304.757 seconds)
+  AllData: {122058,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122060 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304857 ms (approx 1753274304.857 seconds)
+  AllData: {122059,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:24] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122061 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274304958 ms (approx 1753274304.958 seconds)
+  AllData: {122060,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122062 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305058 ms (approx 1753274305.058 seconds)
+  AllData: {122061,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122063 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305158 ms (approx 1753274305.158 seconds)
+  AllData: {122062,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122064 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305258 ms (approx 1753274305.258 seconds)
+  AllData: {122063,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122065 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305359 ms (approx 1753274305.359 seconds)
+  AllData: {122064,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122066 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305459 ms (approx 1753274305.459 seconds)
+  AllData: {122065,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122067 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305559 ms (approx 1753274305.559 seconds)
+  AllData: {122066,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122068 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305659 ms (approx 1753274305.659 seconds)
+  AllData: {122067,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122069 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305759 ms (approx 1753274305.759 seconds)
+  AllData: {122068,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122070 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305860 ms (approx 1753274305.860 seconds)
+  AllData: {122069,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:25] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122071 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274305960 ms (approx 1753274305.960 seconds)
+  AllData: {122070,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122072 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306060 ms (approx 1753274306.060 seconds)
+  AllData: {122071,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122073 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306160 ms (approx 1753274306.160 seconds)
+  AllData: {122072,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122074 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306261 ms (approx 1753274306.261 seconds)
+  AllData: {122073,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122075 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306361 ms (approx 1753274306.361 seconds)
+  AllData: {122074,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122076 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306461 ms (approx 1753274306.461 seconds)
+  AllData: {122075,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122077 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306562 ms (approx 1753274306.562 seconds)
+  AllData: {122076,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122078 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306662 ms (approx 1753274306.662 seconds)
+  AllData: {122077,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122079 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306762 ms (approx 1753274306.762 seconds)
+  AllData: {122078,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122080 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306863 ms (approx 1753274306.863 seconds)
+  AllData: {122079,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:26] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122081 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274306963 ms (approx 1753274306.963 seconds)
+  AllData: {122080,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122082 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307063 ms (approx 1753274307.063 seconds)
+  AllData: {122081,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122083 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307163 ms (approx 1753274307.163 seconds)
+  AllData: {122082,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122084 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307264 ms (approx 1753274307.264 seconds)
+  AllData: {122083,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122085 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307364 ms (approx 1753274307.364 seconds)
+  AllData: {122084,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122086 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307464 ms (approx 1753274307.464 seconds)
+  AllData: {122085,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122087 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307564 ms (approx 1753274307.564 seconds)
+  AllData: {122086,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122088 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307665 ms (approx 1753274307.665 seconds)
+  AllData: {122087,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122089 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307765 ms (approx 1753274307.765 seconds)
+  AllData: {122088,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122090 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307866 ms (approx 1753274307.866 seconds)
+  AllData: {122089,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:27] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122091 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274307966 ms (approx 1753274307.966 seconds)
+  AllData: {122090,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122092 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308066 ms (approx 1753274308.066 seconds)
+  AllData: {122091,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122093 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308167 ms (approx 1753274308.167 seconds)
+  AllData: {122092,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122094 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308267 ms (approx 1753274308.267 seconds)
+  AllData: {122093,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122095 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308367 ms (approx 1753274308.367 seconds)
+  AllData: {122094,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122096 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308467 ms (approx 1753274308.467 seconds)
+  AllData: {122095,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122097 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308568 ms (approx 1753274308.568 seconds)
+  AllData: {122096,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122098 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308668 ms (approx 1753274308.668 seconds)
+  AllData: {122097,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122099 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308768 ms (approx 1753274308.768 seconds)
+  AllData: {122098,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122100 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308868 ms (approx 1753274308.868 seconds)
+  AllData: {122099,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:28] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122101 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274308968 ms (approx 1753274308.968 seconds)
+  AllData: {122100,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122102 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309068 ms (approx 1753274309.068 seconds)
+  AllData: {122101,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122103 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309169 ms (approx 1753274309.169 seconds)
+  AllData: {122102,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122104 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309269 ms (approx 1753274309.269 seconds)
+  AllData: {122103,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122105 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309369 ms (approx 1753274309.369 seconds)
+  AllData: {122104,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122106 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309469 ms (approx 1753274309.469 seconds)
+  AllData: {122105,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122107 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309570 ms (approx 1753274309.570 seconds)
+  AllData: {122106,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122108 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309670 ms (approx 1753274309.670 seconds)
+  AllData: {122107,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122109 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309771 ms (approx 1753274309.771 seconds)
+  AllData: {122108,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122110 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309871 ms (approx 1753274309.871 seconds)
+  AllData: {122109,19840101000000.000Z,false,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:29] GOOSE Event Received ---
+  Message validity: INVALID
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122111 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274309971 ms (approx 1753274309.971 seconds)
+  AllData: {122110,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122112 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274310072 ms (approx 1753274310.072 seconds)
+  AllData: {122111,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122113 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274310172 ms (approx 1753274310.172 seconds)
+  AllData: {122112,19840101000000.000Z,true,5678}
+-----------------------------------------------------
+
+--- [2025-07-23 13:38:30] GOOSE Event Received ---
+  Message validity: valid
+  vlanTag: NOT found
+  appId: 1000
+  srcMac: 00:00:00:00:00:00
+  dstMac: 01:0C:CD:01:00:01
+  goId: DEP_1Tranche/LLN0$GO$gcbInstProt
+  goCbRef: DEP_1Tranche/LLN0$GO$gcbInstProt
+  dataSet: 
+  confRev: 1
+  ndsCom: false
+  simul: false
+  stNum: 122114 sqNum: 0
+  timeToLive: 0
+  timestamp: 1753274310272 ms (approx 1753274310.272 seconds)
+  AllData: {122113,19840101000000.000Z,true,5678}
+-----------------------------------------------------

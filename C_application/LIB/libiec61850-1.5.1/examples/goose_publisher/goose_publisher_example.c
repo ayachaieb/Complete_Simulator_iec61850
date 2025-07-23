@@ -26,23 +26,24 @@ static volatile sig_atomic_t running = 1;
  * Signal handler for SIGINT (Ctrl+C).
  * The function signature for a signal handler is void handler(int signum).
  */
-void
-sigint_handler(int signum)
+void sigint_handler(int signum)
 {
     /* Set the global 'running' flag to 0 to terminate the main loop. */
     running = 0;
 }
 
 /* has to be executed as root! */
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-    const char *interface = NULL;
-
-    if (argc > 1) {
+   const char *interface = NULL;
+    static int counter = 0;
+    bool toggle_boolean = false; // Add a boolean to toggle
+    if (argc > 1)
+    {
         interface = argv[1];
     }
-    else {
+    else
+    {
         interface = "lo"; // Default interface if not provided as an argument
     }
 
@@ -68,22 +69,42 @@ main(int argc, char **argv)
     gooseCommParameters.dstAddress[4] = 0x00;
     gooseCommParameters.dstAddress[5] = 0x01;
 
-
     /*
      * Create a new GOOSE publisher instance.
      */
     GoosePublisher publisher = GoosePublisher_create(&gooseCommParameters, interface);
 
-    if (publisher) {
-        GoosePublisher_setGoCbRef(publisher,"DEP_1Tranche/LLN0$GO$gcbInstProt");
-       // GoosePublisher_setDataSetRef(publisher, "simpleIOGenericIO/LLN0$DS$dsAnalogValues");
-        //GoosePublisher_setConfRev(publisher, 1);
+    if (publisher)
+    {
+        GoosePublisher_setGoCbRef(publisher, "DEP_1Tranche/LLN0$GO$gcbInstProt");
+        // GoosePublisher_setDataSetRef(publisher, "simpleIOGenericIO/LLN0$DS$dsAnalogValues");
+        // GoosePublisher_setConfRev(publisher, 1);
+        GoosePublisher_setConfRev(publisher, 1);
+
+        // Set the integrity period to a small value (e.g., 2 seconds)
+        // This forces a re-send with incremented stNum after this period
+//        GoosePublisher_setIntegrityPeriod(publisher, 2000); // 2000 ms = 2 seconds
 
         printf("Starting GOOSE publishing. Press Ctrl+C to stop.\n");
 
+        while (running)
+        {
+            LinkedList dataSetValues = LinkedList_create();
 
-        while (running) {
-            if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
+            // Increment counter and toggle boolean every X iterations
+            counter++;
+            if (counter % 10 == 0) { // Toggle boolean every 10 messages (1 second)
+                toggle_boolean = !toggle_boolean;
+                printf("Toggling boolean to: %d\n", toggle_boolean);
+            }
+
+            LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(counter));
+            LinkedList_add(dataSetValues, MmsValue_newBinaryTime(false)); // New timestamp
+            LinkedList_add(dataSetValues, MmsValue_newBoolean(toggle_boolean)); // This value will change
+            LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(5678));
+            GoosePublisher_increaseStNum(publisher); // Increment the stNum for each publish
+            if (GoosePublisher_publish(publisher, dataSetValues) == -1)
+            {
                 fprintf(stderr, "Error sending GOOSE message!\n");
                 break; // Exit loop on publish error
             }
@@ -98,12 +119,13 @@ main(int argc, char **argv)
         printf("\nStopping GOOSE publishing...\n");
         GoosePublisher_destroy(publisher);
     }
-    else {
+    else
+    {
         fprintf(stderr, "Failed to create GOOSE publisher. Reason: Ethernet interface doesn't exist or root permissions are required.\n");
         fprintf(stderr, "Please ensure '%s' is a valid and active network interface, and run as root (sudo).\n", interface);
     }
 
-    LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction) MmsValue_delete);
+    LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction)MmsValue_delete);
 
     return 0;
 }

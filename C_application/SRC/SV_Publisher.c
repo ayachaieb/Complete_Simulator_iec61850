@@ -178,7 +178,7 @@ static void gooseListener(GooseSubscriber subscriber, void *parameter)
     GooseSubscriptionState *state = (GooseSubscriptionState *)parameter;
     uint32_t newStNum = GooseSubscriber_getStNum(subscriber);
     // Log every received message
-    printf("GOOSE [%s]: Received message with stNum %u\n", state->path, newStNum);
+   // printf("GOOSE [%s]: Received message with stNum %u\n", state->path, newStNum);
 
     if (newStNum != state->lastStNum)
     {
@@ -207,7 +207,7 @@ static int setupGooseSubscribers(ThreadData *data)
 
     GooseReceiver_setInterfaceId(data->gooseReceiver, data->gooseInterface);
 
-    printf("Setting up GOOSE subscriber for %s interface=%s with AppId %u\n", data->goCbRef,data->gooseInterface ,data->GOOSEappId ,instance_count);
+   // printf("Setting up GOOSE subscriber for %s interface=%s with AppId %u\n", data->goCbRef,data->gooseInterface ,data->GOOSEappId ,instance_count);
     // Each subscriber needs its own instance
     GooseSubscriber subscriber = GooseSubscriber_create(data->goCbRef, NULL);
     if (subscriber == NULL)
@@ -216,24 +216,26 @@ static int setupGooseSubscribers(ThreadData *data)
     }
 
     GooseSubscriber_setDstMac(subscriber, data->parameters.dstAddress);
-    // printf("MAC address set for GOOSE subscriber: %02X:%02X:%02X:%02X:%02X:%02X\n",
+    // printf(" GOOSE subscriber MAC address to: %02X:%02X:%02X:%02X:%02X:%02X GOOSE subscriber for %s interface=%s with AppId %u\n",
     //        data->parameters.dstAddress[0], data->parameters.dstAddress[1],
     //        data->parameters.dstAddress[2], data->parameters.dstAddress[3],
-    //        data->parameters.dstAddress[4], data->parameters.dstAddress[5]);
-
+    //        data->parameters.dstAddress[4], data->parameters.dstAddress[5],data->goCbRef,data->gooseInterface ,data->GOOSEappId );
+   
     GooseSubscriber_setAppId(subscriber, data->GOOSEappId);
 
    // printf("GOOSE Subscriber created for %s with GOAppId %u\n", data->goCbRef, data->GOOSEappId);
-    GooseSubscriptionState gooseStates;
-    strcpy(gooseStates.path, data->goCbRef);
-    memcpy(gooseStates.mac, data->parameters.dstAddress, 6);
-    gooseStates.appId = data->GOOSEappId;
-    gooseStates.lastStNum = 0;
-    gooseStates.faultStartTimeNs = 0;
-    gooseStates.isMeasuring = false;
-    gooseStates.latencyMeasured = false;
+    GooseSubscriptionState *gooseStates = malloc(sizeof(GooseSubscriptionState));
+memset(gooseStates, 0, sizeof(GooseSubscriptionState));
+strncpy(gooseStates->path, data->goCbRef, sizeof(gooseStates->path) - 1);
+gooseStates->path[sizeof(gooseStates->path) - 1] = '\0';
+    memcpy(gooseStates->mac, data->parameters.dstAddress, 6);
+    gooseStates->appId = data->GOOSEappId;
+    gooseStates->lastStNum = 0;
+    gooseStates->faultStartTimeNs = 0;
+    gooseStates->isMeasuring = false;
+    gooseStates->latencyMeasured = false;
 
-    GooseSubscriber_setListener(subscriber, gooseListener, &gooseStates);
+    GooseSubscriber_setListener(subscriber, gooseListener, gooseStates);
     GooseReceiver_addSubscriber(data->gooseReceiver, subscriber);
 
  
@@ -726,7 +728,7 @@ bool SVPublisher_init(SV_SimulationConfig *instances, int number_publishers)
             // For now, GOOSEappId is also a string from JSON, so we'll assume it's handled elsewhere or convert it.
             // Let's assume GOOSEappId is derived from appId string, so it should be uint32_t
             thread_data[i].parameters.appId = val;                                       // Store the numeric value directly
-            thread_data[i].GOOSEappId = (uint32_t)strtoul(instances[i].AppID, NULL, 10); // Convert string appId to uint32_t
+            thread_data[i].GOOSEappId = (uint32_t)strtoul(instances[i].GOAppID, NULL, 10); // Convert string appId to uint32_t
         }
         else
         {

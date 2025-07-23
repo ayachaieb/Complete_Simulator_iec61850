@@ -17,19 +17,21 @@ typedef struct {
     char* DatSet;  // Data Set reference
     char* GoID;    // GOOSE ID
     char* MACAddress; // MAC address for GOOSE communication
-    char* AppID;  // Application ID for GOOSE
+    char* GOAppID;  // Application ID for GOOSE**
     char* Interface; // Network interface for GOOSE communication
 } SV_SimulationConfig;
 
 
-typedef struct {
-    char* GoCBRef; // Reference to the GOOSE Control Block
-    char* DatSet;  // Data Set reference
-    char* GoID;    // GOOSE ID
-    char* MACAddress; // MAC address for GOOSE communication
-    char* AppID;  // Application ID for GOOSE
-    char* Interface; // Network interface for GOOSE communication
-}GOOSE_SimulationConfig;
+typedef struct
+{
+    char *gocbRef;
+    char *datSet;
+    char *goID;
+    char *macAddress;
+    char *appID;
+    char *interface;
+    char *requestId; // Added for the top-level requestId
+} GOOSE_SimulationConfig;
 
 // --- Parser Interface ---
 
@@ -64,7 +66,7 @@ int parseRequestConfig(
     cJSON** json_request_out // Added to return the root cJSON object
 );
 int parseGOOSEConfig(
-    cJSON** data_obj,
+    cJSON* data_obj,
     GOOSE_SimulationConfig* config
 );
 parseSVconfig(

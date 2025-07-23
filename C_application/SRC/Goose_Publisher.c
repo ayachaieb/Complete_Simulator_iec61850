@@ -12,10 +12,10 @@
 #include "goose_publisher.h"
 #include "hal_thread.h"
 #include "logger.h"
-LinkedList dataSetValues ;
+LinkedList dataSetValues;
 GoosePublisher publisher;
 
-void goose_publisher_send(GOOSE_SimulationConfig* config)
+void goose_publisher_send(GOOSE_SimulationConfig *config)
 {
 
     dataSetValues = LinkedList_create();
@@ -23,7 +23,6 @@ void goose_publisher_send(GOOSE_SimulationConfig* config)
     LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(1234));
     LinkedList_add(dataSetValues, MmsValue_newBinaryTime(false));
     LinkedList_add(dataSetValues, MmsValue_newIntegerFromInt32(5678));
-
 
     CommParameters gooseCommParameters;
 
@@ -36,9 +35,9 @@ void goose_publisher_send(GOOSE_SimulationConfig* config)
     gooseCommParameters.dstAddress[5] = 0x01;
     gooseCommParameters.vlanId = 0;
     gooseCommParameters.vlanPriority = 4;
-    publisher = GoosePublisher_create(&gooseCommParameters, config->Interface);
+    publisher = GoosePublisher_create(&gooseCommParameters, config->interface);
 
-    if (publisher) 
+    if (publisher)
     {
         GoosePublisher_setGoCbRef(publisher, "simpleIOGenericIO/LLN0$GO$gcbAnalogValues");
         GoosePublisher_setConfRev(publisher, 1);
@@ -46,31 +45,32 @@ void goose_publisher_send(GOOSE_SimulationConfig* config)
         GoosePublisher_setTimeAllowedToLive(publisher, 500);
 
         int i = 0;
-             for (i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++)
+        {
             Thread_sleep(1000);
 
-            if (i == 3) {
+            if (i == 3)
+            {
                 /* now change dataset to send an invalid GOOSE message */
                 LinkedList_add(dataSetValues, MmsValue_newBoolean(true));
                 GoosePublisher_publish(publisher, dataSetValues);
             }
-            else {
-                if (GoosePublisher_publish(publisher, dataSetValues) == -1) {
-                   
-                    
+            else
+            {
+                if (GoosePublisher_publish(publisher, dataSetValues) == -1)
+                {
                 }
             }
         }
-
     }
-  else {
-         LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
-
+    else
+    {
+        LOG_INFO("Goose_Listener", "Goose_Listenerthreads started.");
+        printf("GoosePublisher started successfully.\n");
     }
-
 }
 void goose_publisher_cleanup(void)
 {
     GoosePublisher_destroy(publisher);
-    LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction) MmsValue_delete);
+    LinkedList_destroyDeep(dataSetValues, (LinkedListValueDeleteFunction)MmsValue_delete);
 }

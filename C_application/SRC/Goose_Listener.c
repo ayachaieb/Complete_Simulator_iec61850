@@ -32,7 +32,7 @@ sigint_handler(int signalId)
     if (SUCCESS == goose_receiver_cleanup())
     {
         printf("Goose_ListenerCleaning up thread successfully");
-        printf(" FASAKH BALIZZZZ\n");
+       // printf(" FASAKH BALIZZZZ\n");
         fflush(stdout);
     }
     else
@@ -174,39 +174,43 @@ void *goose_thread_task(void *arg)
     }
     if (data->receiver == NULL)
     {
-        LOG_ERROR("Goose_Listener", "Failed to create GooseReceiver for appid 0x%d", data->AppID);
+        LOG_ERROR("Goose_Listener", "Failed to create GooseReceiver for appid 0x%d", data->goose_id);
         return NULL;
     }
 
     GooseReceiver_setInterfaceId(data->receiver, data->interface);
 
     // Use configurable GoCBRef and DatSet from ThreadData
-    data->subscriber = GooseSubscriber_create(data->GoCBRef, data->DatSet);
-    if (data->subscriber == NULL)
+    GooseSubscriber subscriber  = GooseSubscriber_create(data->GoCBRef, NULL);
+    if (subscriber == NULL)
     {
-        LOG_ERROR("Goose_Listener", "Failed to create GooseSubscriber for appid 0x%d", data->AppID);
+        LOG_ERROR("Goose_Listener", "Failed to create GooseSubscriber for goappid 0x%d", data->goose_id);
         GooseReceiver_destroy(data->receiver);
         data->receiver = NULL;
         return NULL;
     }
 
     // Set configurable AppID
-    GooseSubscriber_setAppId(data->subscriber, data->AppID);
+    GooseSubscriber_setAppId(subscriber, data->goose_id);
 
     // Set configurable destination MAC address
-    GooseSubscriber_setDstMac(data->subscriber, data->MACAddress);
-
-    GooseSubscriber_setListener(data->subscriber, gooseListener, NULL);
-    GooseReceiver_addSubscriber(data->receiver, data->subscriber);
+    GooseSubscriber_setDstMac(subscriber, data->MACAddress);
+    GooseSubscriber_setListener(subscriber, gooseListener, NULL);
+    GooseReceiver_addSubscriber(data->receiver, subscriber);
+    printf(" GOOSE subscriber MAC address to: %02X:%02X:%02X:%02X:%02X:%02X GOOSE subscriber for %s interface=%s with AppId %u\n",
+           data->MACAddress[0], data->MACAddress[1],
+           data->MACAddress[2], data->MACAddress[3],
+           data->MACAddress[4], data->MACAddress[5],data->GoCBRef,data->interface ,data->goose_id );
+   
     GooseReceiver_start(data->receiver);
 
     if (!GooseReceiver_isRunning(data->receiver))
     {
         LOG_ERROR("Goose_Listener", "Failed to start GooseReceiver for appid 0x%d on interface %s",
-                  data->AppID, data->interface);
+                  data->goose_id, data->interface);
         GooseReceiver_destroy(data->receiver);
         data->receiver = NULL;
-        data->subscriber = NULL;
+        subscriber = NULL;
         return NULL;
     }
 
@@ -215,7 +219,7 @@ void *goose_thread_task(void *arg)
         Thread_sleep(100);
     }
 
-    LOG_INFO("Goose_Listener", "GOOSE subscriber thread for appid 0x%d shutting down.", data->AppID);
+    LOG_INFO("Goose_Listener", "GOOSE subscriber thread for goappid 0x%d shutting down.", data->goose_id);
     return NULL;
 }
 
@@ -294,7 +298,7 @@ int Goose_receiver_init(SV_SimulationConfig *config, int number_of_subscribers)
             }
 
             thread_data[i].AppID = (uint32_t)val;
-            thread_data[i].goose_id = (uint32_t)strtoul(config[i].appId, NULL, 10);
+            thread_data[i].goose_id = (uint32_t)strtoul(config[i].GOAppID, NULL, 10);
         }
         else
         {

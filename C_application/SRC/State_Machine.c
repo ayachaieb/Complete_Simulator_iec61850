@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <signal.h>
 #include "Goose_Listener.h"
+#include "Goose_Publisher.h"
 static state_machine_t sm_data_internal;
 static EventQueue event_queue_internal;
 static pthread_t sm_thread_internal;
@@ -101,7 +102,7 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
 
     state_e current = sm->current_state;
     state_e next = current;
-
+    GOOSE_SimulationConfig config= {0}; 
     // Transition logic
     switch (current)
     {
@@ -116,7 +117,10 @@ static int state_machine_run(state_machine_t *sm, state_event_e event, const cha
         }
         else if (STATE_EVENT_send_goose == event)
         {
-            LOG_ERROR("State_Machine", "send_goose event received in IDLE state, but not handled");
+           parseGOOSEConfig(data_obj,&config);
+           printf("data_obj: %s\n", cJSON_Print(data_obj)); 
+           printf("config->GoCBRef: %s\n", config.gocbRef);
+           goose_publisher_send(&config);
         }
         break;
     case STATE_INIT:
@@ -330,7 +334,7 @@ cleanup:
             if (svconfig_tab[i].DatSet) free(svconfig_tab[i].DatSet);
             if (svconfig_tab[i].GoID) free(svconfig_tab[i].GoID);
             if (svconfig_tab[i].MACAddress) free(svconfig_tab[i].MACAddress);
-            if (svconfig_tab[i].AppID) free(svconfig_tab[i].AppID);
+            if (svconfig_tab[i].GOAppID) free(svconfig_tab[i].GOAppID);
             if (svconfig_tab[i].Interface) free(svconfig_tab[i].Interface);
         }
         free(svconfig_tab); // This frees the array itself

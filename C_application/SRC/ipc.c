@@ -253,6 +253,17 @@ int ipc_run_loop(int (*shutdown_check_func)(void))
                 event = STATE_EVENT_shutdown;
                 LOG_INFO("IPC", "Event: shutdown");
             }
+            else if (strcmp(event_type, "send_goose_message") == VALID)
+            {
+                event = STATE_EVENT_send_goose;
+                printf("IPC", "Event: send_goose");
+                LOG_INFO("IPC", "Event: send_goose");
+            }
+            else if (strcmp(event_type, "receive_goose") == VALID)
+            {
+                event = STATE_EVENT_send_goose;
+                LOG_INFO("IPC", "Event: receive_goose");
+            }
             else
             {
                 LOG_WARN("IPC", "Unknown event type: %s", event_type);

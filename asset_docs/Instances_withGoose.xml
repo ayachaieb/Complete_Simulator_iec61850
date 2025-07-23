@@ -1,7 +1,7 @@
 <instances>
     <instance>
         <appId>4096</appId>
-        <dstMac>01:0c:cd:02:00:00</dstMac>
+        <dstMac>01:0c:cd:01:00:01</dstMac>
         <svInterface>lo</svInterface>
         <scenarioConfigFile>scenario_DPA.txt</scenarioConfigFile>
         <svIDs>svid1</svIDs>

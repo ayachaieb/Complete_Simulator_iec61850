@@ -10,11 +10,11 @@
 // Configuration structure for GOOSE receiver
 typedef struct {
     const char* interface;       // Network interface (e.g., "eth0")*
-    uint32_t goose_id;        // GOOSE control block ID to listen for*
+    uint32_t goose_id;        // GOOSE appid
     const char* GoCBRef; // Reference to the GOOSE Control Block*
     const char* DatSet;  // Data Set reference
     const uint8_t* MACAddress; // MAC address for GOOSE communication
-    uint32_t AppID;  // Application ID for GOOSE*
+    uint32_t AppID;  // Application ID 
     GooseReceiver receiver ;
     GooseSubscriber subscriber ; // GOOSE subscriber instance
     bool enable_retransmission;  // Whether to enable message retransmission
